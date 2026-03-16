@@ -99,12 +99,15 @@ RUN ${PIP_INSTALL} wheel==0.45.1 pybind11 pyyaml decorator scipy attrs psutil \
     && cd .. && rm -rf sgl-kernel-npu \
     && cd "$(python3 -m pip show deep-ep | awk '/^Location:/ {print $2}')" && ln -sf deep_ep/deep_ep_cpp*.so
 
-RUN wget https://sglang-ascend.obs.cn-east-3.myhuaweicloud.com:443/fia.tar.gz \
-    && wget https://sglang-ascend.obs.cn-east-3.myhuaweicloud.com:443/so.tar.gz \
-    && tar -zxf fia.tar.gz \
-    && tar -zxf so.tar.gz \
-    && cp -rf fia/fused_infer_attention_score/* /usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe/kernel/ascend910_93/ops_transformer/fused_infer_attention_score/ \
-    && cp -rf so/* /usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64/ \
-    && rm -rf fia && rm -rf fia.tar.gz && rm -rf so && rm -rf so.tar.gz \
+RUN if [ "$DEVICE_TYPE" = "a3" ]; then \
+        wget https://sglang-ascend.obs.cn-east-3.myhuaweicloud.com:443/fia.tar.gz \
+        && wget https://sglang-ascend.obs.cn-east-3.myhuaweicloud.com:443/so.tar.gz \
+        && tar -zxf fia.tar.gz \
+        && tar -zxf so.tar.gz \
+        && cp -rf fia/fused_infer_attention_score/* /usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe/kernel/ascend910_93/ops_transformer/fused_infer_attention_score/ \
+        && cp -rf so/* /usr/local/Ascend/ascend-toolkit/latest/opp/built-in/op_impl/ai_core/tbe/op_tiling/lib/linux/aarch64/ \
+        && rm -rf fia && rm -rf fia.tar.gz && rm -rf so && rm -rf so.tar.gz \
+    fi
+
 
 CMD ["/bin/bash"]
