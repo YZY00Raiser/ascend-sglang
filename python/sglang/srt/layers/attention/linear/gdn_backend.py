@@ -36,6 +36,12 @@ if is_cuda():
 
     causal_conv1d_fn = causal_conv1d_fn_cuda
 elif is_npu():
+    try:
+        import vllm_ascend
+        from vllm_ascend.utils import enable_custom_op
+        enable_custom_op_flag = True
+    except ModuleNotFoundError:
+        enable_custom_op_flag = False
     from sglang.srt.layers.attention.fla.fused_gdn_gating import fused_gdn_gating_kernel_without_sigmoid
     import npu_ops_transformer_ext
     from sgl_kernel_npu.fla.fused_gdn_gating import fused_gdn_gating_npu
@@ -464,16 +470,30 @@ class GDNAttnBackend(MambaAttnBackendBase):
                 mixed_qkv_reshaped = mixed_qkv.view(
                     batch_size, draft_token_num, -1
                 )
-                conv_states_to_use = conv_states[cache_indices]
-                mixed_qkv_processed, new_conv_state = npu_causal_conv1d_update(
-                    mixed_qkv_reshaped.transpose(1, 2).contiguous(),
-                    layer.conv_weights,
-                    conv_states_to_use.transpose(1, 2).contiguous(),
-                    layer.bias,
-                    True
-                )
-                mixed_qkv = mixed_qkv_processed.transpose(1, 2).contiguous().view(seq_len, -1)
-                conv_states[cache_indices] = new_conv_state.transpose(1, 2).contiguous()
+                if enable_custom_op_flag and enable_custom_op():
+                    num_accepted_tokens=torch.full((batch_size,),draft_token_num,dtype=torch.int32, device=mixed_qkv.device)
+                    mixed_qkv = torch.ops._C_ascend.npu_causal_conv1d_update(
+                        mixed_qkv_reshaped,
+                        layer.conv_weights.transpose(0,1).contiguous(),
+                        conv_states,
+                        cache_indices,
+                        layer.bias,
+                        num_accepted_tokens,
+                        None,
+                        layer.activation,
+                        self.pad_slot_id,
+                    ).view(seq_len,-1)
+                else:
+                    conv_states_to_use = conv_states[cache_indices]
+                    mixed_qkv_processed, new_conv_state = npu_causal_conv1d_update(
+                        mixed_qkv_reshaped.transpose(1, 2).contiguous(),
+                        layer.conv_weights,
+                        conv_states_to_use.transpose(1, 2).contiguous(),
+                        layer.bias,
+                        True
+                    )
+                    mixed_qkv = mixed_qkv_processed.transpose(1, 2).contiguous().view(seq_len, -1)
+                    conv_states[cache_indices] = new_conv_state.transpose(1, 2).contiguous()
             else:
                 mixed_qkv_reshaped = mixed_qkv.view(
                     batch_size, draft_token_num, -1
@@ -510,7 +530,21 @@ class GDNAttnBackend(MambaAttnBackendBase):
                 conv_states_tmp = conv_states_for_prefill.transpose(1, 2).contiguous()
             else:
                 conv_states_tmp = conv_states
+            if enable_custom_op_flag and enable_custom_op():
+                x_origin = mixed_qkv.transpose(-1, -2).contiguous()
+                weight_origin = layer.conv_weights.transpose(-1, -2).contiguous()
 
+                mixed_qkv = torch.ops._C_ascend.causal_conv1d_fn(
+                    x_origin,
+                    weight_origin,
+                    layer.bias,
+                    activation=layer.activation,
+                    conv_states=conv_states_for_prefill,
+                    has_initial_state=has_initial_states,
+                    non_spec_state_indices_tensor=cache_indices,
+                    non_spec_query_start_loc=query_start_loc,
+                    pad_slot_id=-1,
+                ).view(seq_len,-1)
             mixed_qkv = causal_conv1d_fn(
                 mixed_qkv,
                 layer.conv_weights,
