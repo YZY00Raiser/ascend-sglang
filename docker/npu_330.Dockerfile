@@ -58,6 +58,8 @@ RUN apt-get update -y && apt upgrade -y && apt-get install -y \
     libssl-dev \
     pkg-config \
     ca-certificates \
+    libgl1-mesa-glx \
+    libgl1-mesa-dri \
     && rm -rf /var/cache/apt/* \
     && rm -rf /var/lib/apt/lists/* \
     && update-ca-certificates \
