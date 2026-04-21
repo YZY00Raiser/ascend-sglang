@@ -32,7 +32,7 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
       echo "Unsupported TARGETARCH: $TARGETARCH"; exit 1; \
     fi
 
-WORKDIR /workspace
+WORKDIR /sgl-workspace
 
 # Define environments
 ENV DEBIAN_FRONTEND=noninteractive
@@ -86,7 +86,7 @@ RUN . /etc/environment_new && \
 RUN (${PIP_INSTALL} pybind11 triton-ascend)
 
 # Install SGLang (editable mode to preserve source and git history)
-RUN git clone https://github.com/sgl-project/sglang --branch $SGLANG_TAG /sgl-workspace/sglang && \
+RUN git clone https://github.com/chenxu214/ci_sglang --branch cp_multi_bs /sgl-workspace/sglang && \
     cd /sgl-workspace/sglang/python && rm -rf pyproject.toml && mv pyproject_npu.toml pyproject.toml && \
     ${PIP_INSTALL} -v -e .[all_npu]
 
@@ -98,7 +98,10 @@ RUN ${PIP_INSTALL} wheel==0.45.1 pybind11 pyyaml decorator scipy attrs psutil \
     && wget https://github.com/sgl-project/sgl-kernel-npu/releases/download/${SGLANG_KERNEL_NPU_TAG}/sgl-kernel-npu-${SGLANG_KERNEL_NPU_TAG}-torch2.8.0-py311-cann${CANN_VERSION}-${DEVICE_TYPE}-$(arch).zip \
     && unzip sgl-kernel-npu-${SGLANG_KERNEL_NPU_TAG}-torch2.8.0-py311-cann${CANN_VERSION}-${DEVICE_TYPE}-$(arch).zip \
     && ${PIP_INSTALL} deep_ep*.whl sgl_kernel_npu*.whl \
-    && cd .. && rm -rf sgl-kernel-npu \
+    && cd .. \
     && cd "$(python3 -m pip show deep-ep | awk '/^Location:/ {print $2}')" && ln -sf deep_ep/deep_ep_cpp*.so
+
+# Install zbal
+RUN ${PIP_INSTALL} https://sglang-ascend.obs.cn-east-3.myhuaweicloud.com:443/ops/zbal_ascend-0.1.0-cp311-cp311-linux_aarch64.whl
 
 CMD ["/bin/bash"]
