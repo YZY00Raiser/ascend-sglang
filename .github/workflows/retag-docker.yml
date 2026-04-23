@@ -1,4 +1,4 @@
-name: Retag & Copy Docker Image
+name: Retag Docker Image
 on:
   workflow_dispatch:
     inputs:
