@@ -66,7 +66,7 @@ class DisaggregationPrefixMMCacheBase(PDDisaggregationServerBase):
             "--disaggregation-bootstrap-port",
             cls.bootstrap_port,
             "--tp-size",
-            "2",
+            "1",
             "--enable-hierarchical-cache",
             "--hicache-io-backend",
             "kernel_ascend",
@@ -161,9 +161,9 @@ class DisaggregationPrefixMMCacheBase(PDDisaggregationServerBase):
 class TestDisaggregationDecodeWithPrefixMMCache(DisaggregationPrefixMMCacheBase):
     """Decode startup parameters with --enable-prefix-mm-cache"""
 
-    ascend_devices = os.environ.get("ASCEND_RT_VISIBLE_DEVICES", "0,1,2,3")
+    ascend_devices = os.environ.get("ASCEND_RT_VISIBLE_DEVICES", "0")
     base_gpu_id = (
-        ascend_devices.split(",")[2] if len(ascend_devices.split(",")) >= 3 else "2"
+        ascend_devices.split(",")[0] if len(ascend_devices.split(",")) >= 1 else "0"
     )
 
     @classmethod
@@ -177,7 +177,7 @@ class TestDisaggregationDecodeWithPrefixMMCache(DisaggregationPrefixMMCacheBase)
             "--disaggregation-transfer-backend",
             "ascend",
             "--tp-size",
-            2,
+            1,
             "--mem-fraction-static",
             "0.9",
             "--base-gpu-id",
