@@ -10,7 +10,7 @@ data = {
         "temperature": 0.5,
         "max_new_tokens": 600
     },
-    "image_data": "./Pic1.png"
+    "image_data": "Pic1.png"
 }
 
 try:
