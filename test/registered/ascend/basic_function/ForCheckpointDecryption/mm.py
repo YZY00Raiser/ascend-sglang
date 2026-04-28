@@ -10,7 +10,7 @@ data = {
         "temperature": 0.5,
         "max_new_tokens": 600
     },
-    "image_data": "https://github.com/sgl-project/sglang/blob/main/examples/assets/example_image.png?raw=true"
+    "image_data": "/home/y30082119/2.png"
 }
 
 try:
