@@ -1,46 +1,46 @@
-import logging
 import os
-import random
-import shutil
-import tempfile
-import time
 import unittest
-from typing import Dict
+from urllib.parse import urlparse
 
 import requests
-
-from sglang.bench_serving import get_tokenizer
-from sglang.test.ascend.test_ascend_utils import QWEN3_VL_8B_INSTRUCT_WEIGHTS_PATH
-from sglang.test.ci.ci_register import register_npu_ci
-from sglang.test.server_fixtures.disaggregation_fixture import (
-    PDDisaggregationServerBase,
+from sglang.test.ascend.disaggregation_utils import TestDisaggregationBase
+from sglang.test.ascend.test_ascend_utils import (
+    QWEN3_32B_EAGLE3_WEIGHTS_PATH,
+    QWEN3_32B_W8A8_MINDIE_WEIGHTS_PATH,
 )
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+    DEFAULT_URL_FOR_TEST,
     popen_launch_pd_server,
-    popen_with_error_check,
 )
 
-register_npu_ci(est_time=400, suite="nightly-4-npu-a3", nightly=True)
+register_npu_ci(
+    est_time=400,
+    suite="nightly-8-npu-a3",
+    nightly=True,
+)
 
 
-class DisaggregationPrefixMMCacheBase(PDDisaggregationServerBase):
-    """Testcase: Test PD disaggregation with --enable-prefix-mm-cache parameter.
+class TestAscendSpeculativeAttentionMode(TestDisaggregationBase):
+    """Testcase: Verify that in the PD disaggregation + MTP scenario, the model inference accuracy remains
+    uncompromised when the Prefill service is launched with the parameter --speculative-attention-mode decode
+    and the Decode service is configured with --speculative-attention-mode prefill.
 
-    [Test Category] Functional
-    [Test Target] PD disaggregation with prefix multimodal cache on NPU
-    --enable-prefix-mm-cache; vision model with hierarchical cache
+    [Test Category] Parameter
+    [Test Target] --speculative-attention-mode
     """
 
     @classmethod
     def setUpClass(cls):
-        super(DisaggregationPrefixMMCacheBase, cls).setUpClass()
+        super().setUpClass()
+        cls.model = QWEN3_32B_W8A8_MINDIE_WEIGHTS_PATH
+        cls.accuracy = 0.86
+        cls.base_url = DEFAULT_URL_FOR_TEST
+        cls.url = urlparse(DEFAULT_URL_FOR_TEST)
+        os.environ["ASCEND_MF_STORE_URL"] = "tcp://127.0.0.1:24666"
 
-        cls.model = QWEN3_VL_8B_INSTRUCT_WEIGHTS_PATH
-
-        cls.tokenizer = get_tokenizer(cls.model)
-        cls.temp_dir = tempfile.mkdtemp()
-        cls.bootstrap_port = "8996"
+        # Non blocking start servers
         cls.start_prefill()
         cls.start_decode()
 
@@ -48,222 +48,110 @@ class DisaggregationPrefixMMCacheBase(PDDisaggregationServerBase):
         cls.wait_server_ready(cls.prefill_url + "/health")
         cls.wait_server_ready(cls.decode_url + "/health")
 
-        cls.launch_router()
-        cls.wait_server_ready(cls.lb_url + "/health")
-        time.sleep(10)
+        cls.launch_lb()
 
     @classmethod
     def start_prefill(cls):
-        # Prefill with HiCache and prefix-mm-cache enabled
         prefill_args = [
-            "--trust-remote-code",
-            "--attention-backend",
-            "ascend",
             "--disaggregation-mode",
             "prefill",
             "--disaggregation-transfer-backend",
             "ascend",
-            "--disaggregation-bootstrap-port",
-            cls.bootstrap_port,
-            "--tp-size",
-            "1",
-            "--enable-hierarchical-cache",
-            "--hicache-io-backend",
-            "kernel_ascend",
-            "--hicache-mem-layout",
-            "page_first_direct",
-            "--hicache-storage-backend",
-            "file",
-            "--hicache-storage-prefetch-policy",
-            "wait_complete",
+            "--trust-remote-code",
+            "--attention-backend",
+            "ascend",
+            "--speculative-attention-mode",
+            "decode",
             "--mem-fraction-static",
-            "0.9",
+            "0.7",
             "--disable-cuda-graph",
-            "--enable-prefix-mm-cache",
         ]
-        env = {
-            **os.environ,
-            "SGLANG_HICACHE_FILE_BACKEND_STORAGE_DIR": cls.temp_dir,
-            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:24667",
-        }
+        # cls.extra_envs = {
+        #     "SGLANG_ENABLE_OVERLAP_PLAN_STREAM": "1",
+        #     "SGLANG_ENABLE_SPEC_V2": "1",
+        # }
+        # os.environ.update(cls.extra_envs)
         cls.process_prefill = popen_launch_pd_server(
             cls.model,
             cls.prefill_url,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=prefill_args,
-            env=env,
         )
-
-    @classmethod
-    def start_decode(cls):
-        pass
-
-    @classmethod
-    def launch_router(cls):
-        lb_command = [
-            "python3",
-            "-m",
-            "sglang_router.launch_router",
-            "--pd-disaggregation",
-            "--prefill",
-            cls.prefill_url,
-            cls.bootstrap_port,
-            "--decode",
-            cls.decode_url,
-            "--host",
-            cls.base_host,
-            "--port",
-            cls.lb_port,
-        ]
-        cls.process_lb = popen_with_error_check(lb_command)
-        cls.wait_server_ready(cls.lb_url + "/health")
-
-    def gen_prompt(self, token_num: int) -> str:
-        # Generate a string consisting of random tokens.
-        all_available_tokens = list(self.tokenizer.get_vocab().values())
-        selected_tokens = random.choices(all_available_tokens, k=token_num)
-        return self.tokenizer.decode(selected_tokens)
-
-    def send_request(
-        self, prompt: str, max_tokens: int = 100, temperature: float = 0.0
-    ) -> Dict:
-        # Send a generate request and return response
-        response = requests.post(
-            f"{self.lb_url}/generate",
-            json={
-                "text": prompt,
-                "sampling_params": {
-                    "temperature": temperature,
-                    "max_new_tokens": max_tokens,
-                    "ignore_eos": True,
-                },
-            },
-            timeout=60,
-        )
-
-        self.assertEqual(
-            response.status_code,
-            200,
-            f"Request failed: {response.status_code} - {response.text}",
-        )
-        return response.json()
-
-    def trigger_offloading_and_flush(self):
-        # Helper method to trigger offloading and flush cache
-        # Trigger offloading
-        self.send_request(self.gen_prompt(1), max_tokens=150)
-
-        # Flush device cache to force remote storage access
-        time.sleep(2)
-        requests.post(self.prefill_url + "/flush_cache")
-
-
-class TestDisaggregationDecodeWithPrefixMMCache(DisaggregationPrefixMMCacheBase):
-    """Decode startup parameters with --enable-prefix-mm-cache"""
-
-    ascend_devices = os.environ.get("ASCEND_RT_VISIBLE_DEVICES", "0")
-    base_gpu_id = (
-        ascend_devices.split(",")[0] if len(ascend_devices.split(",")) >= 1 else "0"
-    )
 
     @classmethod
     def start_decode(cls):
         decode_args = [
-            "--trust-remote-code",
-            "--attention-backend",
-            "ascend",
             "--disaggregation-mode",
             "decode",
+            "--base-gpu-id",
+            4,
             "--disaggregation-transfer-backend",
             "ascend",
-            "--tp-size",
-            1,
-            "--mem-fraction-static",
-            "0.9",
-            "--base-gpu-id",
-            cls.base_gpu_id,
-            "--disaggregation-decode-enable-offload-kvcache",
-            "--hicache-io-backend",
-            "kernel_ascend",
-            "--hicache-mem-layout",
-            "page_first_direct",
-            "--hicache-storage-backend",
-            "file",
-            "--hicache-storage-prefetch-policy",
-            "wait_complete",
             "--num-reserved-decode-tokens",
             128,
             "--disaggregation-decode-polling-interval",
             2,
-            "--enable-prefix-mm-cache",
+            "--trust-remote-code",
+            "--attention-backend",
+            "ascend",
+            "--device",
+            "npu",
+            "--quantization",
+            "modelslim",
+            "--disable-radix-cache",
+            "--speculative-draft-model-quantization",
+            "unquant",
+            "--speculative-algorithm",
+            "EAGLE3",
+            "--speculative-draft-model-path",
+            QWEN3_32B_EAGLE3_WEIGHTS_PATH,
+            "--speculative-num-steps",
+            "4",
+            "--speculative-eagle-topk",
+            "1",
+            "--speculative-num-draft-tokens",
+            "5",
+            "--speculative-attention-mode",
+            "prefill",
+            "--tp-size",
+            "4",
+            "--mem-fraction-static",
+            "0.7",
+            "--disable-cuda-graph",
+            "--dtype",
+            "bfloat16",
         ]
-
-        env = {
-            **os.environ,
-            "SGLANG_HICACHE_FILE_BACKEND_STORAGE_DIR": cls.temp_dir,
-            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:24667",
+        cls.extra_envs = {
+            "SGLANG_ENABLE_OVERLAP_PLAN_STREAM": "1",
+            "SGLANG_ENABLE_SPEC_V2": "1",
         }
+        os.environ.update(cls.extra_envs)
         cls.process_decode = popen_launch_pd_server(
             cls.model,
             cls.decode_url,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=decode_args,
-            env=env,
         )
 
-    def test_prefill_cache_hit(self):
-        """Test that prefill cache works with repeated queries"""
-        repeated_prompt = self.gen_prompt(800)
-        self.send_request(repeated_prompt, max_tokens=100)
-        # Flush cache
-        self.trigger_offloading_and_flush()
+    def test_gsm8k(self):
+        response = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+            },
+        )
 
-        # Second request - should hit cache (faster)
-        response2 = self.send_request(repeated_prompt, max_tokens=100)
-        # Assert cached tokens cnt
-        self.assertGreater(response2["meta_info"]["cached_tokens"], 700)
-
-    def test_multi_turn_conversation_cache(self):
-        # Test multi-turn conversation scenario with cache hit improvement
-        logging.warning("====================Testing request=======================")
-        initial_prompt = self.gen_prompt(300)
-        response1 = self.send_request(initial_prompt, max_tokens=200, temperature=0.1)
-        current_context = initial_prompt + response1["text"]
-
-        previous_cached_tokens = 0
-
-        for turn in range(2, 5):
-            logging.warning(f"\nTurn {turn}: Continuing from previous context")
-
-            response = self.send_request(
-                current_context, max_tokens=200, temperature=0.1
-            )
-            cached_tokens = response["meta_info"]["cached_tokens"]
-
-            logging.warning(f"Turn {turn} cached tokens: {cached_tokens}")
-            logging.warning(
-                f"Improvement: {cached_tokens - previous_cached_tokens} tokens"
-            )
-
-            # Assert cache improvement
-            self.assertGreater(
-                cached_tokens,
-                previous_cached_tokens,
-                f"Turn {turn} should have more cached tokens than turn {turn - 1}",
-            )
-
-            # Update context and cached tokens for next iteration
-            current_context += response["text"]
-            previous_cached_tokens = cached_tokens
-
-            # Flush prefill cache
-            self.trigger_offloading_and_flush()
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Paris", response.text)
 
     @classmethod
     def tearDownClass(cls):
+        os.environ.pop("ASCEND_MF_STORE_URL")
         super().tearDownClass()
-        if os.path.exists(cls.temp_dir):
-            shutil.rmtree(cls.temp_dir)
 
 
 if __name__ == "__main__":

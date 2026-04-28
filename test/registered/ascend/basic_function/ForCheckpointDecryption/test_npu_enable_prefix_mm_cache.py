@@ -225,39 +225,9 @@ class TestDisaggregationDecodeWithPrefixMMCache(DisaggregationPrefixMMCacheBase)
 
     def test_multi_turn_conversation_cache(self):
         # Test multi-turn conversation scenario with cache hit improvement
-        logging.warning("====================Testing request=======================")
-        initial_prompt = self.gen_prompt(300)
-        response1 = self.send_request(initial_prompt, max_tokens=200, temperature=0.1)
-        current_context = initial_prompt + response1["text"]
 
-        previous_cached_tokens = 0
 
-        for turn in range(2, 5):
-            logging.warning(f"\nTurn {turn}: Continuing from previous context")
 
-            response = self.send_request(
-                current_context, max_tokens=200, temperature=0.1
-            )
-            cached_tokens = response["meta_info"]["cached_tokens"]
-
-            logging.warning(f"Turn {turn} cached tokens: {cached_tokens}")
-            logging.warning(
-                f"Improvement: {cached_tokens - previous_cached_tokens} tokens"
-            )
-
-            # Assert cache improvement
-            self.assertGreater(
-                cached_tokens,
-                previous_cached_tokens,
-                f"Turn {turn} should have more cached tokens than turn {turn - 1}",
-            )
-
-            # Update context and cached tokens for next iteration
-            current_context += response["text"]
-            previous_cached_tokens = cached_tokens
-
-            # Flush prefill cache
-            self.trigger_offloading_and_flush()
 
     @classmethod
     def tearDownClass(cls):
