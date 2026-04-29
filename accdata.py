@@ -108,7 +108,6 @@ def assert_mmmu_accuracy(score, expected=0.36, delta=0.01):
         )
 
     print("✓ 精度值检查通过！")
-    print("OK")
     return True
 
 
@@ -208,6 +207,7 @@ def main():
     print("\n" + "=" * 60)
     print("终止服务...")
     print("=" * 60)
+    print("OK")
     server_process.terminate()
     server_process.wait()
 
