@@ -11,3 +11,17 @@ mmmu 精度值断言检查:
 
 ✗ 断言失败: mmmu 精度值 0.37 与期望值 0.36 的差值 0.0100 超过允许范围 ±0.01
 
+TensorRTL_Management Failed, Because an issue occurred while trying to run the test case: 
+Traceback (most recent call last):
+  File "/ticc/prj/framework/src/Framework/Dev/lib/UniAutos/TestEngine/Engine.py", line 303, in _runTest
+    self.runProcedure(testCase)
+  File "/ticc/prj/framework/src/Framework/Dev/lib/UniAutos/TestEngine/Engine.py", line 2068, in runProcedure
+    testcase.procedure()
+  File "/ticc/prj/scripts/testcase/TensorRTL/testcase/TensorRTL_Management.py", line 156, in procedure
+    self.assertIn("OK", res.get('stdout').split("\r\n")[-2])
+  File "/ticc/prj/framework/src/Framework/Dev/lib/UniAutos/TestEngine/Base.py", line 2029, in assertIn
+    self.fail(self._formatMessage(msg, standardMsg))
+  File "/ticc/prj/framework/src/Framework/Dev/lib/UniAutos/TestEngine/Base.py", line 1637, in fail
+    raise self.failureException(msg)
+AssertionError: 'OK' not found in '[Server] [2026-04-29 12:59:38] Gracefully exiting... Remaining number of requests 0. Remaining requests remaining_rids=[].'
+
