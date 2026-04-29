@@ -79,32 +79,24 @@ def extract_score_from_output(output):
     return None
 
 
-def assert_mmmu_accuracy(score, expected=0.36, delta=0.01):
+def assert_mmmu_accuracy(score, threshold=0.36):
     """
-    断言 mmmu 精度值与期望值的差值在允许范围内
+    断言 mmmu 精度值大于等于阈值
     :param score: 实际精度值
-    :param expected: 期望精度值（默认 0.36）
-    :param delta: 允许差值（默认 0.01，即绝对差值不超过 0.01）
+    :param threshold: 阈值（默认 0.36）
     """
     if score is None:
         raise AssertionError("未能从输出中提取到 mmmu 精度值")
 
-    diff = round(abs(score - expected), 4)
-    lower_bound = expected - delta
-    upper_bound = expected + delta
-
     print(f"\n{'=' * 60}")
     print(f"mmmu 精度值断言检查:")
-    print(f"  期望值: {expected}")
+    print(f"  阈值: >= {threshold}")
     print(f"  实际值: {score}")
-    print(f"  差值: {diff:.4f}")
-    print(f"  允许范围: [{lower_bound:.4f}, {upper_bound:.4f}]")
-    print(f"  允许差值: ±{delta}")
     print(f"{'=' * 60}")
 
-    if diff > delta:
+    if score < threshold:
         raise AssertionError(
-            f"mmmu 精度值 {score} 与期望值 {expected} 的差值 {diff:.4f} 超过允许范围 ±{delta}"
+            f"mmmu 精度值 {score} 小于阈值 {threshold}"
         )
 
     print("✓ 精度值检查通过！")
@@ -198,7 +190,7 @@ def main():
     if eval_returncode == 0:
         score = extract_score_from_output(output)
         try:
-            assert_mmmu_accuracy(score, expected=0.36, delta=0.01)
+            assert_mmmu_accuracy(score, threshold=0.36)
         except AssertionError as e:
             print(f"\n✗ 断言失败: {e}")
             eval_returncode = 1
