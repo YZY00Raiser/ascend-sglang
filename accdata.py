@@ -79,31 +79,32 @@ def extract_score_from_output(output):
     return None
 
 
-def assert_mmmu_accuracy(score, expected=0.36, tolerance=0.01):
+def assert_mmmu_accuracy(score, expected=0.36, delta=0.01):
     """
-    断言 mmmu 精度值与期望值在允许范围内
+    断言 mmmu 精度值与期望值的差值在允许范围内
     :param score: 实际精度值
     :param expected: 期望精度值（默认 0.36）
-    :param tolerance: 允许误差范围（默认 1%，即 0.01）
+    :param delta: 允许差值（默认 0.01，即绝对差值不超过 0.01）
     """
     if score is None:
         raise AssertionError("未能从输出中提取到 mmmu 精度值")
 
-    lower_bound = expected * (1 - tolerance)
-    upper_bound = expected * (1 + tolerance)
+    diff = abs(score - expected)
+    lower_bound = expected - delta
+    upper_bound = expected + delta
 
     print(f"\n{'=' * 60}")
     print(f"mmmu 精度值断言检查:")
     print(f"  期望值: {expected}")
     print(f"  实际值: {score}")
+    print(f"  差值: {diff:.4f}")
     print(f"  允许范围: [{lower_bound:.4f}, {upper_bound:.4f}]")
-    print(f"  误差范围: ±{tolerance * 100}%")
+    print(f"  允许差值: ±{delta}")
     print(f"{'=' * 60}")
 
-    if not (lower_bound <= score <= upper_bound):
+    if diff > delta:
         raise AssertionError(
-            f"mmmu 精度值 {score} 超出允许范围 [{lower_bound:.4f}, {upper_bound:.4f}], "
-            f"期望值 {expected} ± {tolerance * 100}%"
+            f"mmmu 精度值 {score} 与期望值 {expected} 的差值 {diff:.4f} 超过允许范围 ±{delta}"
         )
 
     print("✓ 精度值检查通过！")
