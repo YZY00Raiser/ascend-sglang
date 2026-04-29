@@ -89,7 +89,7 @@ def assert_mmmu_accuracy(score, expected=0.36, delta=0.01):
     if score is None:
         raise AssertionError("未能从输出中提取到 mmmu 精度值")
 
-    diff = abs(score - expected)
+    diff = round(abs(score - expected), 4)
     lower_bound = expected - delta
     upper_bound = expected + delta
 
