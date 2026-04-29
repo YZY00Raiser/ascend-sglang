@@ -197,7 +197,7 @@ def main():
     if eval_returncode == 0:
         score = extract_score_from_output(output)
         try:
-            assert_mmmu_accuracy(score, expected=0.36, tolerance=0.01)
+            assert_mmmu_accuracy(score, expected=0.36, delta=0.01)
         except AssertionError as e:
             print(f"\n✗ 断言失败: {e}")
             eval_returncode = 1
