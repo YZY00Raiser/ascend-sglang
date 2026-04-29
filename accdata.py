@@ -209,9 +209,15 @@ def main():
     print("=" * 60)
     server_process.terminate()
     server_process.wait()
-    sys.exit(eval_returncode)
+
+    # 等待日志线程结束，确保服务日志输出完毕
+    log_thread.join(timeout=5)
+
     if eval_returncode == 0:
         print("OK")
+
+    sys.exit(eval_returncode)
+
 
 if __name__ == '__main__':
     main()
