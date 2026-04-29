@@ -1,0 +1,1 @@
+export LD_LIBRARY_PATH=/home/y/AccData/output/3rdparty/FFmpeg/lib:$LD_LIBRARY_PATH
