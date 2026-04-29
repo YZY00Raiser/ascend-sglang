@@ -166,7 +166,7 @@ def main():
 
     # 等待服务启动成功
     print("-" * 60)
-    service_ready = wait_for_service(host, port, max_wait=300, check_interval=2)
+    service_ready = wait_for_service(host, port, max_wait=600, check_interval=2)
     print("-" * 60)
 
     if not service_ready:
