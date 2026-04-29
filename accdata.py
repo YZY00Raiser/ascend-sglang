@@ -142,6 +142,10 @@ def main():
     print("=" * 60)
     print("启动 sglang 服务...")
     print("=" * 60)
+    print(f"命令: {' '.join(launch_cmd)}")
+    print(f"环境变量: USE_ACCDATA={env.get('USE_ACCDATA')}")
+    print(f"工作目录: {os.getcwd()}")
+    print("-" * 60)
 
     # 使用 Popen 启动服务（后台运行）
     server_process = subprocess.Popen(
@@ -161,7 +165,11 @@ def main():
     log_thread.start()
 
     # 等待服务启动成功
-    if not wait_for_service(host, port, max_wait=300, check_interval=2):
+    print("-" * 60)
+    service_ready = wait_for_service(host, port, max_wait=300, check_interval=2)
+    print("-" * 60)
+
+    if not service_ready:
         print("服务启动失败，正在终止...")
         server_process.terminate()
         server_process.wait()
