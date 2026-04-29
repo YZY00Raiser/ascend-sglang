@@ -207,12 +207,11 @@ def main():
     print("\n" + "=" * 60)
     print("终止服务...")
     print("=" * 60)
-    print("OK")
     server_process.terminate()
     server_process.wait()
-
     sys.exit(eval_returncode)
-
+    if eval_returncode == 0:
+        print("OK")
 
 if __name__ == '__main__':
     main()
