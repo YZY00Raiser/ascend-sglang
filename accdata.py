@@ -125,6 +125,7 @@ def main():
     # 设置环境变量
     env = os.environ.copy()
     env['USE_ACCDATA'] = '2'
+    env['LD_LIBRARY_PATH'] = '/home/y/AccData/output/3rdparty/FFmpeg/lib:' + env.get('LD_LIBRARY_PATH', '')
 
     # 启动 sglang 服务
     launch_cmd = [
@@ -145,6 +146,7 @@ def main():
     print("=" * 60)
     print(f"命令: {' '.join(launch_cmd)}")
     print(f"环境变量: USE_ACCDATA={env.get('USE_ACCDATA')}")
+    print(f"环境变量: LD_LIBRARY_PATH={env.get('LD_LIBRARY_PATH')}")
     print(f"工作目录: {os.getcwd()}")
     print("-" * 60)
 
