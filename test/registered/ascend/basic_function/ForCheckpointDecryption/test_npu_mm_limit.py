@@ -47,7 +47,34 @@ class TestLimitMMDatePerRequest(TestVLMModels, CustomTestCase):
         # assert response.status_code == 200
         print(response.json())
 
-    def _run_multi_turn_request1(self):
+    def _run_multi_turn_request2(self):
+        # Input video and image respectively
+        messages = [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": IMAGE_MAN_IRONING_URL},
+                    },
+                    {
+                        "type": "text",
+                        "text": "Describe this image in a sentence.",
+                    },
+                ],
+            },
+        ]
+        response = requests.post("http://127.0.0.1:30002/v1/chat/completions",
+                                 json={
+                                     "messages": messages,
+                                     "temperature": 0,
+                                     "max_completion_tokens": 1024,
+                                 },
+                                 )
+        # assert response.status_code == 200
+        print(response.json())
+
+    def _run_multi_turn_request3(self):
         # Enter two images
         messages2 = [
             {
@@ -79,9 +106,10 @@ class TestLimitMMDatePerRequest(TestVLMModels, CustomTestCase):
         assert response2.status_code == 400
 
     def test_vlm(self):
-        self._run_multi_turn_request()
-        # self._run_multi_turn_request1()
-        # self._run_parallel_two_requests()
+        # self._run_multi_turn_request()
+        self._run_multi_turn_request2()
+        # self._run_multi_turn_request3()
+
 
 
 if __name__ == "__main__":
