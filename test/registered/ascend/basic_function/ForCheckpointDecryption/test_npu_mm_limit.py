@@ -38,12 +38,12 @@ class TestLimitMMDatePerRequest(TestVLMModels, CustomTestCase):
             },
         ]
         response = requests.post("http://127.0.0.1:30002/v1/chat/completions",
-            json={
-                "messages": messages,
-                "temperature": 0,
-                "max_completion_tokens": 1024,
-            },
-        )
+                                 json={
+                                     "messages": messages,
+                                     "temperature": 0,
+                                     "max_completion_tokens": 1024,
+                                 },
+                                 )
         # assert response.status_code == 200
         print(response.json())
 
@@ -57,10 +57,7 @@ class TestLimitMMDatePerRequest(TestVLMModels, CustomTestCase):
                         "type": "image_url",
                         "image_url": {"url": IMAGE_MAN_IRONING_URL},
                     },
-                    {
-                        "type": "text",
-                        "text": "Describe this image in a sentence.",
-                    },
+
                 ],
             },
         ]
@@ -109,7 +106,6 @@ class TestLimitMMDatePerRequest(TestVLMModels, CustomTestCase):
         # self._run_multi_turn_request()
         self._run_multi_turn_request2()
         # self._run_multi_turn_request3()
-
 
 
 if __name__ == "__main__":
