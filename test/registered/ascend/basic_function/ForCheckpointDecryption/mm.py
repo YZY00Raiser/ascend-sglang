@@ -10,7 +10,7 @@ data = {
         "temperature": 0.5,
         "max_new_tokens": 600
     },
-    "image_data": "/home/y30082119/2.png"
+    "image_data": "https://miaobi-lite.bj.bcebos.com/miaobi/5mao/b%27b2Ny6K%2BG5Yir5Luj56CBXzE3MzQ2MzcyNjAuMzgxNDk5NQ%3D%3D%27/0.png"
 }
 
 try:
