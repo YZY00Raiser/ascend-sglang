@@ -15,7 +15,7 @@ data = {
 
 try:
     # 发送 POST 请求到本地服务
-    res = requests.post("http://127.0.0.1:30002/generate", json=data, headers=headers)
+    res = requests.post("http://127.0.0.1:30002/generate", json=data, headers=headers, verify=False)
     res.raise_for_status()  # 检查请求是否成功
     response_data = res.json()
     print(response_data)
