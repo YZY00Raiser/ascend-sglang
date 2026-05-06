@@ -11,7 +11,7 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=400, suite="nightly-4-npu-a3", nightly=True)
 
 IMAGES_LOGO_PATH = "/home/y30082119/man.png"
-IMAGES_MAN_PATH = ""
+IMAGES_MAN_PATH = "/home/y30082119/man.png"
 # MODEL = QWEN3_VL_8B_INSTRUCT_WEIGHTS_PATH
 
 # image
