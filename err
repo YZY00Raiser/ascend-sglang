@@ -1,0 +1,27 @@
+ERROR:sglang.srt.disaggregation.encode_server:Rank 0 encode failed: Failed to process mm items: Error while loading data : cannot identify image file <_io.BytesIO object at 0xfffc14276ed0> error_code = <HTTPStatus.BAD_REQUEST: 400>
+INFO:     127.0.0.1:59242 - "POST /encode HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:59244 - "POST /scheduler_receive_url HTTP/1.1" 200 OK
+INFO:sglang.srt.disaggregation.encode_server:Found 1 new endpoints for a9d8194c960946afac524f4853eb307a_local_part_0. Starting tasks...
+INFO:sglang.srt.disaggregation.encode_server:All 1 endpoints initiated for a9d8194c960946afac524f4853eb307a_local_part_0. Breaking loop.
+INFO:sglang.srt.disaggregation.encode_server:Loop finished. Awaiting completion of 1 sending tasks...
+INFO:sglang.srt.disaggregation.encode_server:endpoint = 'tcp://61.47.19.75:34397'
+INFO:sglang.srt.disaggregation.encode_server:All tasks completed for req_id: a9d8194c960946afac524f4853eb307a_local_part_0
+INFO:sglang.srt.disaggregation.encode_server:Cleaning up resources for req_id a9d8194c960946afac524f4853eb307a_local_part_0
+
+[2026-05-06 11:29:26] Processing 1 mm items for request 30db6f1f671a4214b82ac757d35173a2
+[2026-05-06 11:29:26] Encoder returned error 400: Failed to process mm items: Error while loading data : cannot identify image file <_io.BytesIO object at 0xfffc14277d30>
+[2026-05-06 11:29:26] Waiting for input self.embedding_port = 44847
+[2026-05-06 11:29:26] self.num_items_assigned = OrderedDict([(<Modality.IMAGE: 1>, [1])]) 
+[2026-05-06 11:29:26] Preparing to send to http://127.0.0.1:30000/scheduler_receive_url with part_req_id=30db6f1f671a4214b82ac757d35173a2_local_part_0
+[2026-05-06 11:29:26] Concurrently sending 1 requests...
+[2026-05-06 11:29:26] Received error signal from encoder for 30db6f1f671a4214b82ac757d35173a2: Failed to process mm items: Error while loading data : cannot identify image file <_io.BytesIO object at 0xfffc14277d30> recv_obj.error_code = <HTTPStatus.BAD_REQUEST: 400>
+[2026-05-06 11:29:26] Waiting request 30db6f1f671a4214b82ac757d35173a2 failed: Failed to process mm items: Error while loading data : cannot identify image file <_io.BytesIO object at 0xfffc14277d30> waiting_req.error_code = <HTTPStatus.BAD_REQUEST: 400>
+[2026-05-06 11:29:26] INFO:     127.0.0.1:34510 - "POST /v1/chat/completions HTTP/1.1" 400 Bad Request
+
+[CI Test Method] TestLimitMMDatePerRequest.test_vlm
+{'object': 'error', 'message': 'Failed to process mm items: Error while loading data : cannot identify image file <_io.BytesIO object at 0xfffc14277d30>', 'type': 'BadRequestError', 'param': None, 'code': 400}
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.016s
+
+OK
