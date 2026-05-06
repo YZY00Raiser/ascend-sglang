@@ -65,8 +65,6 @@ class DisaggregationPrefixMMCacheBase(PDDisaggregationServerBase):
             "ascend",
             "--disaggregation-bootstrap-port",
             cls.bootstrap_port,
-            "--tp-size",
-            "1",
             "--enable-hierarchical-cache",
             "--hicache-io-backend",
             "kernel_ascend",
