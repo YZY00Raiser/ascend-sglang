@@ -39,13 +39,13 @@ class TestPrefixMMCacheSimple(unittest.TestCase):
         encode_args = [
             "--trust-remote-code",
             "--encoder-only",
-            "--tp",
-            "1",
             "--port",
             str(cls.encoder_port),
             "--enable-prefix-mm-cache",
             "--encoder-transfer-backend",
             "zmq_to_scheduler",
+            "--base-gpu-id",
+            "4",
         ]
 
         cls.process_encode = popen_launch_server(
@@ -64,10 +64,11 @@ class TestPrefixMMCacheSimple(unittest.TestCase):
             cls.encoder_url,
             "--encoder-transfer-backend",
             "zmq_to_scheduler",
-            "--tp",
-            "1",
             "--port",
             str(cls.language_port),
+            "--base-gpu-id",
+            "12",
+
         ]
 
         cls.process_language = popen_launch_server(
