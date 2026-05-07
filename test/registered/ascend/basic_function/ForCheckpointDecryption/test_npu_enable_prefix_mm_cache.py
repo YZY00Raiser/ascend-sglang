@@ -143,16 +143,9 @@ class TestPrefixMMCacheSimple(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        if hasattr(cls, 'process_language') and cls.process_language:
-            try:
-                kill_process_tree(cls.process_language.pid)
-            except Exception as e:
-                print(f"Error killing language process: {e}")
-        if hasattr(cls, 'process_encode') and cls.process_encode:
-            try:
-                kill_process_tree(cls.process_encode.pid)
-            except Exception as e:
-                print(f"Error killing encoder process: {e}")
+        kill_process_tree(cls.process_language.pid)
+        kill_process_tree(cls.process_encode.pid)
+
 
 
 if __name__ == "__main__":
