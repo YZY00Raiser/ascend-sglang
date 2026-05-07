@@ -1,32 +1,71 @@
-INFO:sglang.srt.disaggregation.encode_server:Using transfer backend: zmq_to_scheduler
-INFO:sglang.srt.disaggregation.encode_server:rank 0 init finish 
-INFO:     Started server process [13227]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://127.0.0.1:31600 (Press CTRL+C to quit)
-INFO:     127.0.0.1:38870 - "GET /health_generate HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37714 - "POST /v1/chat/completions HTTP/1.1" 404 Not Found
-E
-======================================================================
-ERROR: test_same_image_cache_hit (__main__.TestPrefixMMCacheSimple.test_same_image_cache_hit)
-Send same image twice, verify second request hits cache.
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/y30082119/mysglang/test/registered/ascend/basic_function/ForCheckpointDecryption/test_npu_enable_prefix_mm_cache.py", line 61, in test_same_image_cache_hit
-    response1 = client.chat.completions.create(
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/python3.11.14/lib/python3.11/site-packages/openai/_utils/_utils.py", line 286, in wrapper
+[2026-05-07 02:55:13] Multimodal attention backend not set. Use sdpa.
+[2026-05-07 02:55:13] Using sdpa as multimodal attention backend.
+[2026-05-07 02:55:16] Scheduler hit an exception: Traceback (most recent call last):
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/managers/scheduler.py", line 3691, in run_scheduler_process
+    scheduler = Scheduler(
+                ^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/managers/scheduler.py", line 409, in __init__
+    self.init_model_worker()
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/managers/scheduler.py", line 666, in init_model_worker
+    self.init_tp_model_worker()
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/managers/scheduler.py", line 621, in init_tp_model_worker
+    self.tp_worker = TpModelWorker(**worker_kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/managers/tp_worker.py", line 261, in __init__
+    self._init_model_runner()
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/managers/tp_worker.py", line 344, in _init_model_runner
+    self._model_runner = ModelRunner(
+                         ^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/model_executor/model_runner.py", line 477, in __init__
+    self.initialize(pre_model_load_memory)
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/model_executor/model_runner.py", line 557, in initialize
+    self.load_model()
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/model_executor/model_runner.py", line 1217, in load_model
+    self.model = self.loader.load_model(
+                 ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/model_loader/loader.py", line 683, in load_model
+    model = _initialize_model(
+            ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/model_loader/loader.py", line 277, in _initialize_model
+    return model_class(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/models/qwen3_vl.py", line 1099, in __init__
+    self.model = language_model_cls(
+                 ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/models/qwen3_vl.py", line 954, in __init__
+    super().__init__(config=config, quant_config=quant_config, prefix=prefix)
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/models/qwen3.py", line 431, in __init__
+    super().__init__(
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/models/qwen2.py", line 294, in __init__
+    self.layers, self.start_layer, self.end_layer = make_layers(
+                                                    ^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/utils/common.py", line 644, in make_layers
+    + get_offloader().wrap_modules(
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/utils/offloader.py", line 36, in wrap_modules
+    return list(all_modules_generator)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/utils/common.py", line 646, in <genexpr>
+    layer_fn(idx=idx, prefix=add_prefix(idx, prefix))
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/models/qwen2.py", line 296, in <lambda>
+    lambda idx, prefix: decoder_layer_type(
+                        ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/models/qwen3.py", line 338, in __init__
+    self.mlp = Qwen3MLP(
+               ^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/models/qwen2.py", line 73, in __init__
+    self.gate_up_proj = MergedColumnParallelLinear(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/layers/linear.py", line 523, in __init__
+    super().__init__(
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/layers/linear.py", line 351, in __init__
+    self.quant_method.create_weights(
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/sglang/srt/layers/quantization/unquant.py", line 122, in create_weights
+    torch.empty(
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/torch_npu/contrib/transfer_to_npu.py", line 182, in decorated
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/torch/utils/_device.py", line 103, in __torch_function__
     return func(*args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/python3.11.14/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 1156, in create
-    return self._post(
-           ^^^^^^^^^^^
-  File "/usr/local/python3.11.14/lib/python3.11/site-packages/openai/_base_client.py", line 1259, in post
-    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/local/python3.11.14/lib/python3.11/site-packages/openai/_base_client.py", line 1047, in request
-    raise self._make_status_error_from_response(err.response) from None
-openai.NotFoundError: Error code: 404 - {'detail': 'Not Found'}
-
-----------------------------------------------------------------------
-Ran 1 test in 25.380s
+RuntimeError: NPU out of memory. Tried to allocate 194.00 MiB (NPU 0; 61.27 GiB total capacity; 9.21 GiB already allocated; 9.21 GiB current active; 7.18 MiB free; 9.43 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.
