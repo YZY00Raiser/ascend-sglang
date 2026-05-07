@@ -1,5 +1,6 @@
 """
 Simple test for --enable-prefix-mm-cache: send same image twice, verify second hits cache.
+Uses encoder-only + language-only mode.
 """
 
 import io
@@ -7,10 +8,10 @@ import time
 import unittest
 
 import openai
+import requests
 
 from sglang.srt.utils import kill_process_tree
 from sglang.test.test_utils import (
-    # DEFAULT_SMALL_VLM_MODEL_NAME_FOR_TEST,
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     popen_launch_server,
 )
@@ -22,39 +23,69 @@ class TestPrefixMMCacheSimple(unittest.TestCase):
 
     model = "/home/weights/Qwen/Qwen3-VL-8B-Instruct"
     base_host = "127.0.0.1"
-    base_port = 31600
+    encoder_port = 31600
+    language_port = 31602
 
     @classmethod
     def setUpClass(cls):
-        cls.encode_port = cls.base_port
-        cls.encode_url = f"http://{cls.base_host}:{cls.encode_port}"
+        cls.encoder_url = f"http://{cls.base_host}:{cls.encoder_port}"
+        cls.language_url = f"http://{cls.base_host}:{cls.language_port}"
         cls.encode_stdout = io.StringIO()
         cls.encode_stderr = io.StringIO()
+        cls.language_stdout = io.StringIO()
+        cls.language_stderr = io.StringIO()
 
+        # Start encoder-only server
         encode_args = [
             "--trust-remote-code",
             "--encoder-only",
             "--tp",
             "1",
             "--port",
-            str(cls.encode_port),
+            str(cls.encoder_port),
             "--enable-prefix-mm-cache",
+            "--encoder-transfer-backend",
+            "zmq_to_scheduler",
         ]
 
         cls.process_encode = popen_launch_server(
             cls.model,
-            base_url=cls.encode_url,
+            base_url=cls.encoder_url,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=encode_args,
             return_stdout_stderr=(cls.encode_stdout, cls.encode_stderr),
         )
+
+        # Start language-only server
+        language_args = [
+            "--trust-remote-code",
+            "--language-only",
+            "--encoder-urls",
+            cls.encoder_url,
+            "--encoder-transfer-backend",
+            "zmq_to_scheduler",
+            "--tp",
+            "1",
+            "--port",
+            str(cls.language_port),
+        ]
+
+        cls.process_language = popen_launch_server(
+            cls.model,
+            base_url=cls.language_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=language_args,
+            return_stdout_stderr=(cls.language_stdout, cls.language_stderr),
+        )
+
+        # Wait for servers to be ready
         time.sleep(5)
 
     def test_same_image_cache_hit(self):
         """Send same image twice, verify second request hits cache."""
         client = openai.OpenAI(
             api_key="sk-123456",
-            base_url=f"{self.encode_url}/v1",
+            base_url=f"{self.language_url}/v1",
         )
 
         # First request - cache miss
@@ -111,11 +142,16 @@ class TestPrefixMMCacheSimple(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        if hasattr(cls, 'process_language') and cls.process_language:
+            try:
+                kill_process_tree(cls.process_language.pid)
+            except Exception as e:
+                print(f"Error killing language process: {e}")
         if hasattr(cls, 'process_encode') and cls.process_encode:
             try:
                 kill_process_tree(cls.process_encode.pid)
             except Exception as e:
-                print(f"Error killing process: {e}")
+                print(f"Error killing encoder process: {e}")
 
 
 if __name__ == "__main__":
