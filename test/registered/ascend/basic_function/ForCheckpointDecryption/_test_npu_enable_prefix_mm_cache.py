@@ -95,15 +95,16 @@ class TestPrefixMMCacheSimple(unittest.TestCase):
                 ],
             },
         ]
-        response = requests.post(f"{self.language_url}/v1/chat/completions",
-                                 json={
-                                     "messages": messages,
-                                     "temperature": 0,
-                                     "max_completion_tokens": 1024,
-                                 },
-                                 )
-        # assert response.status_code == 200
-        print(response.json())
+        for i in range(2):
+            response = requests.post(f"{self.language_url}/v1/chat/completions",
+                                     json={
+                                         "messages": messages,
+                                         "temperature": 0,
+                                         "max_completion_tokens": 1024,
+                                     },
+                                     )
+            # assert response.status_code == 200
+            print(response.json())
 
     @classmethod
     def tearDownClass(cls):
