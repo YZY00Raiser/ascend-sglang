@@ -1,0 +1,32 @@
+INFO:sglang.srt.disaggregation.encode_server:Using transfer backend: zmq_to_scheduler
+INFO:sglang.srt.disaggregation.encode_server:rank 0 init finish 
+INFO:     Started server process [13227]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:31600 (Press CTRL+C to quit)
+INFO:     127.0.0.1:38870 - "GET /health_generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37714 - "POST /v1/chat/completions HTTP/1.1" 404 Not Found
+E
+======================================================================
+ERROR: test_same_image_cache_hit (__main__.TestPrefixMMCacheSimple.test_same_image_cache_hit)
+Send same image twice, verify second request hits cache.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/y30082119/mysglang/test/registered/ascend/basic_function/ForCheckpointDecryption/test_npu_enable_prefix_mm_cache.py", line 61, in test_same_image_cache_hit
+    response1 = client.chat.completions.create(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/openai/_utils/_utils.py", line 286, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 1156, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/openai/_base_client.py", line 1259, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python3.11.14/lib/python3.11/site-packages/openai/_base_client.py", line 1047, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'detail': 'Not Found'}
+
+----------------------------------------------------------------------
+Ran 1 test in 25.380s
