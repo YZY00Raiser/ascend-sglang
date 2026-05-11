@@ -133,8 +133,6 @@ class TestOffloadShardedGpu(TestOffloadGroupSize):
         "2",
         "--offload-mode",
         "sharded_gpu",
-        "--tp-size",
-        "2",
     ]
 
     def _check_offload_message(self):
@@ -143,7 +141,7 @@ class TestOffloadShardedGpu(TestOffloadGroupSize):
 
 
 if __name__ == "__main__":
-    for i in range(1):
+    for i in range(10):
         print(f"运行第{i}次")
         unittest.main(exit=False)
 
