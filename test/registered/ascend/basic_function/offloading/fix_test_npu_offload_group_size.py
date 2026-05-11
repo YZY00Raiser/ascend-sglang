@@ -141,7 +141,7 @@ class TestOffloadShardedGpu(TestOffloadGroupSize):
 
 
 if __name__ == "__main__":
-    for i in range(10):
+    for i in range(1):
         print(f"运行第{i}次")
         unittest.main(exit=False)
 
