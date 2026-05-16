@@ -27,16 +27,4 @@ test_rope_rocm
 
 --dllm-algorithm
 
-- `Alibaba-NLP/gte-Qwen2-1.5B-instruct`
-- `intfloat/e5-mistral-7b-instruct`
-- `Qwen/Qwen3-Embedding-8B`
-**Function Points / 功能点**:
-- Prefill logits comparison with HF runner / 与 HF runner 的 prefill logits 比较
-- Prompt truncation based on max_position_embeddings / 基于 max_position_embeddings 的提示截断
-- Matryoshka embedding dimension reduction / Matryoshka 嵌入维度缩减
-- Similarity calculation between HF and SGLang outputs / HF 和 SGLang 输出之间的相似度计算
-
-**Observable Points / 可观察点**:
-- Cosine similarity between embeddings (tolerance: 1e-5) / 嵌入之间的余弦相似度（容差：1e-5）
-- Embedding dimension correctness / 嵌入维度正确性
-- Truncation behavior for long prompts / 长提示的截断行为
+验证兼容 OpenAI 的嵌入 API 端点
