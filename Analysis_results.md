@@ -22,3 +22,5 @@
 test_rope_rocm
 
 --enable-mfu-metrics
+
+--default-priority-value
