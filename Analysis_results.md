@@ -26,3 +26,7 @@ test_rope_rocm
 --default-priority-value
 
 --dllm-algorithm
+
+- `Alibaba-NLP/gte-Qwen2-1.5B-instruct`
+- `intfloat/e5-mistral-7b-instruct`
+- `Qwen/Qwen3-Embedding-8B`
