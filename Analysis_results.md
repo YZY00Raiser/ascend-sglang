@@ -19,3 +19,6 @@
 | XiaomiMiMo/MiMo-VL-7B-RL | 0.28 | 40.0 | 1 |
 | zai-org/GLM-4.1V-9B-Thinking | 0.280 | 30.4 | 1 |
 | zai-org/GLM-4.5V-FP8 | 0.26 | 34.0 | 2 |
+test_rope_rocm
+
+--enable-mfu-metrics
