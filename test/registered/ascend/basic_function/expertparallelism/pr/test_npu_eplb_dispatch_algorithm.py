@@ -79,7 +79,7 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
         metrics = run_eval(args)
         self.assertGreater(metrics["score"], 0.79)
 
-'''
+
 
 
 class TestEPLBDispatchAlgorithmDynamic(TestEPLBDispatchAlgorithmStatic):
@@ -88,7 +88,7 @@ class TestEPLBDispatchAlgorithmDynamic(TestEPLBDispatchAlgorithmStatic):
 
 class TestEPLBDispatchAlgorithmFake(TestEPLBDispatchAlgorithmStatic):
     ep_dispatch_algorithm = "fake"
-'''
+
 
 if __name__ == "__main__":
     unittest.main()
