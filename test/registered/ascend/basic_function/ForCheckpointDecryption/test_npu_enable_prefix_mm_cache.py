@@ -15,7 +15,9 @@ from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     popen_launch_server,
 )
-from sglang.test.vlm_utils import IMAGE_SGL_LOGO_URL
+# from sglang.test.vlm_utils import IMAGE_SGL_LOGO_URL
+
+IMAGE_SGL_LOGO_URL="/home/y30082119/sgl_logo.png"
 
 
 class TestPrefixMMCacheSimple(unittest.TestCase):
