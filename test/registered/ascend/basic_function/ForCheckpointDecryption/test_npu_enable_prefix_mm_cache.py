@@ -112,7 +112,7 @@ class TestPrefixMMCacheSimple(unittest.TestCase):
             temperature=0,
             max_tokens=128,
         )
-        print(f"First response: {response1.choices[0].message.content[:100]}...")
+        print(f"First response: {response1.json()}")
 
         time.sleep(1)
 
@@ -137,7 +137,7 @@ class TestPrefixMMCacheSimple(unittest.TestCase):
             temperature=0,
             max_tokens=128,
         )
-        print(f"Second response: {response2.choices[0].message.content[:100]}...")
+        print(f"Second response: {response2.to_json()}...")
 
         # Verify responses are valid
         self.assertIsNotNone(response1.choices[0].message.content)
