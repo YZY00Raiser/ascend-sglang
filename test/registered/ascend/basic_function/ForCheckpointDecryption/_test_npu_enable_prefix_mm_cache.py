@@ -40,7 +40,7 @@ class TestPrefixMMCacheSimple(unittest.TestCase):
             "--encoder-transfer-backend",
             "zmq_to_scheduler",
             "--base-gpu-id",
-            "4",
+            "8",
         ]
 
         cls.process_encode = popen_launch_server(
@@ -62,7 +62,7 @@ class TestPrefixMMCacheSimple(unittest.TestCase):
             "--port",
             cls.language_port,
             "--base-gpu-id",
-            "12",
+            "9",
 
         ]
 
