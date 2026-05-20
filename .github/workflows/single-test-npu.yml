@@ -23,10 +23,6 @@ jobs:
   # ==================== HiCache NPU New Test Cases ====================
   # HiCache functional tests - 1 NPU
   hicache-npu-new-1-npu-a3:
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'pull_request' &&
-       contains(github.event.pull_request.changed_files, 'test/registered/ascend/basic_function/HiCache_npu_new/'))
     runs-on: linux-aarch64-a3-1
     container:
       image: swr.cn-southwest-2.myhuaweicloud.com/base_image/ascend-ci/cann:8.5.0-a3-ubuntu22.04-py3.11
@@ -92,10 +88,6 @@ jobs:
 
   # HiCache functional tests - 4 NPU
   hicache-npu-new-4-npu-a3:
-    if: |
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'pull_request' &&
-       contains(github.event.pull_request.changed_files, 'test/registered/ascend/basic_function/HiCache_npu_new/'))
     runs-on: linux-aarch64-a3-4
     container:
       image: swr.cn-southwest-2.myhuaweicloud.com/base_image/ascend-ci/cann:8.5.0-a3-ubuntu22.04-py3.11
