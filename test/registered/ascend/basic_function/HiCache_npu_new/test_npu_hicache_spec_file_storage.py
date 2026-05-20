@@ -28,7 +28,7 @@ import psutil
 import requests
 
 from sglang.benchmark.utils import get_tokenizer
-from sglang.srt.utils import is_hip, kill_process_tree
+from sglang.srt.utils import kill_process_tree
 from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
