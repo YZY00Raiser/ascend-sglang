@@ -20,7 +20,6 @@ embed_tokens. This test validates that SGLang correctly handles this case
 by untying lm_head before LoRA wrapping on NPU backend.
 """
 
-import json
 import os
 import tempfile
 import unittest
@@ -32,6 +31,7 @@ try:
     from peft import LoraConfig, get_peft_model
 except ImportError:
     import subprocess
+
     subprocess.check_call(["pip", "install", "peft", "--no-deps"])
     from peft import LoraConfig, get_peft_model
 
@@ -85,6 +85,7 @@ def create_lora_adapter_with_lm_head(base_model_path: str, output_dir: str):
     peft_model.save_pretrained(output_dir)
 
     from safetensors import safe_open
+
     safetensors_path = os.path.join(output_dir, "adapter_model.safetensors")
     f = safe_open(safetensors_path, framework="pt")
     lm_head_keys = [k for k in f.keys() if "lm_head" in k]
@@ -141,6 +142,7 @@ class TestNPULoRATiedLMHead(CustomTestCase):
         kill_process_tree(cls.process.pid)
         if cls._adapter_dir and os.path.exists(cls._adapter_dir):
             import shutil
+
             shutil.rmtree(cls._adapter_dir)
         super().tearDownClass()
 
