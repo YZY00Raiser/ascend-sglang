@@ -232,8 +232,9 @@ class TestNPUHf3fsBackendAccuracy(NPUHiCacheStorage3FSBackendBaseMixin, CustomTe
 
     def test_eval_accuracy(self):
         """Test eval accuracy with cache persistence across cache flushes."""
-        import requests
         from types import SimpleNamespace
+
+        import requests
 
         print("\n=== Testing Eval Accuracy with HF3FS Cache ===")
 
