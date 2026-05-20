@@ -113,12 +113,15 @@ jobs:
   multi-node-tests:
     name: multi-node-poc
     needs: [ set-image-config ]
-    if: ${{ !cancelled() && (needs.set-image-config.outputs.test_scope == 'all' || needs.set-image-config.outputs.test_scope == 'multi') }}
+    if: ${{ false }}  # Disabled - no multi-node tests for EPLB
     strategy:
       fail-fast: false
       matrix:
         test_config:
-          # No multi-node tests for EPLB
+          - name: placeholder
+            runner: linux-aarch64-a3-8
+            test_case: test/registered/ascend/basic_function/parallel_strategy/expert_parallelism_npu_new/test_npu_eplb.py
+            test_type: 'func'
     uses: ./.github/workflows/nightly-test-npu-e2e-multi-node.yml
     with:
       runner: ${{ matrix.test_config.runner }}
