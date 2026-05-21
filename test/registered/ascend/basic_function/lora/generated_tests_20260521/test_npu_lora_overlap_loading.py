@@ -1,4 +1,4 @@
-import unittest
+﻿import unittest
 
 import requests
 
@@ -98,7 +98,9 @@ class TestNPULoRAOverlapLoadingEnabled(CustomTestCase):
             self.assertEqual(response.status_code, 200)
             outputs.append(response.json()["text"])
 
-        self.assertNotEqual(outputs[0], outputs[1], "Different adapters should produce different outputs")
+        self.assertNotEqual(
+            outputs[0], outputs[1], "Different adapters should produce different outputs"
+        )
 
     def test_lora_overlap_loading_batch_inference(self):
         """Test batch inference with overlap loading enabled."""
@@ -131,7 +133,9 @@ class TestNPULoRAOverlapLoadingEnabled(CustomTestCase):
             self.assertEqual(response.status_code, 200)
             outputs.append(response.json()["text"])
 
-        self.assertTrue(all(o == outputs[0] for o in outputs), "Outputs should be consistent with overlap loading")
+        self.assertTrue(
+            all(o == outputs[0] for o in outputs), "Outputs should be consistent with overlap loading"
+        )
 
 
 class TestNPULoRABatchSplittingEquivalence(CustomTestCase):
@@ -205,7 +209,9 @@ class TestNPULoRABatchSplittingEquivalence(CustomTestCase):
         single_result = response_single.json()["text"]
 
         for batch_result in batch_results:
-            self.assertEqual(batch_result["text"], single_result, "Batch and single outputs should match")
+            self.assertEqual(
+                batch_result["text"], single_result, "Batch and single outputs should match"
+            )
 
     def test_batch_splitting_mixed_adapters(self):
         """Test batch splitting with mixed adapters."""
@@ -226,8 +232,12 @@ class TestNPULoRABatchSplittingEquivalence(CustomTestCase):
             batch_results.append(response.json()["text"])
 
         self.assertEqual(len(batch_results), 3)
-        self.assertNotEqual(batch_results[0], batch_results[1], "Different adapters should produce different outputs")
-        self.assertEqual(batch_results[0], batch_results[2], "Same adapter should produce same output")
+        self.assertNotEqual(
+            batch_results[0], batch_results[1], "Different adapters should produce different outputs"
+        )
+        self.assertEqual(
+            batch_results[0], batch_results[2], "Same adapter should produce same output"
+        )
 
     def test_batch_splitting_large_batch(self):
         """Test batch splitting with large batch size."""
