@@ -215,8 +215,8 @@ class TestNPULoRAEvictionPolicy(unittest.TestCase):
         from sglang.srt.lora.eviction_policy import get_eviction_policy
 
         policy = get_eviction_policy("fifo")
-        policy.add("adapter1")
-        policy.add("adapter2")
+        policy.mark_used("adapter1")
+        policy.mark_used("adapter2")
         policy.mark_used("adapter1")
 
         victim = policy.select_victim(["adapter1", "adapter2"])
@@ -227,8 +227,8 @@ class TestNPULoRAEvictionPolicy(unittest.TestCase):
         from sglang.srt.lora.eviction_policy import get_eviction_policy
 
         policy = get_eviction_policy("lru")
-        policy.add("adapter1")
-        policy.add("adapter2")
+        policy.mark_used("adapter1")
+        policy.mark_used("adapter2")
         policy.mark_used("adapter1")
 
         victim = policy.select_victim(["adapter1", "adapter2"])
@@ -239,9 +239,9 @@ class TestNPULoRAEvictionPolicy(unittest.TestCase):
         from sglang.srt.lora.eviction_policy import get_eviction_policy
 
         policy = get_eviction_policy("lru")
-        policy.add("adapter1")
-        policy.add("adapter2")
-        policy.add("adapter3")
+        policy.mark_used("adapter1")
+        policy.mark_used("adapter2")
+        policy.mark_used("adapter3")
 
         policy.mark_used("adapter1")
         policy.mark_used("adapter2")
@@ -254,8 +254,8 @@ class TestNPULoRAEvictionPolicy(unittest.TestCase):
         from sglang.srt.lora.eviction_policy import get_eviction_policy
 
         policy = get_eviction_policy("fifo")
-        policy.add("adapter1")
-        policy.add("adapter2")
+        policy.mark_used("adapter1")
+        policy.mark_used("adapter2")
 
         policy.mark_used("adapter2")
 
