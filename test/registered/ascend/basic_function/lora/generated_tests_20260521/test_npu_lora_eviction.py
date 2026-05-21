@@ -1,8 +1,6 @@
-import contextlib
 import unittest
 
 import requests
-
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ascend.test_ascend_utils import (
     LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH,
@@ -149,7 +147,11 @@ class TestNPULoRAEviction(CustomTestCase):
             self.assertEqual(response.status_code, 200)
             outputs.append(response.json()["text"])
 
-        self.assertNotEqual(outputs[0], outputs[1], "Different adapters should produce different outputs")
+        self.assertNotEqual(
+            outputs[0],
+            outputs[1],
+            "Different adapters should produce different outputs",
+        )
 
 
 class TestNPULoRAEvictionWithReusedName(CustomTestCase):
@@ -237,7 +239,11 @@ class TestNPULoRAEvictionWithReusedName(CustomTestCase):
         self.assertEqual(response.status_code, 200)
         output_b = response.json()["text"]
 
-        self.assertNotEqual(output_a, output_b, "Different LoRA paths with same name should produce different outputs")
+        self.assertNotEqual(
+            output_a,
+            output_b,
+            "Different LoRA paths with same name should produce different outputs",
+        )
 
 
 if __name__ == "__main__":
