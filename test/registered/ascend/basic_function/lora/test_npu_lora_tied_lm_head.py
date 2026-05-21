@@ -32,7 +32,7 @@ try:
 except ImportError:
     import subprocess
 
-    subprocess.check_call(["pip", "install", "peft", "--no-deps"])
+    subprocess.check_call(["pip", "install", "peft", "accelerate", "-i", "https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple"])
     from peft import LoraConfig, get_peft_model
 
 from transformers import AutoModelForCausalLM
