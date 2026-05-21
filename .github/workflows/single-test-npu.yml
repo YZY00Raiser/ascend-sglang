@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 1: LoRA tied lm_head test case
+# test round 2: LoRA tied lm_head test case - fix torchao version incompatibility
 
 on:
   pull_request:
