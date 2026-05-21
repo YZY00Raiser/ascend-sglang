@@ -111,7 +111,9 @@ class TestNPULoRAEvictionComplete(CustomTestCase):
                 output = response.json()["text"]
                 prev_output = output_history.get((prompt, "lora_a"))
                 if prev_output:
-                    self.assertEqual(prev_output, output, f"Output mismatch for prompt '{prompt}'")
+                    self.assertEqual(
+                        prev_output, output, f"Output mismatch for prompt '{prompt}'"
+                    )
         finally:
             kill_process_tree(process.pid)
 
@@ -156,7 +158,11 @@ class TestNPULoRAEvictionComplete(CustomTestCase):
         try:
             requests.post(
                 DEFAULT_URL_FOR_TEST + "/load_lora_adapter",
-                json={"lora_name": "shared_name", "lora_path": self.lora_a, "pinned": False},
+                json={
+                    "lora_name": "shared_name",
+                    "lora_path": self.lora_a,
+                    "pinned": False,
+                },
             )
 
             response1 = requests.post(
@@ -176,7 +182,11 @@ class TestNPULoRAEvictionComplete(CustomTestCase):
 
             requests.post(
                 DEFAULT_URL_FOR_TEST + "/load_lora_adapter",
-                json={"lora_name": "shared_name", "lora_path": self.lora_a, "pinned": False},
+                json={
+                    "lora_name": "shared_name",
+                    "lora_path": self.lora_a,
+                    "pinned": False,
+                },
             )
 
             response2 = requests.post(
@@ -189,7 +199,9 @@ class TestNPULoRAEvictionComplete(CustomTestCase):
             )
             output2 = response2.json()["text"]
 
-            self.assertEqual(output1, output2, "Output should be consistent with reused name")
+            self.assertEqual(
+                output1, output2, "Output should be consistent with reused name"
+            )
         finally:
             kill_process_tree(process.pid)
 
