@@ -136,6 +136,8 @@ class TestNPULoRAEvictionComplete(CustomTestCase):
             "2",
             "--max-loras-per-batch",
             "1",
+            "--max-lora-rank",
+            "64",
             "--lora-eviction-policy",
             "fifo",
             "--lora-target-modules",
@@ -210,7 +212,7 @@ class TestNPULoRAEvictionPolicy(unittest.TestCase):
 
     def test_fifo_basic_behavior(self):
         """Test FIFO policy basic behavior."""
-        from sglang.srt.lora.lora_registry import get_eviction_policy
+        from sglang.srt.lora.eviction_policy import get_eviction_policy
 
         policy = get_eviction_policy("fifo")
         policy.add("adapter1")
@@ -222,7 +224,7 @@ class TestNPULoRAEvictionPolicy(unittest.TestCase):
 
     def test_lru_basic_behavior(self):
         """Test LRU policy basic behavior."""
-        from sglang.srt.lora.lora_registry import get_eviction_policy
+        from sglang.srt.lora.eviction_policy import get_eviction_policy
 
         policy = get_eviction_policy("lru")
         policy.add("adapter1")
@@ -234,7 +236,7 @@ class TestNPULoRAEvictionPolicy(unittest.TestCase):
 
     def test_lru_reuse_updates_order(self):
         """Test LRU policy updates order on reuse."""
-        from sglang.srt.lora.lora_registry import get_eviction_policy
+        from sglang.srt.lora.eviction_policy import get_eviction_policy
 
         policy = get_eviction_policy("lru")
         policy.add("adapter1")
@@ -249,7 +251,7 @@ class TestNPULoRAEvictionPolicy(unittest.TestCase):
 
     def test_fifo_ignores_reuse(self):
         """Test FIFO policy ignores reuse."""
-        from sglang.srt.lora.lora_registry import get_eviction_policy
+        from sglang.srt.lora.eviction_policy import get_eviction_policy
 
         policy = get_eviction_policy("fifo")
         policy.add("adapter1")
