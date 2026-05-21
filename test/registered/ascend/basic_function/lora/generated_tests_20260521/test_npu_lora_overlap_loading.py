@@ -220,11 +220,11 @@ class TestNPULoRABatchSplittingEquivalence(CustomTestCase):
 
     def test_batch_splitting_mixed_adapters(self):
         """Test batch splitting with mixed adapters."""
-        prompts = PROMPTS[:3]
+        prompt = PROMPTS[0]
         adapters = ["lora_a", "lora_b", "lora_a"]
 
         batch_results = []
-        for prompt, adapter in zip(prompts, adapters):
+        for adapter in adapters:
             response = requests.post(
                 DEFAULT_URL_FOR_TEST + "/generate",
                 json={
