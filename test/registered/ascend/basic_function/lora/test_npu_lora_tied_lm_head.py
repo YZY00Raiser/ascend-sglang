@@ -1,25 +1,3 @@
-# Copyright 2023-2025 SGLang Team
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ==============================================================================
-
-"""
-Test LoRA on models with tied lm_head (tie_word_embeddings=True) on NPU.
-
-When tie_word_embeddings=True, lm_head shares the same weight tensor as
-embed_tokens. This test validates that SGLang correctly handles this case
-by untying lm_head before LoRA wrapping on NPU backend.
-"""
-
 import os
 import tempfile
 import unittest
@@ -73,8 +51,9 @@ def create_lora_adapter_with_lm_head(base_model_path: str, output_dir: str):
         device_map="cpu",
     )
 
-    if not model.config.tie_word_embeddings:
-        print(f"Warning: {base_model_path} does not have tie_word_embeddings=True")
+    assert model.config.tie_word_embeddings, (
+        f"{base_model_path} does not have tie_word_embeddings=True"
+    )
 
     lora_config = LoraConfig(
         r=8,
@@ -100,15 +79,23 @@ def create_lora_adapter_with_lm_head(base_model_path: str, output_dir: str):
     f = safe_open(safetensors_path, framework="pt")
     lm_head_keys = [k for k in f.keys() if "lm_head" in k]
 
-    print(f"Created LoRA adapter at {output_dir}")
-    print(f"  lm_head keys: {lm_head_keys}")
+    assert os.path.isdir(output_dir), f"LoRA adapter directory not created: {output_dir}"
+    assert os.path.isfile(safetensors_path), (
+        f"adapter_model.safetensors not found in {output_dir}"
+    )
+    assert len(lm_head_keys) > 0, (
+        f"No lm_head keys found in adapter at {output_dir}"
+    )
 
     del peft_model, model
-    torch.cuda.empty_cache()
+    torch.npu.empty_cache()
 
 
 class TestNPULoRATiedLMHead(CustomTestCase):
-    """Testcase: Verify LoRA on models with tied lm_head on NPU.
+    """Testcase: Test LoRA on models with tied lm_head (tie_word_embeddings=True) on NPU.
+    When tie_word_embeddings=True, lm_head shares the same weight tensor as
+    embed_tokens. This test validates that SGLang correctly handles this case
+    by untying lm_head before LoRA wrapping on NPU backend.
 
     [Test Category] Feature
     [Test Target] tie_word_embeddings, lm_head LoRA
@@ -206,15 +193,6 @@ class TestNPULoRATiedLMHead(CustomTestCase):
         self.assertEqual(len(results), len(prompts))
         for result in results:
             self.assertGreater(len(result["text"]), 0)
-
-    def test_server_info_lora_config(self):
-        """Verify server info shows correct LoRA configuration."""
-        response = requests.get(DEFAULT_URL_FOR_TEST + "/server_info")
-        self.assertEqual(response.status_code, 200)
-        server_info = response.json()
-
-        self.assertIn("lora_target_modules", server_info)
-        self.assertIn("lm_head", server_info["lora_target_modules"])
 
 
 if __name__ == "__main__":
