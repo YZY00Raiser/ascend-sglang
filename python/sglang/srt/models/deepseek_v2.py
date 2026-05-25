@@ -2345,15 +2345,6 @@ class DeepseekV2ForCausalLM(nn.Module, DeepseekV2WeightLoaderMixin):
         torch.cuda.empty_cache()
         torch.cuda.synchronize()
 
-    def get_embed(self):
-        return self.model.embed_tokens.weight
-
-    def set_embed(self, embed):
-        del self.model.embed_tokens.weight
-        self.model.embed_tokens.weight = embed
-        torch.cuda.empty_cache()
-        torch.cuda.synchronize()
-
     @classmethod
     def get_model_config_for_expert_location(cls, config):
         return ModelConfigForExpertLocation(
