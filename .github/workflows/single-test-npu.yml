@@ -76,7 +76,7 @@ jobs:
           pip install tabulate
 
           # Apply runtime monkey-patch for missing set_embed/get_embed on DeepseekV2ForCausalLM
-          python -c "
+          cat > /tmp/monkey_patch.py << 'PYEOF'
 from sglang.srt.models.deepseek_v2 import DeepseekV2ForCausalLM
 import torch
 
@@ -92,7 +92,8 @@ def _get_embed(self):
 DeepseekV2ForCausalLM.set_embed = _set_embed
 DeepseekV2ForCausalLM.get_embed = _get_embed
 print('Applied monkey-patch for set_embed/get_embed on DeepseekV2ForCausalLM')
-"
+PYEOF
+          python /tmp/monkey_patch.py
 
           current_date=$(date +%Y%m%d)
           log_path="/root/.cache/tests/logs/log/${current_date}/${HOSTNAME}"
