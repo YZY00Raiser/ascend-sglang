@@ -43,7 +43,7 @@ class TestNPUEAGLEConstrainedDecoding(
         cls.base_url = DEFAULT_URL_FOR_TEST
         os.environ["SGLANG_ENABLE_SPEC_V2"] = "1"
         cls.env = os.environ.copy()
-        
+
         launch_args = [
             "--trust-remote-code",
             "--attention-backend",
@@ -70,7 +70,7 @@ class TestNPUEAGLEConstrainedDecoding(
             "4",
             "--disable-cuda-graph",
         ]
-        
+
         cls.process = popen_launch_server(
             cls.model,
             cls.base_url,

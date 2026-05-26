@@ -1,11 +1,7 @@
-import json
 import threading
 import time
-import unittest
-from concurrent.futures import ThreadPoolExecutor
 from types import SimpleNamespace
 
-import numpy as np
 import requests
 
 from sglang.srt.utils import kill_process_tree
@@ -14,7 +10,6 @@ from sglang.test.ascend.test_ascend_utils import (
     QWEN3_32B_W8A8_MINDIE_WEIGHTS_PATH,
 )
 from sglang.test.ci.ci_register import register_npu_ci
-from sglang.test.kits.radix_cache_server_kit import run_radix_attention_test
 from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -45,7 +40,7 @@ class TestNPUEAGLE3ServerBasic(CustomTestCase):
         os.environ["SGLANG_ENABLE_OVERLAP_PLAN_STREAM"] = "1"
         os.environ["SGLANG_ENABLE_SPEC_V2"] = "1"
         cls.env = os.environ.copy()
-        
+
         launch_args = [
             "--trust-remote-code",
             "--attention-backend",
@@ -75,7 +70,7 @@ class TestNPUEAGLE3ServerBasic(CustomTestCase):
             "8",
             "--disable-cuda-graph",
         ]
-        
+
         cls.process = popen_launch_server(
             cls.model,
             cls.base_url,
@@ -175,7 +170,7 @@ class TestNPUEAGLE3ServerAdditional(TestNPUEAGLE3ServerBasic):
         os.environ["SGLANG_ENABLE_OVERLAP_PLAN_STREAM"] = "1"
         os.environ["SGLANG_ENABLE_SPEC_V2"] = "1"
         cls.env = os.environ.copy()
-        
+
         launch_args = [
             "--trust-remote-code",
             "--attention-backend",
@@ -205,7 +200,7 @@ class TestNPUEAGLE3ServerAdditional(TestNPUEAGLE3ServerBasic):
             "8",
             "--disable-cuda-graph",
         ]
-        
+
         cls.process = popen_launch_server(
             cls.model,
             cls.base_url,

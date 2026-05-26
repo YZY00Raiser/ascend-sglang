@@ -66,7 +66,7 @@ class TestNPUAdaptiveSpeculativeServer(CustomTestCase):
         os.environ["SGLANG_ENABLE_OVERLAP_PLAN_STREAM"] = "1"
         os.environ["SGLANG_ENABLE_SPEC_V2"] = "1"
         cls.env = os.environ.copy()
-        
+
         try:
             cls.process = popen_launch_server(
                 cls.model,
