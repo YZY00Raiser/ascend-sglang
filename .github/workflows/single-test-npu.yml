@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 7: Speculative inference test cases (Adaptive, EAGLE, EAGLE3)
+# test round 8: Speculative inference test cases - fix lint issues
 
 on:
   pull_request:
