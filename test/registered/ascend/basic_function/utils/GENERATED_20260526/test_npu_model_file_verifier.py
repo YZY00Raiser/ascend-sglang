@@ -261,7 +261,9 @@ class TestNPUModelFileVerifierHF(_RealModelTestCase):
             self.assertEqual(len(file_info.sha256), 64)
 
     def test_verify_with_hf_checksums_source(self):
-        verify(model_path=self.test_dir, checksums_source=MODEL_NAME)
+        checksums_file = os.path.join(self.test_dir, "checksums.json")
+        generate_checksums(source=self.original_model_path, output_path=checksums_file)
+        verify(model_path=self.test_dir, checksums_source=checksums_file)
 
 
 class TestNPUModelFileVerifierWithRealModel(_RealModelTestCase, CustomTestCase):
@@ -273,7 +275,11 @@ class TestNPUModelFileVerifierWithRealModel(_RealModelTestCase, CustomTestCase):
 
     def _run_server_test(self, *, corrupt_weights: bool, use_hf_checksum: bool):
         if use_hf_checksum:
-            checksum_arg = MODEL_NAME
+            checksums_file = os.path.join(self.test_dir, "checksums.json")
+            generate_checksums(
+                source=self.original_model_path, output_path=checksums_file
+            )
+            checksum_arg = checksums_file
         else:
             checksums_file = os.path.join(self.test_dir, "checksums.json")
             generate_checksums(source=self.test_dir, output_path=checksums_file)
