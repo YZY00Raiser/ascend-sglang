@@ -36,7 +36,8 @@ class TestNPUSchedulerStatusLogger(CustomTestCase):
         env["SGLANG_LOG_SCHEDULER_STATUS_TARGET"] = cls.temp_dir
         env["SGLANG_LOG_SCHEDULER_STATUS_INTERVAL"] = "1"
         other_args = [
-            "--attention-backend", "ascend",
+            "--attention-backend",
+            "ascend",
             "--disable-cuda-graph",
             "--skip-server-warmup",
             "--enable-metrics",

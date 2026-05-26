@@ -20,7 +20,6 @@ from sglang.srt.utils.model_file_verifier import (
     generate_checksums,
     verify,
 )
-from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -297,9 +296,11 @@ class TestNPUModelFileVerifierWithRealModel(_RealModelTestCase, CustomTestCase):
                 base_url=DEFAULT_URL_FOR_TEST,
                 timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
                 other_args=[
-                    "--attention-backend", "ascend",
+                    "--attention-backend",
+                    "ascend",
                     "--disable-cuda-graph",
-                    "--model-checksum", checksum_arg,
+                    "--model-checksum",
+                    checksum_arg,
                 ],
                 return_stdout_stderr=(stdout_io, stderr_io),
             )

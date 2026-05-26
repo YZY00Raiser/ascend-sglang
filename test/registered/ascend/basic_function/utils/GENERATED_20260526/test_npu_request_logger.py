@@ -38,13 +38,17 @@ class BaseTestNPURequestLogger:
         cls.stdout = io.StringIO()
         cls.stderr = io.StringIO()
         other_args = [
-            "--attention-backend", "ascend",
+            "--attention-backend",
+            "ascend",
             "--disable-cuda-graph",
             "--log-requests",
-            "--log-requests-level", "2",
-            "--log-requests-format", cls.log_requests_format,
+            "--log-requests-level",
+            "2",
+            "--log-requests-format",
+            cls.log_requests_format,
             "--skip-server-warmup",
-            "--log-requests-target", "stdout",
+            "--log-requests-target",
+            "stdout",
             cls.temp_dir,
         ]
         cls._old_env_vars = {}
