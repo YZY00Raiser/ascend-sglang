@@ -3,7 +3,7 @@ import unittest
 import requests
 
 from sglang.srt.utils import kill_process_tree
-# from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -12,8 +12,7 @@ from sglang.test.test_utils import (
     popen_launch_server,
 )
 
-register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
-DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
+register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
 
 
 class TestMoreRunnerBackendTriton(CustomTestCase):
@@ -23,13 +22,12 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
     [Test Target] --moe-a2a-backend
     """
 
-    model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
     moe_runner_backend = "triton"
 
     @classmethod
     def setUpClass(cls):
         cls.process = popen_launch_server(
-            cls.model,
+            DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH,
             DEFAULT_URL_FOR_TEST,
             DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=[

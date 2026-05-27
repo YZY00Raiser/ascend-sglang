@@ -2,7 +2,7 @@ import unittest
 from types import SimpleNamespace
 
 from sglang.srt.utils import kill_process_tree
-# from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import DEEPSEEK_CODER_V2_LITE_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
@@ -13,7 +13,7 @@ from sglang.test.test_utils import (
 )
 
 register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
-DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
+DEEPSEEK_CODER_V2_LITE_WEIGHTS_PATH = "/home/weights/DeepSeek-Coder-V2-Lite-Instruct"
 
 
 class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
@@ -28,7 +28,7 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
     @classmethod
     def setUpClass(cls):
         cls.process = popen_launch_server(
-            DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH,
+            DEEPSEEK_CODER_V2_LITE_WEIGHTS_PATH,
             DEFAULT_URL_FOR_TEST,
             DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=[
@@ -43,6 +43,10 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
                 "--expert-parallel-size",
                 "2",
                 "--enable-eplb",
+                "--moe-a2a-backend",
+                "ascend_fuseep",
+                # "--deepep-mode",
+                # "normal",
                 "--ep-num-redundant-experts",
                 "4",
                 "--ep-dispatch-algorithm",
@@ -53,7 +57,7 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
             env={
                 # "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
                 "HCCL_BUFFSIZE": "1024",
-                "SGLANG_NPU_FUSED_MOE_MODE": "1",
+                "SGLANG_NPU_FUSED_MOE_MODE":"1",
             },
         )
 
@@ -65,7 +69,7 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
         args = SimpleNamespace(
             max_new_tokens=512,
             base_url=DEFAULT_URL_FOR_TEST,
-            model=DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH,
+            model=DEEPSEEK_CODER_V2_LITE_WEIGHTS_PATH,
             eval_name="gsm8k",
             api="completion",
             num_examples=200,
@@ -74,6 +78,8 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
         )
         metrics = run_eval(args)
         self.assertGreater(metrics["score"], 0.79)
+
+
 
 
 class TestEPLBDispatchAlgorithmDynamic(TestEPLBDispatchAlgorithmStatic):
