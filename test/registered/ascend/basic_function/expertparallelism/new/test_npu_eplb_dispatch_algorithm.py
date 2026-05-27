@@ -65,7 +65,7 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
         args = SimpleNamespace(
             max_new_tokens=512,
             base_url=DEFAULT_URL_FOR_TEST,
-            model=DEEPSEEK_CODER_V2_LITE_WEIGHTS_PATH,
+            model=DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH,
             eval_name="gsm8k",
             api="completion",
             num_examples=200,
