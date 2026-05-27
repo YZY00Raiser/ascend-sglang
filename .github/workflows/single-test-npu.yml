@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 8: Speculative inference test cases - fix lint issues
+# test round 9: Execute all three test cases - continue on failure
 
 on:
   pull_request:
@@ -38,11 +38,11 @@ jobs:
           echo "Source code path: ${sglang_source_path}"
           ln -sf ${sglang_source_path} /root/sglang
 
-          # Test cases
+          # Test cases - reordered to run simpler tests first
           test_cases=(
-            "test/registered/ascend/basic_function/speculative_inference/GENERATED_20260525/test_npu_adaptive_speculative.py"
             "test/registered/ascend/basic_function/speculative_inference/GENERATED_20260525/test_npu_eagle_constrained_decoding.py"
             "test/registered/ascend/basic_function/speculative_inference/GENERATED_20260525/test_npu_eagle_gsm8k_radix_abort.py"
+            "test/registered/ascend/basic_function/speculative_inference/GENERATED_20260525/test_npu_adaptive_speculative.py"
           )
 
           for test_case in "${test_cases[@]}"; do
@@ -79,12 +79,22 @@ jobs:
           mkdir -p ${log_path}
           echo "Log path: ${log_path}"
 
+          exit_code=0
           for test_case in "${test_cases[@]}"; do
             tc_name=$(basename ${test_case} .py)
+            echo "========================================"
             echo "Running test case ${test_case}"
-            python -u ${sglang_source_path}/${test_case}
+            echo "========================================"
+            if python -u ${sglang_source_path}/${test_case}; then
+              echo "✓ PASSED: ${test_case}"
+            else
+              echo "✗ FAILED: ${test_case}"
+              exit_code=1
+            fi
             echo "Finished test case ${test_case}"
+            echo ""
           done
+          exit ${exit_code}
 
           plog_path="/root/ascend/log/debug/plog"
           if [ -d "$plog_path" ];then
