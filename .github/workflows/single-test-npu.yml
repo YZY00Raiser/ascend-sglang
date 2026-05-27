@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 2: Execute 3 NPU session test cases - fix newline
+# test round 3: Execute 3 NPU session test cases - fix ruff
 
 on:
   pull_request:
