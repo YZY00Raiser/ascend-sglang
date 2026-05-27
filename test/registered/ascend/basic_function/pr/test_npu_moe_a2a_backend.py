@@ -55,7 +55,7 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
                 # "--moe-runner-backend",
                 # cls.moe_runner_backend,
                 "--base-gpu-id",
-                "2"
+                "2",
             ],
             env={
                 "SGLANG_NPUDISABLE_ACL_FORMAT_WEIGHT": "1",

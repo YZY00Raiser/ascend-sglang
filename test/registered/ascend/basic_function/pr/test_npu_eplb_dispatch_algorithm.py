@@ -21,6 +21,7 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
     [Test Category] Parameter
     [Test Target] --ep-dispatch-algorithm, --moe-a2a-backend
     """
+
     model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
     ep_dispatch_algorithm = "static"
 
@@ -46,7 +47,6 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
                 "4",
                 "--ep-dispatch-algorithm",
                 cls.ep_dispatch_algorithm,
-
             ],
             env={
                 "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
