@@ -16,10 +16,10 @@ register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
 DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH ="/home/weights/DeepSeek-V3.2-W8A8"
 
 class TestMoreRunnerBackendTriton(CustomTestCase):
-    """Testcase：Verify set --moe-runner-backend, the inference request is successfully processed.
+    """Testcase：Verify set --moe-a2a-backend, the inference request is successfully processed.
 
     [Test Category] Parameter
-    [Test Target] --moe-runner-backend
+    [Test Target] --moe-a2a-backend
     """
 
     model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
