@@ -1,0 +1,59 @@
+name: Single Test (NPU)
+# test round 1: Execute 3 NPU session test cases
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/single-test-npu.yml"
+
+jobs:
+  single-node-poc:
+    runs-on: linux-aarch64-a3-8
+    container:
+      image: swr.cn-southwest-2.myhuaweicloud.com/base_image/dockerhub/lmsysorg/sglang:main-cann8.5.0-a3
+    timeout-minutes: 120
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Mark repository safe
+        run: |
+          git config --system --add safe.directory ${GITHUB_WORKSPACE}
+
+      - name: Install dependencies
+        run: |
+          bash scripts/ci/npu/npu_ci_install_dependency.sh
+
+      - name: Run test cases
+        run: |
+          source /usr/local/Ascend/ascend-toolkit/set_env.sh
+          source /root/.bashrc
+          export PYTHONPATH="${GITHUB_WORKSPACE}/python:${PYTHONPATH}"
+          export SGLANG_SOURCE_PATH="${GITHUB_WORKSPACE}"
+          export SGLANG_IS_IN_CI=true
+          export SGLANG_IS_IN_NPU_CI=true
+
+          sglang_source_path="${GITHUB_WORKSPACE}"
+
+          test_cases=(
+            "test/registered/ascend/basic_function/sessions/GENERATED_20260527/test_npu_session_control.py"
+            "test/registered/ascend/basic_function/sessions/GENERATED_20260527/test_npu_session_latency.py"
+            "test/registered/ascend/basic_function/sessions/GENERATED_20260527/test_npu_streaming_session.py"
+          )
+
+          exit_code=0
+          for test_case in "${test_cases[@]}"; do
+            tc_name=$(basename ${test_case} .py)
+            echo "========================================"
+            echo "Running test case ${test_case}"
+            echo "========================================"
+            if python -u ${sglang_source_path}/${test_case}; then
+              echo "✓ PASSED: ${test_case}"
+            else
+              echo "✗ FAILED: ${test_case}"
+              exit_code=1
+            fi
+            echo "Finished test case ${test_case}"
+            echo ""
+          done
+          exit ${exit_code}
