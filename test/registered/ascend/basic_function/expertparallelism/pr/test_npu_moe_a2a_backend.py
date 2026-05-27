@@ -13,7 +13,8 @@ from sglang.test.test_utils import (
 )
 
 register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
-DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH ="/home/weights/DeepSeek-V3.2-W8A8"
+DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
+
 
 class TestMoreRunnerBackendTriton(CustomTestCase):
     """Testcase：Verify set --moe-a2a-backend, the inference request is successfully processed.
@@ -44,7 +45,7 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
                 "2",
                 # "--enable-eplb",
                 "--moe-a2a-backend",
-                "ascend_fuseep",
+                "ascend_fuseep",  # It is incompatible with eplb
                 # "--moe-a2a-backend",
                 # "deepep",
                 # "--deepep-mode",
@@ -61,7 +62,7 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
             env={
                 "SGLANG_NPUDISABLE_ACL_FORMAT_WEIGHT": "1",
                 "HCCL_BUFFSIZE": "1024",
-                "SGLANG_NPU_FUSED_MOE_MODE":"1",
+                "SGLANG_NPU_FUSED_MOE_MODE": "1",
             },
         )
 
