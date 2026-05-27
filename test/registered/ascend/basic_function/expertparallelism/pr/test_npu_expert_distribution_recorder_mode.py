@@ -6,7 +6,7 @@ import requests
 
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ascend.test_ascend_utils import run_command
-# from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -15,8 +15,7 @@ from sglang.test.test_utils import (
     popen_launch_server,
 )
 
-register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
-DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
+register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
 
 
 class TestExpertDistributionRecorderModeStatic(CustomTestCase):
@@ -25,6 +24,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
     [Test Category] Parameter
     [Test Target] --expert-distribution-recorder-mode
     """
+
     expert_distribution_recorder_mode = "stat"
 
     path = "/tmp/pt"
@@ -59,7 +59,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
                 "12",
             ],
             env={
-                # "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
+                "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
                 "HCCL_BUFFSIZE": "1024",
                 "SGLANG_EXPERT_DISTRIBUTION_RECORDER_DIR": f"{cls.path}",
             },
