@@ -1,162 +1,75 @@
 import unittest
-from types import SimpleNamespace
 
-import json
+import requests
 
 from sglang.srt.utils import kill_process_tree
+from sglang.test.ascend.test_ascend_utils import (
+    LLAMA_4_SCOUT_17B_16E_INSTRUCT_WEIGHTS_PATH,
+
+)
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
-    is_in_ci,
     popen_launch_server,
 )
+git clone https://huggingface.co/kingabzpro/Llama-4-Scout-17B-16E-Instruct-Medical-ChatBot
+register_npu_ci(est_time=400, suite="nightly-4-npu-a3", nightly=True)
 
-MODELS = [
-    SimpleNamespace(
-        # model="/root/.cache/modelscope/hub/models/meta-llama/Llama-4-Scout-17B-16E-Instruct",
-        model="/root/.cache/modelscope/hub/models/meta-llama/Llama-4-Scout-17B-16E-Instruct",
-        tp_size=8,
-    ),
-]
 
-@unittest.skipIf(is_in_ci(), "To reduce the CI execution time.")
-class TestLlama4LoRA(CustomTestCase):
+class TestLoraBasicFunction(CustomTestCase):
+    """Testcase：Verify the use llama4 model with lora, inference request succeeded.
+
+    [Test Category] Parameter
+    [Test Target] --enable-lora, --lora-path,
+    """
+
+    lora_a = ""
+
     @classmethod
     def setUpClass(cls):
-        cls.base_url = DEFAULT_URL_FOR_TEST
+        other_args = [
+            "--enable-lora",
+            "--lora-path",
+            f"lora_a={cls.lora_a}",
+            "--lora-target-modules",
+            "all",
+            "--attention-backend",
+            "ascend",
+            "--disable-cuda-graph",
+            "--tp-size",
+            "4",
+            "--mem-fraction-static",
+            "0.9",
+            "--disable-radix-cache",
+        ]
+        cls.process = popen_launch_server(
+            LLAMA_4_SCOUT_17B_16E_INSTRUCT_WEIGHTS_PATH,
+            DEFAULT_URL_FOR_TEST,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=other_args,
+        )
 
-    def test_bringup(self):
-        for model in MODELS:
-            try:
-                process = popen_launch_server(
-                    model.model,
-                    self.base_url,
-                    timeout=3 * DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
-                    other_args=[
-                        "--mem-fraction-static",
-                        0.8,
-                        # "--cuda-graph-max-bs",
-                        # 16,
-                        "--disable-cuda-graph",
-                        "--disable-radix-cache",
-                        "--enable-lora",
-                        "--max-lora-rank",
-                        "64",
-                        "--lora-target-modules",
-                        "qkv_proj",
-                        "o_proj",
-                        "gate_up_proj",
-                        "down_proj",
-                        "--tp-size",
-                        str(model.tp_size),
-                        "--context-length",
-                        "262144",
-                        "--attention-backend",
-                        "ascend",
-                    ],
-                )
+    @classmethod
+    def tearDownClass(cls):
+        kill_process_tree(cls.process.pid)
 
-                # json_schema = json.dumps({
-                #     "type": "object",
-                #     "properties": {
-                #         "name": {"type": "string"},
-                #         "age": {"type": "integer"},
-                #         "city": {"type": "string"},
-                #     },
-                #     "required": ["name", "age", "city"],
-                #
-                # })
-                # response = requests.post(
-                #     f"{DEFAULT_URL_FOR_TEST}/generate",
-                #     json={
-                #         "text": "Generate person information",
-                #         "sampling_params": {
-                #             "temperature": 0.3,
-                #             "max_new_tokens": 128,
-                #             "json_schema": json_schema,
-                #         },
-                #         "lora_path": "lora_a",
-                #     },
-                # )
-                # self.assertEqual(response.status_code, 200)
-                # result = response.json()
-                # parsed_json = json.loads(result["text"])
-                # self.assertIn("name", parsed_json)
-                # self.assertIn("age", parsed_json)
-                # self.assertIn("city", parsed_json)
-            except Exception as e:
-                print(f"Error testing {model.model}: {e}")
-                self.fail(f"Test failed for {model.model}: {e}")
-
-            finally:
-                # Ensure process cleanup happens regardless of success/failure
-                if process is not None and process.poll() is None:
-                    print(f"Cleaning up process {process.pid}")
-                    try:
-                        kill_process_tree(process.pid)
-                    except Exception as e:
-                        print(f"Error killing process: {e}")
+    def test_lama4_lora(self):
+        response = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+                "lora_path": "lora_a",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Paris", response.text)
 
 
 if __name__ == "__main__":
     unittest.main()
-# import unittest
-#
-# from sglang.srt.utils import kill_process_tree
-# from sglang.test.ascend.test_ascend_utils import LLAMA_4_SCOUT_17B_16E_INSTRUCT_WEIGHTS_PATH
-# from sglang.test.ci.ci_register import register_npu_ci
-# from sglang.test.test_utils import (
-#     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
-#     DEFAULT_URL_FOR_TEST,
-#     CustomTestCase,
-#     is_in_ci,
-#     popen_launch_server,
-# )
-#
-# register_npu_ci(est_time=400, suite="nightly-1-npu-a3", nightly=True)
-#
-#
-# @unittest.skipIf(is_in_ci(), "To reduce the CI execution time.")
-# class TestLlama4LoRA(CustomTestCase):
-#     """
-#     Testcase：Verify the successful launch and operation of Llama-4 model when LoRA function is enabled.
-#
-#     [Test Category] Parameter
-#     [Test Target] --enable-lora, --max-lora-rank
-#     """
-#
-#     @classmethod
-#     def setUpClass(cls):
-#         cls.model = LLAMA_4_SCOUT_17B_16E_INSTRUCT_WEIGHTS_PATH
-#         cls.base_url = DEFAULT_URL_FOR_TEST
-#         cls.process = popen_launch_server(
-#             cls.model,
-#             cls.base_url,
-#             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
-#             other_args=[
-#                 "--enable-lora",
-#                 "--max-lora-rank",
-#                 "64",
-#                 "--lora-target-modules",
-#                 "all",
-#                 "--tp-size",
-#                 8,
-#                 "--context-length",
-#                 "262144",
-#                 "--attention-backend",
-#                 "fa3",
-#             ],
-#         )
-#
-#     @classmethod
-#     def tearDownClass(cls):
-#         kill_process_tree(cls.process.pid)
-#
-#     def test_bringup(self):
-#         self.assertNotEqual(self.process, None)
-#         self.assertEqual(self.process.poll(), None)
-#
-#
-# if __name__ == "__main__":
-#     unittest.main()
