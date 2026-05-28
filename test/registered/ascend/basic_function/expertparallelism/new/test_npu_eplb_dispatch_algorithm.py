@@ -42,8 +42,6 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
                 "--expert-parallel-size",
                 "16",
                 "--enable-eplb",
-                "--ep-num-redundant-experts",
-                "4",
                 "--ep-dispatch-algorithm",
                 cls.ep_dispatch_algorithm,
             ],
