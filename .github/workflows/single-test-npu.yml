@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 2: retrigger PR CI for EPLB and MoE test cases
+# test round 5: expert_parallelism test cases
 
 on:
   pull_request:
@@ -40,8 +40,9 @@ jobs:
 
           # Test cases
           test_cases=(
-            "test/registered/ascend/basic_function/pr/test_npu_eplb_dispatch_algorithm.py"
-            "test/registered/ascend/basic_function/pr/test_npu_moe_a2a_backend.py"
+            "test/registered/ascend/basic_function/expert_parallelism/test_npu_moe_a2a_backend.py"
+            "test/registered/ascend/basic_function/expert_parallelism/test_npu_eplb_dispatch_algorithm.py"
+            "test/registered/ascend/basic_function/expert_parallelism/test_npu_expert_distribution_recorder_mode.py"
           )
 
           for test_case in "${test_cases[@]}"; do
