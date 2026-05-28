@@ -28,7 +28,7 @@ class TestNPUWeightCheckerE2E(CustomTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.url = DEFAULT_URL_FOR_TEST
+        cls.url = "http://127.0.0.1:30001"
         cls.process = popen_launch_server(
             _MODEL_NAME,
             cls.url,
