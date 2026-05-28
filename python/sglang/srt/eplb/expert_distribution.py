@@ -411,12 +411,18 @@ class _DetailSinglePassGatherer(_SinglePassGatherer):
         num_tokens_per_rdma_rank,
         num_tokens_per_expert,
     ):
+        # Handle both tensor and list inputs
+        def _to_list(obj):
+            if hasattr(obj, 'cpu'):
+                return obj.cpu().tolist()
+            return obj
+
         self._misc_objects.append(
             dict(
                 layer_id=layer_idx,
-                num_tokens_per_rank=num_tokens_per_rank.cpu().tolist(),
-                num_tokens_per_rdma_rank=num_tokens_per_rdma_rank.cpu().tolist(),
-                num_tokens_per_expert=num_tokens_per_expert.cpu().tolist(),
+                num_tokens_per_rank=_to_list(num_tokens_per_rank),
+                num_tokens_per_rdma_rank=_to_list(num_tokens_per_rdma_rank),
+                num_tokens_per_expert=_to_list(num_tokens_per_expert),
             )
         )
 
