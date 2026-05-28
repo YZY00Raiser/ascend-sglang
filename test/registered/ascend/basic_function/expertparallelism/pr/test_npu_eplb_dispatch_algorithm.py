@@ -38,7 +38,7 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
                 "--mem-fraction-static",
                 "0.5",
                 "--tp-size",
-                "8",
+                "16",
                 "--expert-parallel-size",
                 "2",
                 "--enable-eplb",

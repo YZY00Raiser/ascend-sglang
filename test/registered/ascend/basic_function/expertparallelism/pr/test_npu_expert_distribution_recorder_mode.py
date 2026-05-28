@@ -43,7 +43,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
                 "--mem-fraction-static",
                 "0.5",
                 "--tp-size",
-                "2",
+                "16",
                 "--expert-parallel-size",
                 "2",
                 "--enable-eplb",

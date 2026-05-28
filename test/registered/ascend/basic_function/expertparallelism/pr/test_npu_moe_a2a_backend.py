@@ -38,7 +38,7 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
                 "--mem-fraction-static",
                 "0.5",
                 "--tp-size",
-                "2",
+                "16",
                 "--ep",
                 "2",
                 # "--enable-eplb",
