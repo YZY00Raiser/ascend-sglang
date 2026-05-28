@@ -40,7 +40,7 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
                 "--tp-size",
                 "16",
                 "--ep",
-                "2",
+                "16",
                 # "--enable-eplb",
                 "--moe-a2a-backend",
                 "ascend_fuseep",  # It is incompatible with eplb

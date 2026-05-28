@@ -45,7 +45,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
                 "--tp-size",
                 "16",
                 "--expert-parallel-size",
-                "2",
+                "16",
                 "--enable-eplb",
                 "--moe-a2a-backend",
                 "deepep",
