@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 2: retrigger CI after fixing timeout issue in test_npu_large_max_new_tokens
+# test round 3: retrigger CI after fixing lint issues
 
 on:
   pull_request:
