@@ -54,13 +54,10 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
                 # "50",
                 # "--moe-runner-backend",
                 # cls.moe_runner_backend,
-                "--base-gpu-id",
-                "2"
             ],
             env={
                 "SGLANG_NPUDISABLE_ACL_FORMAT_WEIGHT": "1",
                 "HCCL_BUFFSIZE": "1024",
-                "SGLANG_NPU_FUSED_MOE_MODE": "1",
             },
         )
 
