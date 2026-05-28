@@ -6,13 +6,13 @@ from huggingface_hub import snapshot_download
 from safetensors.torch import load_file
 
 import sglang as sgl
-from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
+from sglang.test.ascend.test_ascend_utils import LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
 
 register_npu_ci(est_time=150, suite="nightly-2-npu-a3", nightly=True)
 
-MODEL_PATH = QWEN3_0_6B_WEIGHTS_PATH
+MODEL_PATH = LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
 LORA_REPO = "charent/self_cognition_Alice"
 TEST_PROMPT = "Hello, my name is"
 EXPECTED_OUTPUT = (

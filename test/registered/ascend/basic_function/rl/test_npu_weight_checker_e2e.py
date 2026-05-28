@@ -4,7 +4,7 @@ import requests
 import torch
 
 from sglang.srt.utils import MultiprocessingSerializer, kill_process_tree
-from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
+from sglang.test.ascend.test_ascend_utils import LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -15,7 +15,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=150, suite="nightly-2-npu-a3", nightly=True)
 
-_MODEL_NAME = QWEN3_0_6B_WEIGHTS_PATH
+_MODEL_NAME = LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
 _UP_PROJ_SHAPE = (3072, 1024)
 
 
