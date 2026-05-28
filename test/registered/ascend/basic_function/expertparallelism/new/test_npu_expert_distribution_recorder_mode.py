@@ -52,7 +52,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
                 "--deepep-mode",
                 "normal",
                 "--ep-num-redundant-experts",
-                "4",
+                "2",
                 "--expert-distribution-recorder-mode",
                 cls.expert_distribution_recorder_mode,
             ],
