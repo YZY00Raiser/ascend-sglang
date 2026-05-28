@@ -1,3 +1,5 @@
+import base64
+import io
 import pickle
 import unittest
 
@@ -56,8 +58,11 @@ class TestNPUWeightCheckerE2E(CustomTestCase):
         )
 
     def _update_weights(self, named_tensors):
-        # Use pickle instead of MultiprocessingSerializer to avoid auth issues on NPU
-        serialized = pickle.dumps(named_tensors).hex()
+        # Use ForkingPickler and base64 encoding to match server-side deserialize
+        buf = io.BytesIO()
+        pickle.dump(named_tensors, buf)
+        buf.seek(0)
+        serialized = base64.b64encode(buf.read()).decode("utf-8")
         return requests.post(
             f"{self.url}/update_weights_from_tensor",
             json={
