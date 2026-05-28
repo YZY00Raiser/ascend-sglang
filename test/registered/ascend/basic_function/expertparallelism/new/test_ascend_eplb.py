@@ -112,7 +112,7 @@ class TestStaticEPLB(CustomTestCase):
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             engine_kwargs = dict(
-                model_path=MODEL_PATH,
+                model_path=,
                 trust_remote_code=True,
                 attention_backend="ascend",
                 quantization="modelslim",

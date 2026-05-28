@@ -23,7 +23,7 @@ DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V3.2-W8A8"
 class _BaseTestDynamicEPLB(CustomTestCase):
     """Test dynamic EPLB functionality on NPU.
 
-    [Test Category] EPLB
+    [Test Category] Parameter
     [Test Target] --enable-eplb, --ep-num-redundant-experts, dynamic rebalancing
     """
     extra_args = []
@@ -129,7 +129,7 @@ class TestDynamicEPLBMultiChunk(_BaseTestDynamicEPLB):
 class TestStaticEPLB(CustomTestCase):
     """Test static EPLB with expert distribution recording and initialization on NPU.
 
-    [Test Category] EPLB
+    [Test Category] Parameter
     [Test Target] --enable-eplb, expert distribution recorder, init_expert_location
     """
     def test_save_expert_distribution_and_init_expert_location(self):
