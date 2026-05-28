@@ -83,6 +83,9 @@ class TestLargeMaxNewTokens(CustomTestCase):
 
         futures = []
         all_requests_running = False
+        start_time = time.time()
+        max_wait_time = 300  # 5 minutes timeout
+
         with ThreadPoolExecutor(num_requests) as executor:
             for i in range(num_requests):
                 futures.append(executor.submit(self.run_chat_completion))
@@ -90,6 +93,11 @@ class TestLargeMaxNewTokens(CustomTestCase):
             pt = 0
             while pt >= 0:
                 time.sleep(5)
+                # Check timeout
+                if time.time() - start_time > max_wait_time:
+                    print(f"Timeout after {max_wait_time} seconds")
+                    pt = -1
+                    break
                 lines = open(STDERR_FILENAME).readlines()
                 for line in lines[pt:]:
                     print(line, end="", flush=True)
