@@ -3,7 +3,7 @@ import unittest
 import requests
 
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -14,7 +14,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
 
-
+DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V3.2-W8A8"
 class TestMoreRunnerBackendTriton(CustomTestCase):
     """Testcase：Verify set --moe-a2a-backend, the inference request is successfully processed.
 
