@@ -15,10 +15,7 @@ from sglang.test.ascend.test_ascend_utils import (
 from sglang.test.ci.ci_register import register_npu_ci
 
 register_npu_ci(
-    est_time=3600,
-    suite="",
-    nightly=True,
-    disabled="multi modes test cases"
+    est_time=3600, suite="", nightly=True, disabled="multi modes test cases"
 )
 
 
