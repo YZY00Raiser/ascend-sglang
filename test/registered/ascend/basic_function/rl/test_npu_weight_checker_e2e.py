@@ -45,7 +45,10 @@ class TestNPUWeightCheckerE2E(CustomTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        kill_process_tree(cls.process.pid)
+        try:
+            kill_process_tree(cls.process.pid)
+        except Exception:
+            pass  # Ignore cleanup errors
 
     def _post(self, action: str) -> requests.Response:
         return requests.post(
