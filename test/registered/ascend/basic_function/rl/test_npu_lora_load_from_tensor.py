@@ -47,22 +47,12 @@ class TestNPULoRALoadFromTensor(CustomTestCase):
             cls.lora_config_dict = json.load(f)
 
     def test_lora_lru_eviction(self):
-        MAX_LOADED_LORAS = 8
-        test_engine = sgl.Engine(
-            model_path=MODEL_PATH,
-            trust_remote_code=True,
-            enable_lora=True,
-            max_lora_rank=64,
-            lora_target_modules=["all"],
-            mem_fraction_static=0.6,
-            log_level="error",
-            max_loaded_loras=MAX_LOADED_LORAS,
-        )
-
+        # Test LRU eviction using the class-level engine
+        # Load multiple LoRA adapters to trigger LRU eviction
         TEST_LORA_COUNT = 10
         for i in range(TEST_LORA_COUNT):
-            result = test_engine.load_lora_adapter_from_tensors(
-                lora_name=f"tool_calling_lora_{i}",
+            result = self.engine.load_lora_adapter_from_tensors(
+                lora_name=f"tool_calling_lora_evict_{i}",
                 tensors=self.lora_tensors,
                 config_dict=self.lora_config_dict,
             )
@@ -71,15 +61,16 @@ class TestNPULoRALoadFromTensor(CustomTestCase):
                 f"Failed to load LoRA adapter {i}: {result.error_message}",
             )
 
+        # Verify that the last 8 adapters are loaded (LRU eviction)
         EXPECTED_LORA_ADAPTERS = [
-            "tool_calling_lora_2",
-            "tool_calling_lora_3",
-            "tool_calling_lora_4",
-            "tool_calling_lora_5",
-            "tool_calling_lora_6",
-            "tool_calling_lora_7",
-            "tool_calling_lora_8",
-            "tool_calling_lora_9",
+            "tool_calling_lora_evict_2",
+            "tool_calling_lora_evict_3",
+            "tool_calling_lora_evict_4",
+            "tool_calling_lora_evict_5",
+            "tool_calling_lora_evict_6",
+            "tool_calling_lora_evict_7",
+            "tool_calling_lora_evict_8",
+            "tool_calling_lora_evict_9",
         ]
         EXPECTED_LORA_COUNT = 8
         self.assertEqual(
@@ -90,8 +81,6 @@ class TestNPULoRALoadFromTensor(CustomTestCase):
             list(result.loaded_adapters.keys()),
             EXPECTED_LORA_ADAPTERS,
         )
-
-        test_engine.shutdown()
 
     def test_lora_e2e_load_from_tensor_params(self):
         result = self.engine.load_lora_adapter_from_tensors(
