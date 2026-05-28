@@ -98,7 +98,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
         requests.post(f"{DEFAULT_URL_FOR_TEST}/dump_expert_distribution_record")
 
         # Check distribution_recorder_files
-        distribution_recorder_suffixes = "*.pt"
+        distribution_recorder_suffixes = ["*.pt"]
         distribution_recorder_files = []
         for suffix in distribution_recorder_suffixes:
             distribution_recorder_files.extend(

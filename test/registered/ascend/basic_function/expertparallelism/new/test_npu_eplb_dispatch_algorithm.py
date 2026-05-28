@@ -16,10 +16,10 @@ register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
 
 DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V3.2-W8A8"
 class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
-    """Testcase: Verify that the model accuracy remains uncompromised when the parameter --moe-dense-tp-size is configured to 1.
+    """Testcase: Verify that the model accuracy remains uncompromised when the parameter --ep-dispatch-algorithm is configured.
 
     [Test Category] Parameter
-    [Test Target] --ep-dispatch-algorithm, --moe-a2a-backend
+    [Test Target] --ep-dispatch-algorithm
     """
     model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
     ep_dispatch_algorithm = "static"
@@ -46,7 +46,6 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
                 "4",
                 "--ep-dispatch-algorithm",
                 cls.ep_dispatch_algorithm,
-
             ],
             env={
                 "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
