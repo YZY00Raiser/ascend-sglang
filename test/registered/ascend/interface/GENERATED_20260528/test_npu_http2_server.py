@@ -14,7 +14,7 @@ from sglang.test.test_utils import (
 )
 
 try:
-    import granian
+    import granian  # noqa: F401
 
     _HAS_GRANIAN = True
 except ImportError:
@@ -41,7 +41,8 @@ class TestHTTP2Server(CustomTestCase):
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=[
                 "--enable-http2",
-                "--attention-backend", "ascend",
+                "--attention-backend",
+                "ascend",
                 "--disable-cuda-graph",
             ],
         )
