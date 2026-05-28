@@ -64,7 +64,9 @@ jobs:
 
           export SGLANG_TEST_MAX_RETRY=0
           export SGLANG_SET_CPU_AFFINITY=1
+          export TRITON_ALL_BLOCKS_PARALLEL=1
           echo "SGLANG_SET_CPU_AFFINITY: $SGLANG_SET_CPU_AFFINITY"
+          echo "TRITON_ALL_BLOCKS_PARALLEL: $TRITON_ALL_BLOCKS_PARALLEL"
 
           echo "Use sglang from image"
           sglang_pkg_path=/sgl-workspace/sglang/python
