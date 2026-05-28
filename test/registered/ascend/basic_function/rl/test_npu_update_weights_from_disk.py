@@ -34,7 +34,11 @@ class TestEngineUpdateWeightsFromDisk(CustomTestCase):
         )
 
     def tearDown(self):
-        self.engine.shutdown()
+        if hasattr(self, "engine") and self.engine:
+            try:
+                self.engine.shutdown()
+            except Exception:
+                pass  # Ignore shutdown errors
 
     def run_decode(self):
         prompts = ["The capital of France is"]
