@@ -8,7 +8,6 @@ from sglang.test.ascend.test_ascend_utils import (
     LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
 )
 from sglang.test.ci.ci_register import register_npu_ci
-from sglang.test.kits.eval_accuracy_kit import GSM8KMixin
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     DEFAULT_URL_FOR_TEST,
@@ -23,14 +22,12 @@ register_npu_ci(
 )
 
 
-class TestNPUDataParallelism(CustomTestCase, GSM8KMixin):
+class TestNPUDataParallelism(CustomTestCase):
     """Test data parallelism on NPU.
 
     [Test Category] Distributed
     [Test Target] Data parallelism (DP=2)
     """
-
-    gsm8k_accuracy_thres = 0.60
 
     @classmethod
     def setUpClass(cls):

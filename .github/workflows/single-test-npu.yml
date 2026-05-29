@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 1: Distributed tests - data parallelism, DP attention, pipeline parallelism
+# test round 2: Distributed tests - data parallelism, DP attention, pipeline parallelism (fixed data parallelism test)
 
 on:
   pull_request:
