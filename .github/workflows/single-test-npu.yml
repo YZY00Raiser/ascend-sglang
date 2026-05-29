@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 7: prefill-only tests - fix test case paths
+# test round 8: prefill-only tests - fix lint issues
 
 on:
   pull_request:
