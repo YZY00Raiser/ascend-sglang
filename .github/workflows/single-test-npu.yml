@@ -3,7 +3,8 @@ name: Single Test (NPU)
 
 on:
   pull_request:
-    branches: [ testcases ]
+    branches:
+      - testcases
     paths:
       - ".github/workflows/single-test-npu.yml"
 
@@ -13,6 +14,7 @@ concurrency:
 
 jobs:
   single-node-poc:
+    name: single-node-poc
     runs-on: linux-aarch64-a3-4
     container:
       image: swr.cn-southwest-2.myhuaweicloud.com/base_image/dockerhub/lmsysorg/sglang:main-cann8.5.0-a3
@@ -30,33 +32,27 @@ jobs:
           SGLANG_USE_MODELSCOPE: true
           HF_ENDPOINT: https://hf-mirror.com
           SGLANG_IS_IN_CI: true
-          TRANSFORMERS_VERBOSITY: "error"
         shell: bash
         run: |
           sglang_source_path=$(pwd)
           echo "Source code path: ${sglang_source_path}"
           ln -sf ${sglang_source_path} /root/sglang
 
-          test_case="test/registered/ascend/basic_function/lora/test_npu_lora_llama4.py"
-          if [ ! -f "${sglang_source_path}/${test_case}" ]; then
-            echo "The testcase does not exit: ${sglang_source_path}/${test_case}"
-            exit 1
-          fi
+          # Test cases
+          test_cases=(
+            "test/registered/ascend/basic_function/lora/test_npu_lora_llama4.py"
+          )
 
-          # prepare for output data
-          current_date=$(date +%Y%m%d)
-          test_data_output_path=/root/.cache/tests/output/accuracy/${current_date}
-          mkdir -p ${test_data_output_path}
-          tc_name=${test_case##*/}
-          tc_name=${tc_name%.*}
-          export METRICS_DATA_FILE=${test_data_output_path}/${tc_name}
-          mkdir -p ${METRICS_DATA_FILE}
-          echo "Metrics file path: ${METRICS_DATA_FILE}"
+          for test_case in "${test_cases[@]}"; do
+            if [ ! -f "${sglang_source_path}/${test_case}" ]; then
+              echo "The testcase does not exit: ${sglang_source_path}/${test_case}"
+              exit 1
+            fi
+          done
 
           # copy required file from our daily cache
           cp ~/.cache/modelscope/hub/datasets/otavia/ShareGPT_Vicuna_unfiltered/ShareGPT_V3_unfiltered_cleaned_split.json /tmp
-          # copy download through proxy
-          curl -o /tmp/test.jsonl -L https://gh-proxy.test.osinfra.cn/https://raw.githubusercontent.com/openai/grade-school-math/master/grade_school_math/data/test.jsonl
+          cp ~/.cache/modelscope/hub/datasets/tmp/test.jsonl /tmp
 
           echo "scaling_governor performance num: \
             $(cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor | grep performance | wc -l)"
@@ -79,13 +75,25 @@ jobs:
           source /usr/local/Ascend/cann/set_env.sh || true
           source /usr/local/Ascend/nnal/atb/set_env.sh || true
 
-          log_path="/root/.cache/tests/logs/log/${current_date}/${tc_name}/${HOSTNAME}"
+          current_date=$(date +%Y%m%d)
+          log_path="/root/.cache/tests/logs/log/${current_date}/${HOSTNAME}"
           rm -rf ${log_path}
           mkdir -p ${log_path}
           echo "Log path: ${log_path}"
 
-          echo "Running test case ${test_case}"
-          python -u ${test_case}
-          echo "Finished test case ${test_case}"
+          for test_case in "${test_cases[@]}"; do
+            tc_name=$(basename ${test_case} .py)
+            echo "Running test case ${test_case}"
+            python -u ${sglang_source_path}/${test_case}
+            echo "Finished test case ${test_case}"
+          done
 
           plog_path="/root/ascend/log/debug/plog"
+          if [ -d "$plog_path" ];then
+            echo "Plog files found. Begin to backup them."
+            target_plog_path="/root/.cache/tests/logs/plog/${HOSTNAME}"
+            echo "Save path: ${target_plog_path}"
+            rm -rf ${target_plog_path}
+            mkdir -p ${target_plog_path}
+            cp ${plog_path}/* ${target_plog_path}
+          fi
