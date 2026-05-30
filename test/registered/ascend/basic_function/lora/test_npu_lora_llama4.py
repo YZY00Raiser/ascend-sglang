@@ -24,7 +24,7 @@ class TestLoraBasicFunction(CustomTestCase):
     [Test Target] --enable-lora, --lora-path,
     """
 
-    lora_a = "/root/.cache/huggingface/hub/models--kingabzpro--Llama-4-Scout-17B-16E-Instruct-Medical-ChatBot"
+    lora_a = "/root/.cache/huggingface/hub/models--kingabzpro--Llama-4-Scout-17B-16E-Instruct-Medical-ChatBot/"
 
     @classmethod
     def setUpClass(cls):
