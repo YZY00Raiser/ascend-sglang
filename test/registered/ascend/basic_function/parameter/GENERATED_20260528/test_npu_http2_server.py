@@ -27,7 +27,7 @@ register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
 class TestHTTP2Server(CustomTestCase):
     """Test HTTP/2 server (Granian) on NPU.
 
-    [Test Category] Interface
+    [Test Category] Parameter
     [Test Target] --enable-http2
     """
 
