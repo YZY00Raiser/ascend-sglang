@@ -1,5 +1,5 @@
 ﻿name: Single Test (NPU)
-# test round 5: LoRA 7 test cases from GENERATED_20260529 - fixed peft dependency
+# test round 6: LoRA 7 test cases from GENERATED_20260529 - fixed formatting
 
 on:
   pull_request:
