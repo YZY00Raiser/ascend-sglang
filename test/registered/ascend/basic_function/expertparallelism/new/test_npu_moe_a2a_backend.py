@@ -19,7 +19,7 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
     """Testcase：Verify set --moe-a2a-backend, the inference request is successfully processed.
 
     [Test Category] Parameter
-    [Test Target] --moe-a2a-backend
+    [Test Target]--moe-a2a-backend
     """
 
     moe_runner_backend = "triton"
@@ -31,7 +31,7 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
             DEFAULT_URL_FOR_TEST,
             DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=[
-                "--trust-remote-code",
+                 "--trust-remote-code",
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
@@ -39,21 +39,16 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
                 "0.8",
                 "--tp-size",
                 "16",
-                "--ep",
-                "2",
-                # "--enable-eplb",
+                "--expert-parallel-size",
+                "16",
+                "--enable-eplb",
                 "--moe-a2a-backend",
                 "ascend_fuseep",  # It is incompatible with eplb
-                # "--moe-a2a-backend",
-                # "deepep",
-                # "--deepep-mode",
-                # "normal",
-                # "--ep-num-redundant-experts",
-                # "4",
-                # "--expert-distribution-recorder-buffer-size",
-                # "50",
-                # "--moe-runner-backend",
-                # cls.moe_runner_backend,
+                "--deepep-mode",
+                "normal",
+                "--expert-distribution-recorder-mode",
+                cls.expert_distribution_recorder_mode,
+
             ],
             env={
                 "SGLANG_NPUDISABLE_ACL_FORMAT_WEIGHT": "1",
