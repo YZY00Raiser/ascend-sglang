@@ -372,6 +372,12 @@ class TestNPUPrefillDelayerNegotiate(unittest.TestCase):
 
 
 class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
+    """Test PrefillDelayer throughput for online serving on NPU.
+
+    [Test Category] Scheduler
+    [Test Target] PrefillDelayer online serving functionality, server boot, benchmark completion, metrics emission
+    """
+
     def test_throughput_comparison(self):
         _run_throughput_comparison(
             self,
@@ -399,6 +405,12 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
 
 
 class TestPrefillDelayerThroughputOfflineGen(CustomTestCase):
+    """Test PrefillDelayer throughput improvement for offline generation on NPU.
+
+   [Test Category] Scheduler
+   [Test Target] PrefillDelayer throughput improvement, offline generation
+   """
+
     def test_throughput_comparison(self):
         _run_throughput_comparison(
             self,
@@ -447,7 +459,7 @@ def _run_throughput_test(
     other_benchmark_args,
     token_usage_low_watermark: float = None,
 ):
-    model = "Qwen/Qwen3-0.6B"
+    model = QWEN3_0_6B_WEIGHTS_PATH
     base_url = DEFAULT_URL_FOR_TEST
 
     process = _launch_server(
@@ -489,7 +501,7 @@ def _assert_throughput_improvement(
     test_case.assertEqual(
         WORLD_SIZE,
         "8",
-        f"This test requires 8 GPUs to properly measure throughput improvement, got {WORLD_SIZE}",
+        f"This test requires 8 NPUs to properly measure throughput improvement, got {WORLD_SIZE}",
     )
 
     enabled = res_enabled["total_throughput"]
@@ -513,6 +525,12 @@ def _assert_throughput_improvement(
 
 
 class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
+    """Test PrefillDelayer token usage low watermark functionality on NPU.
+
+    [Test Category] Scheduler
+    [Test Target] PrefillDelayer token watermark, request prioritization
+    """
+
     def test_1_with_low_watermark(self):
         # The kv cache size here is deliberately small, thus we use smaller token usage
         self._run(token_usage_low_watermark=0.5)
@@ -524,7 +542,7 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
         self._run(token_usage_low_watermark=None)
 
     def _run(self, token_usage_low_watermark):
-        model = "Qwen/Qwen3-0.6B"
+        model = QWEN3_0_6B_WEIGHTS_PATH
         base_url = DEFAULT_URL_FOR_TEST
         world_size = int(WORLD_SIZE)
 
@@ -597,6 +615,12 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
 
 
 class TestPrefillDelayerAccuracy(CustomTestCase):
+    """Test PrefillDelayer accuracy on NPU.
+
+    [Test Category] Scheduler
+    [Test Target] PrefillDelayer GSM8K accuracy with/without delayer
+    """
+
     def test_1_gsm8k_has_prefill_delayer(self):
         self._run_accuracy_test(prefill_delayer=True)
 
@@ -604,7 +628,7 @@ class TestPrefillDelayerAccuracy(CustomTestCase):
         self._run_accuracy_test(prefill_delayer=False)
 
     def _run_accuracy_test(self, prefill_delayer: bool):
-        model = DEFAULT_MLA_MODEL_NAME_FOR_TEST
+        model = DEEPSEEK_CODER_V2_LITE_WEIGHTS_PATH
         base_url = DEFAULT_URL_FOR_TEST
         process = _launch_server(
             prefill_delayer=prefill_delayer,

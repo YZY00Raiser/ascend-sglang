@@ -356,6 +356,7 @@ class TestNPUPrefillDelayerThroughputOnlineServing(CustomTestCase):
             self,
             test_name="online_serving",
             other_launch_args=[
+                # Not really needed, only to test support non-FCFS algorithms
                 "--schedule-policy",
                 "lpm",
             ],
@@ -479,6 +480,7 @@ def _assert_throughput_improvement(
     )
 
     if min_improvement_pct is None:
+        # Functionality-only mode: skip the perf assertion.
         return
 
     test_case.assertGreaterEqual(
@@ -496,6 +498,7 @@ class TestNPUPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
     """
 
     def test_1_with_low_watermark(self):
+        # The kv cache size here is deliberately small, thus we use smaller token usage
         self._run(token_usage_low_watermark=0.5)
 
     def _run(self, token_usage_low_watermark):
@@ -508,6 +511,8 @@ class TestNPUPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
             base_url=base_url,
             prefill_delayer=True,
             other_args=["--max-total-tokens", "50000"],
+            # e.g. gen throughput is 370 tok/s on H200.
+            # Will need a different threshold on B200
             max_delay_passes=3000,
             token_usage_low_watermark=token_usage_low_watermark,
         )
@@ -590,8 +595,10 @@ class TestNPUPrefillDelayerAccuracy(CustomTestCase):
             model=model,
             base_url=base_url,
             other_args=[
+                # Not really needed, only to test support non-FCFS algorithms
                 "--schedule-policy",
                 "lpm",
+                # Use this to ensure prefill delayer will be run
                 "--max-total-tokens",
                 "4096",
             ],
