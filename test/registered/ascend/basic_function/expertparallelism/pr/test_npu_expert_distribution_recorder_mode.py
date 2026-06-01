@@ -19,7 +19,8 @@ register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
 
 
 class TestExpertDistributionRecorderModeStatic(CustomTestCase):
-    """Testcase: Verify that the model accuracy remains uncompromised when the parameter --moe-dense-tp-size is configured to 1.
+    """Testcase: Verify set the parameter --expert-distribution-recorder-mode，
+    will generate .pt file and the inference request successfully.
 
     [Test Category] Parameter
     [Test Target] --expert-distribution-recorder-mode
@@ -41,7 +42,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
                 "ascend",
                 "--disable-cuda-graph",
                 "--mem-fraction-static",
-                "0.5",
+                "0.8",
                 "--tp-size",
                 "16",
                 "--expert-parallel-size",
@@ -51,17 +52,14 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
                 "deepep",
                 "--deepep-mode",
                 "normal",
-                "--ep-num-redundant-experts",
-                "4",
                 "--expert-distribution-recorder-mode",
                 cls.expert_distribution_recorder_mode,
-                "--base-gpu-id",
-                "12",
             ],
             env={
                 "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
                 "HCCL_BUFFSIZE": "1024",
                 "SGLANG_EXPERT_DISTRIBUTION_RECORDER_DIR": f"{cls.path}",
+                "TRANSFORMERS_VERBOSITY": "error",
             },
         )
 
@@ -98,7 +96,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
         requests.post(f"{DEFAULT_URL_FOR_TEST}/dump_expert_distribution_record")
 
         # Check distribution_recorder_files
-        distribution_recorder_suffixes = "*.pt"
+        distribution_recorder_suffixes = ["*.pt"]
         distribution_recorder_files = []
         for suffix in distribution_recorder_suffixes:
             distribution_recorder_files.extend(
