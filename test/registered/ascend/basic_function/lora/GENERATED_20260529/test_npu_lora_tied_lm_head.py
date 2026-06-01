@@ -6,15 +6,13 @@ import unittest
 
 import torch
 
+# Check if required dependencies are available
 try:
     from peft import LoraConfig, get_peft_model
+    from transformers import AutoModelForCausalLM
+    PEFT_AVAILABLE = True
 except ImportError:
-    import subprocess
-
-    subprocess.check_call(["pip", "install", "peft", "--no-deps"])
-    from peft import LoraConfig, get_peft_model
-
-from transformers import AutoModelForCausalLM
+    PEFT_AVAILABLE = False
 
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ascend.test_ascend_utils import LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
@@ -75,6 +73,7 @@ def create_lora_adapter_with_lm_head(base_model_path: str, output_dir: str):
     del peft_model, model
 
 
+@unittest.skipUnless(PEFT_AVAILABLE, "peft and accelerate not available")
 class TestNPULoRATiedLMHead(CustomTestCase):
     """Test LoRA on models with tied lm_head on NPU.
 
@@ -86,6 +85,8 @@ class TestNPULoRATiedLMHead(CustomTestCase):
 
     @classmethod
     def setUpClass(cls):
+        if not PEFT_AVAILABLE:
+            raise unittest.SkipTest("peft and accelerate not available")
         super().setUpClass()
         cls._adapter_dir = tempfile.mkdtemp(prefix="sglang_test_npu_lora_tied_lm_head_")
         create_lora_adapter_with_lm_head(
