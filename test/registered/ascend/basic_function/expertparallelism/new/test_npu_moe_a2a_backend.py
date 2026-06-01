@@ -14,7 +14,9 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
 
-DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V3.2-W8A8"
+DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
+
+
 class TestMoreRunnerBackendTriton(CustomTestCase):
     """Testcase：Verify set --moe-a2a-backend, the inference request is successfully processed.
 
@@ -31,7 +33,7 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
             DEFAULT_URL_FOR_TEST,
             DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=[
-                 "--trust-remote-code",
+                "--trust-remote-code",
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
@@ -46,9 +48,6 @@ class TestMoreRunnerBackendTriton(CustomTestCase):
                 "ascend_fuseep",  # It is incompatible with eplb
                 "--deepep-mode",
                 "normal",
-                "--expert-distribution-recorder-mode",
-                cls.expert_distribution_recorder_mode,
-
             ],
             env={
                 "SGLANG_NPUDISABLE_ACL_FORMAT_WEIGHT": "1",
