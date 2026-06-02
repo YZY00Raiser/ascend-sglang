@@ -364,7 +364,7 @@ class TestPrefillDelayerNegotiate(unittest.TestCase):
 '''
 # ============================ E2E Tests ============================
 
-
+'''
 class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
     """Testcase: Online serving scenario: Verify that throughput is improved by at least 5%
     when PrefillDelayer is enabled, compared with disabled.
@@ -372,9 +372,7 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
     [Test Category] Parameter
     [Test Target] --enable-prefill-delayer
     """
-    '''
-    
-    
+
     def test_throughput_comparison(self):
         _run_throughput_comparison(
             self,
@@ -395,7 +393,8 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
             ),
             min_improvement_pct=5,
         )
-    '''
+'''
+
 '''
 class TestPrefillDelayerThroughputOfflineGen(CustomTestCase):
     """Testcase: Offline generation scenario: Verify that throughput is improved by at least 20%
@@ -532,12 +531,11 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
     [Test Category] Parameter
     [Test Target] --enable-prefill-delayer; --prefill-delayer-max-delay-passes; --prefill-delayer-token-usage-low-watermark
     """
-    
-    # def test_1_with_low_watermark(self):
-    #     # The kv cache size here is deliberately small, thus we use smaller token usage
-    #     self._run(token_usage_low_watermark=0.5)
 
-    # @unittest.skip("blocked by sgl-project/sglang#22511")
+    def test_1_with_low_watermark(self):
+        # The kv cache size here is deliberately small, thus we use smaller token usage
+        self._run(token_usage_low_watermark=0.5)
+
     def test_2_without_low_watermark(self):
         self._run(token_usage_low_watermark=None)
 
