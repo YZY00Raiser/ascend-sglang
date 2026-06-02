@@ -386,6 +386,9 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
                 # Not really needed, only to test support non-FCFS algorithms
                 "--schedule-policy",
                 "lpm",
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
             ],
             other_benchmark_args=dict(
                 num_prompts=500,
@@ -407,15 +410,21 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
 class TestPrefillDelayerThroughputOfflineGen(CustomTestCase):
     """Test PrefillDelayer throughput improvement for offline generation on NPU.
 
-   [Test Category] Scheduler
-   [Test Target] PrefillDelayer throughput improvement, offline generation
-   """
+    [Test Category] Scheduler
+    [Test Target] PrefillDelayer throughput improvement, offline generation
+    """
 
     def test_throughput_comparison(self):
         _run_throughput_comparison(
             self,
             test_name="offline_gen",
-            other_launch_args=["--max-total-tokens", "200000"],
+            other_launch_args=[
+                "--max-total-tokens",
+                "200000",
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
+            ],
             other_benchmark_args=dict(
                 num_prompts=800,
                 random_input_len=30000,
@@ -550,7 +559,13 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
             model=model,
             base_url=base_url,
             prefill_delayer=True,
-            other_args=["--max-total-tokens", "50000"],
+            other_args=[
+                "--max-total-tokens",
+                "50000",
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
+            ],
             # e.g. gen throughput is 370 tok/s on H200.
             # Will need a different threshold on B200
             max_delay_passes=3000,
@@ -641,6 +656,9 @@ class TestPrefillDelayerAccuracy(CustomTestCase):
                 # Use this to ensure prefill delayer will be run
                 "--max-total-tokens",
                 "4096",
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
             ],
         )
         try:
@@ -685,6 +703,9 @@ def _launch_server(
             "131072",
             "--mem-fraction-static",
             "0.6",
+            "--attention-backend",
+            "ascend",
+            "--disable-cuda-graph",
             "--enable-metrics",
             *(["--enable-prefill-delayer"] if prefill_delayer else []),
             "--prefill-delayer-max-delay-passes",
