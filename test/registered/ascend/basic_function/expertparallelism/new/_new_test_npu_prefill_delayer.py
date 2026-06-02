@@ -353,12 +353,6 @@ _NEGOTIATE_TEST_CASES = [
 
 
 class TestNPUPrefillDelayerNegotiate(unittest.TestCase):
-    """Test PrefillDelayer negotiate logic on NPU.
-
-    [Test Category] Scheduler
-    [Test Target] PrefillDelayer negotiation logic, distributed coordination
-    """
-
     def test_negotiate(self):
         run_distributed_test(
             _run_negotiate_test,
@@ -372,10 +366,11 @@ class TestNPUPrefillDelayerNegotiate(unittest.TestCase):
 
 
 class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
-    """Test PrefillDelayer throughput for online serving on NPU.
+    """Testcase: Online serving scenario: Verify that throughput is improved by at least 5%
+    when PrefillDelayer is enabled, compared with disabled.
 
-    [Test Category] Scheduler
-    [Test Target] PrefillDelayer online serving functionality, server boot, benchmark completion, metrics emission
+    [Test Category] Parameter
+    [Test Target] --enable-prefill-delayer
     """
 
     def test_throughput_comparison(self):
@@ -408,10 +403,11 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
 
 
 class TestPrefillDelayerThroughputOfflineGen(CustomTestCase):
-    """Test PrefillDelayer throughput improvement for offline generation on NPU.
+    """Testcase: Offline generation scenario: Verify that throughput is improved by at least 20%
+    when PrefillDelayer is enabled, compared with disabled.
 
-    [Test Category] Scheduler
-    [Test Target] PrefillDelayer throughput improvement, offline generation
+    [Test Category] Parameter
+    [Test Target] --enable-prefill-delayer; --prefill-delayer-token-usage-low-watermark
     """
 
     def test_throughput_comparison(self):
@@ -534,10 +530,12 @@ def _assert_throughput_improvement(
 
 
 class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
-    """Test PrefillDelayer token usage low watermark functionality on NPU.
+    """Testcase: Verify PrefillDelayer memory low watermark protection mechanism
+    1.With token_usage_low_watermark=0.5: When memory usage is low, force allow requests, short request latency < 5s
+    2.Without watermark configured: Long request blocks one NPU, short requests on other cards are forced to wait, latency > 5s
 
-    [Test Category] Scheduler
-    [Test Target] PrefillDelayer token watermark, request prioritization
+    [Test Category] Parameter
+    [Test Target] --enable-prefill-delayer; --prefill-delayer-max-delay-passes; --prefill-delayer-token-usage-low-watermark
     """
 
     def test_1_with_low_watermark(self):
@@ -630,10 +628,11 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
 
 
 class TestPrefillDelayerAccuracy(CustomTestCase):
-    """Test PrefillDelayer accuracy on NPU.
+    """Testcase: Verify that model accuracy on mgsm_en dataset > 0.57
+    both when PrefillDelayer is enabled and disabled.
 
-    [Test Category] Scheduler
-    [Test Target] PrefillDelayer GSM8K accuracy with/without delayer
+    [Test Category] Parameter
+    [Test Target] --enable-prefill-delayer
     """
 
     def test_1_gsm8k_has_prefill_delayer(self):
