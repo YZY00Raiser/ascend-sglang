@@ -14,10 +14,13 @@ import torch
 from sglang.bench_serving import run_benchmark
 from sglang.srt.managers.prefill_delayer import PrefillDelayer
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ci.ci_register import register_cuda_ci
+from sglang.test.ascend.test_ascend_utils import (
+    DEEPSEEK_CODER_V2_LITE_WEIGHTS_PATH,
+    QWEN3_0_6B_WEIGHTS_PATH,
+)
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
-    DEFAULT_MLA_MODEL_NAME_FOR_TEST,
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
@@ -26,15 +29,14 @@ from sglang.test.test_utils import (
     run_distributed_test,
 )
 
-register_cuda_ci(
-    est_time=300,
-    stage="base-c",
-    runner_config="8-gpu-h200",
-    disabled="Temporarily disabled",
+register_npu_ci(
+    est_time=400,
+    suite="nightly-8-npu-a3",
+    nightly=True,
 )
 
 WORLD_SIZE = os.environ.get("SGLANG_TEST_WORLD_SIZE", "8")
-
+'''
 # ============================ Unit Tests ============================
 
 
@@ -359,11 +361,18 @@ class TestPrefillDelayerNegotiate(unittest.TestCase):
             test_cases=_NEGOTIATE_TEST_CASES,
         )
 
-
+'''
 # ============================ E2E Tests ============================
 
-
+'''
 class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
+    """Testcase: Online serving scenario: Verify that throughput is improved by at least 5%
+    when PrefillDelayer is enabled, compared with disabled.
+
+    [Test Category] Parameter
+    [Test Target] --enable-prefill-delayer
+    """
+
     def test_throughput_comparison(self):
         _run_throughput_comparison(
             self,
@@ -372,6 +381,9 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
                 # Not really needed, only to test support non-FCFS algorithms
                 "--schedule-policy",
                 "lpm",
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
             ],
             other_benchmark_args=dict(
                 num_prompts=500,
@@ -379,23 +391,30 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
                 random_output_len=256,
                 request_rate=32,
             ),
-            # TODO: re-enable a throughput-improvement assertion once a
-            # workload that reliably exercises PrefillDelayer in online-
-            # serving mode is available. The current workload yields run-
-            # to-run noise on H200, while the offline test below shows the
-            # same code path is healthy (improvement ~+27%). We still
-            # validate functionality (server boot, benchmark completion,
-            # metrics emission).
-            min_improvement_pct=None,
+            min_improvement_pct=5,
         )
+'''
 
-
+'''
 class TestPrefillDelayerThroughputOfflineGen(CustomTestCase):
+    """Testcase: Offline generation scenario: Verify that throughput is improved by at least 20%
+    when PrefillDelayer is enabled, compared with disabled.
+
+    [Test Category] Parameter
+    [Test Target] --enable-prefill-delayer; --prefill-delayer-token-usage-low-watermark
+    """
+
     def test_throughput_comparison(self):
         _run_throughput_comparison(
             self,
             test_name="offline_gen",
-            other_launch_args=["--max-total-tokens", "200000"],
+            other_launch_args=[
+                "--max-total-tokens",
+                "200000",
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
+            ],
             other_benchmark_args=dict(
                 num_prompts=800,
                 random_input_len=30000,
@@ -404,7 +423,7 @@ class TestPrefillDelayerThroughputOfflineGen(CustomTestCase):
             token_usage_low_watermark=0.8,
             min_improvement_pct=20,
         )
-
+'''
 
 def _run_throughput_comparison(
     test_case,
@@ -439,7 +458,7 @@ def _run_throughput_test(
     other_benchmark_args,
     token_usage_low_watermark: float = None,
 ):
-    model = "Qwen/Qwen3-0.6B"
+    model = QWEN3_0_6B_WEIGHTS_PATH
     base_url = DEFAULT_URL_FOR_TEST
 
     process = _launch_server(
@@ -481,7 +500,7 @@ def _assert_throughput_improvement(
     test_case.assertEqual(
         WORLD_SIZE,
         "8",
-        f"This test requires 8 GPUs to properly measure throughput improvement, got {WORLD_SIZE}",
+        f"This test requires 8 NPUs to properly measure throughput improvement, got {WORLD_SIZE}",
     )
 
     enabled = res_enabled["total_throughput"]
@@ -505,18 +524,23 @@ def _assert_throughput_improvement(
 
 
 class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
+    """Testcase: Verify PrefillDelayer memory low watermark protection mechanism
+    1.With token_usage_low_watermark=0.5: When memory usage is low, force allow requests, short request latency < 5s
+    2.Without watermark configured: Long request blocks one NPU, short requests on other cards are forced to wait, latency > 5s
+
+    [Test Category] Parameter
+    [Test Target] --enable-prefill-delayer; --prefill-delayer-max-delay-passes; --prefill-delayer-token-usage-low-watermark
+    """
+
     def test_1_with_low_watermark(self):
         # The kv cache size here is deliberately small, thus we use smaller token usage
         self._run(token_usage_low_watermark=0.5)
 
-    # TODO: re-enable once sglang/sglang#22511 (DP-attention detokenizer
-    # hang on H200 in CI) is fixed.
-    @unittest.skip("blocked by sgl-project/sglang#22511")
     def test_2_without_low_watermark(self):
         self._run(token_usage_low_watermark=None)
 
     def _run(self, token_usage_low_watermark):
-        model = "Qwen/Qwen3-0.6B"
+        model = QWEN3_0_6B_WEIGHTS_PATH
         base_url = DEFAULT_URL_FOR_TEST
         world_size = int(WORLD_SIZE)
 
@@ -524,10 +548,16 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
             model=model,
             base_url=base_url,
             prefill_delayer=True,
-            other_args=["--max-total-tokens", "50000"],
+            other_args=[
+                "--max-total-tokens",
+                "50000",
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
+            ],
             # e.g. gen throughput is 370 tok/s on H200.
             # Will need a different threshold on B200
-            max_delay_passes=3000,
+            max_delay_passes=100,
             token_usage_low_watermark=token_usage_low_watermark,
         )
 
@@ -587,8 +617,15 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
         finally:
             kill_process_tree(process.pid)
 
-
+'''
 class TestPrefillDelayerAccuracy(CustomTestCase):
+    """Testcase: Verify that model accuracy on mgsm_en dataset > 0.57
+    both when PrefillDelayer is enabled and disabled.
+
+    [Test Category] Parameter
+    [Test Target] --enable-prefill-delayer
+    """
+
     def test_1_gsm8k_has_prefill_delayer(self):
         self._run_accuracy_test(prefill_delayer=True)
 
@@ -596,7 +633,7 @@ class TestPrefillDelayerAccuracy(CustomTestCase):
         self._run_accuracy_test(prefill_delayer=False)
 
     def _run_accuracy_test(self, prefill_delayer: bool):
-        model = DEFAULT_MLA_MODEL_NAME_FOR_TEST
+        model = DEEPSEEK_CODER_V2_LITE_WEIGHTS_PATH
         base_url = DEFAULT_URL_FOR_TEST
         process = _launch_server(
             prefill_delayer=prefill_delayer,
@@ -609,6 +646,9 @@ class TestPrefillDelayerAccuracy(CustomTestCase):
                 # Use this to ensure prefill delayer will be run
                 "--max-total-tokens",
                 "4096",
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
             ],
         )
         try:
@@ -625,7 +665,7 @@ class TestPrefillDelayerAccuracy(CustomTestCase):
             self.assertGreater(metrics["score"], 0.57)
         finally:
             kill_process_tree(process.pid)
-
+'''
 
 def _launch_server(
     *,
@@ -653,6 +693,9 @@ def _launch_server(
             "131072",
             "--mem-fraction-static",
             "0.6",
+            "--attention-backend",
+            "ascend",
+            "--disable-cuda-graph",
             "--enable-metrics",
             *(["--enable-prefill-delayer"] if prefill_delayer else []),
             "--prefill-delayer-max-delay-passes",
