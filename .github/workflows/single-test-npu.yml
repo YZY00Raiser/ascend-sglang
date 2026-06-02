@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 5: core tests - hidden_states, request_queue, srt_endpoint, srt_engine
+# test round 6: core tests - hidden_states, request_queue
 
 on:
   pull_request:
@@ -42,8 +42,6 @@ jobs:
           test_cases=(
             "test/registered/ascend/core/GENERATED_20260529/test_npu_hidden_states.py"
             "test/registered/ascend/core/GENERATED_20260529/test_npu_request_queue_validation.py"
-            "test/registered/ascend/core/GENERATED_20260529/test_npu_srt_endpoint.py"
-            "test/registered/ascend/core/GENERATED_20260529/test_npu_srt_engine.py"
           )
 
           for test_case in "${test_cases[@]}"; do
