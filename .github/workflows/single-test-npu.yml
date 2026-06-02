@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 4: core tests - hidden_states, request_queue, srt_endpoint, srt_engine
+# test round 5: core tests - hidden_states, request_queue, srt_endpoint, srt_engine
 
 on:
   pull_request:
