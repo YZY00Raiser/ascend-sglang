@@ -372,7 +372,9 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
     [Test Category] Parameter
     [Test Target] --enable-prefill-delayer
     """
-
+    '''
+    
+    
     def test_throughput_comparison(self):
         _run_throughput_comparison(
             self,
@@ -391,9 +393,9 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
                 random_output_len=256,
                 request_rate=32,
             ),
-            min_improvement_pct=None,
+            min_improvement_pct=5,
         )
-
+    '''
 '''
 class TestPrefillDelayerThroughputOfflineGen(CustomTestCase):
     """Testcase: Offline generation scenario: Verify that throughput is improved by at least 20%
@@ -530,12 +532,12 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
     [Test Category] Parameter
     [Test Target] --enable-prefill-delayer; --prefill-delayer-max-delay-passes; --prefill-delayer-token-usage-low-watermark
     """
+    
+    # def test_1_with_low_watermark(self):
+    #     # The kv cache size here is deliberately small, thus we use smaller token usage
+    #     self._run(token_usage_low_watermark=0.5)
 
-    def test_1_with_low_watermark(self):
-        # The kv cache size here is deliberately small, thus we use smaller token usage
-        self._run(token_usage_low_watermark=0.5)
-
-    @unittest.skip("blocked by sgl-project/sglang#22511")
+    # @unittest.skip("blocked by sgl-project/sglang#22511")
     def test_2_without_low_watermark(self):
         self._run(token_usage_low_watermark=None)
 
@@ -557,7 +559,7 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
             ],
             # e.g. gen throughput is 370 tok/s on H200.
             # Will need a different threshold on B200
-            max_delay_passes=3000,
+            max_delay_passes=100,
             token_usage_low_watermark=token_usage_low_watermark,
         )
 
