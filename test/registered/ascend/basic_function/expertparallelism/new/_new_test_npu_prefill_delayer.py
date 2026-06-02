@@ -391,13 +391,6 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
                 random_output_len=256,
                 request_rate=32,
             ),
-            # TODO: re-enable a throughput-improvement assertion once a
-            # workload that reliably exercises PrefillDelayer in online-
-            # serving mode is available. The current workload yields run-
-            # to-run noise on H200, while the offline test below shows the
-            # same code path is healthy (improvement ~+27%). We still
-            # validate functionality (server boot, benchmark completion,
-            # metrics emission).
             min_improvement_pct=5,
         )
 
