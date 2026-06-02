@@ -114,9 +114,7 @@ class TestSRTEngine(unittest.TestCase):
             offset = len(output["text"])
 
         loop = asyncio.get_event_loop()
-        output = loop.run_until_complete(
-            llm.async_generate(prompt, sampling_params)
-        )
+        output = loop.run_until_complete(llm.async_generate(prompt, sampling_params))
 
         async def async_streaming(engine):
             generator = await engine.async_generate(

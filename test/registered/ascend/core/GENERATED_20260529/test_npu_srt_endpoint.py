@@ -3,10 +3,8 @@ import random
 import time
 import unittest
 from concurrent.futures import ThreadPoolExecutor
-from functools import partial
 from typing import Optional
 
-import numpy as np
 import requests
 
 from sglang.srt.sampling.custom_logit_processor import CustomLogitProcessor
@@ -19,7 +17,6 @@ from sglang.test.test_utils import (
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
     popen_launch_server,
-    run_logprob_check,
 )
 
 register_npu_ci(est_time=400, suite="nightly-1-npu-a3", nightly=True)
