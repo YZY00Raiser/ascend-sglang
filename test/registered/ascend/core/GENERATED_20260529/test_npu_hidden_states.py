@@ -57,8 +57,8 @@ class TestHiddenState(unittest.TestCase):
         )
 
         model = AutoModelForCausalLM.from_pretrained(
-            model_path, torch_dtype=torch.bfloat16, device_map=get_device()
-        )
+            model_path, torch_dtype=torch.bfloat16
+        ).to(get_device())
 
         for input_id, output in zip(input_ids, outputs):
             with torch.inference_mode():
