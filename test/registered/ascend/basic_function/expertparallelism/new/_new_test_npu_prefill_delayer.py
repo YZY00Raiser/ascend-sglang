@@ -352,7 +352,7 @@ _NEGOTIATE_TEST_CASES = [
 ]
 
 
-class TestNPUPrefillDelayerNegotiate(unittest.TestCase):
+class TestPrefillDelayerNegotiate(unittest.TestCase):
     def test_negotiate(self):
         run_distributed_test(
             _run_negotiate_test,
