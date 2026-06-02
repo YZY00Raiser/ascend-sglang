@@ -398,7 +398,7 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
             # same code path is healthy (improvement ~+27%). We still
             # validate functionality (server boot, benchmark completion,
             # metrics emission).
-            min_improvement_pct=None,
+            min_improvement_pct=5,
         )
 
 
@@ -542,9 +542,6 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
         # The kv cache size here is deliberately small, thus we use smaller token usage
         self._run(token_usage_low_watermark=0.5)
 
-    # TODO: re-enable once sglang/sglang#22511 (DP-attention detokenizer
-    # hang on H200 in CI) is fixed.
-    @unittest.skip("blocked by sgl-project/sglang#22511")
     def test_2_without_low_watermark(self):
         self._run(token_usage_low_watermark=None)
 
