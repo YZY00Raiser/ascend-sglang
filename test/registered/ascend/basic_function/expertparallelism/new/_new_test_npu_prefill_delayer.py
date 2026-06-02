@@ -410,9 +410,9 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
 class TestPrefillDelayerThroughputOfflineGen(CustomTestCase):
     """Test PrefillDelayer throughput improvement for offline generation on NPU.
 
-   [Test Category] Scheduler
-   [Test Target] PrefillDelayer throughput improvement, offline generation
-   """
+    [Test Category] Scheduler
+    [Test Target] PrefillDelayer throughput improvement, offline generation
+    """
 
     def test_throughput_comparison(self):
         _run_throughput_comparison(
