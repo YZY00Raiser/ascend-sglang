@@ -152,7 +152,6 @@ class UnifiedRadixTreeTestMixin:
         )
 
 
-@unittest.skipIf(is_in_ci(), "Requires 4 NPUs, CI only has 2 NPUs")
 class TestNPUUnifiedFullRadixCache(UnifiedRadixTreeTestMixin, CustomTestCase):
     """Test unified radix cache with full attention on NPU.
 
