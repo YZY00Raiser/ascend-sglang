@@ -98,12 +98,10 @@ class TestNPUQwen3_5_397B_W4A8_1P_In3k5_Out1k5_High_GPQA(
     other_args = QWEN3_5_397B_W4A8_1P_HIGH_OTHER_ARGS
     envs = QWEN3_5_397B_W4A8_1P_HIGH_ENVS
     accuracy = 0.884
-    dataset_type = "gpqa"
-    dataset_name = "gpqa_gen_0_shot_cot_chat_prompt"
-    output_len = 65536
-    max_concurrency = 64
-    generation_kwargs = "dict(temperature=1.0)"
-    num_prompts = 448
+    datasets = ["gpqa"]
+    few_shot_num = 0
+    generation_config = {"max_tokens": 65536, "temperature": 1.0}
+    eval_batch_size = 64
 
     def test_npu_qwen3_5_397b_w4a8_1p_in3k5_out1k5_high_gpqa(self):
         self.run_accuracy()
