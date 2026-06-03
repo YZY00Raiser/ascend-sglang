@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 5: re-trigger CI for utils test cases
+# test round 6: re-trigger CI with updated image
 
 on:
   pull_request:
