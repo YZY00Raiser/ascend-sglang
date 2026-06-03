@@ -37,6 +37,7 @@ register_npu_ci(
 
 WORLD_SIZE = os.environ.get("SGLANG_TEST_WORLD_SIZE", "8")
 
+
 # ============================ Unit Tests ============================
 
 
@@ -392,12 +393,7 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
                 request_rate=32,
             ),
             # TODO: re-enable a throughput-improvement assertion once a
-            # workload that reliably exercises PrefillDelayer in online-
-            # serving mode is available. The current workload yields run-
-            # to-run noise on H200, while the offline test below shows the
-            # same code path is healthy (improvement ~+27%). We still
-            # validate functionality (server boot, benchmark completion,
-            # metrics emission).
+            # Inheritance community testing is currently experiencing fluctuations
             min_improvement_pct=None,
         )
 
@@ -542,9 +538,6 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
         # The kv cache size here is deliberately small, thus we use smaller token usage
         self._run(token_usage_low_watermark=0.5)
 
-    # TODO: re-enable once sglang/sglang#22511 (DP-attention detokenizer
-    # hang on H200 in CI) is fixed.
-    @unittest.skip("blocked by sgl-project/sglang#22511")
     def test_2_without_low_watermark(self):
         self._run(token_usage_low_watermark=None)
 
@@ -564,9 +557,7 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
                 "ascend",
                 "--disable-cuda-graph",
             ],
-            # e.g. gen throughput is 370 tok/s on H200.
-            # Will need a different threshold on B200
-            max_delay_passes=3000,
+            max_delay_passes=100,
             token_usage_low_watermark=token_usage_low_watermark,
         )
 

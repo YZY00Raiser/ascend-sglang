@@ -395,6 +395,7 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
         )
 
 
+
 class TestPrefillDelayerThroughputOfflineGen(CustomTestCase):
     """Testcase: Offline generation scenario: Verify that throughput is improved by at least 20%
     when PrefillDelayer is enabled, compared with disabled.
@@ -556,7 +557,7 @@ class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
             ],
             # e.g. gen throughput is 370 tok/s on H200.
             # Will need a different threshold on B200
-            max_delay_passes=3000,
+            max_delay_passes=100,
             token_usage_low_watermark=token_usage_low_watermark,
         )
 
