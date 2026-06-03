@@ -104,7 +104,7 @@ class TestQwen8B(TestAscendPerformanceTestCaseBase):
         self.run_throughput()
 
 
-class TestQwen8B_mmlupro(TestAscendAccuracyTestCaseBase):
+class TestQwen8B_gpqa(TestAscendAccuracyTestCaseBase):
     model = QWEN3_8B_W8A8_MODEL_PATH
     envs = QWEN3_8B_ENVS
     other_args = QWEN3_8B_OTHER_ARGS
