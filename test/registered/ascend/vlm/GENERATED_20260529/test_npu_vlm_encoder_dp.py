@@ -25,6 +25,8 @@ class TestNPUVLMEncoderDP(TestVLMModels):
     [Test Target] --mm-enable-dp-encoder, VLM Encoder DP
     """
 
+    model = QWEN2_5_VL_3B_INSTRUCT_WEIGHTS_PATH
+    mmmu_accuracy = 0.2
     other_args = [
         "--trust-remote-code",
         "--cuda-graph-max-bs",
