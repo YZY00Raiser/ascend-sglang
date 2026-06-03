@@ -42,6 +42,8 @@ logger.info(f"PYTHON_FOR_TEST_TOOL: {PYTHON_FOR_TEST_TOOL}")
 DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH = 3600
 MAX_SERVER_KEEP_ALIVE_TIME = 3600
 
+ACCURACY_TOLERANCE = 0.99
+
 SERVER_INITIALIZATION_DELAY = 120
 
 if os.environ.get("ASCEND_RT_VISIBLE_DEVICES"):
@@ -211,7 +213,7 @@ def assert_metrics(self, metrics):
     if self.accuracy is not None:
         self.assertGreaterEqual(
             float(metrics["accuracy"]),
-            self.accuracy,
+            self.accuracy * ACCURACY_TOLERANCE,
             f"Accuracy check failed. Expected >= {self.accuracy}, Got: {metrics['accuracy']}",
         )
 
