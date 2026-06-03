@@ -90,7 +90,7 @@ class TestQwen3(TestAscendAccuracyTestCaseBase):
     model = QWEN3_OMNI_30B_A3B_THINKING_MODEL_PATH
     envs = ENVS
     other_args = OTHER_ARGS
-    accuracy = 57.6
+    accuracy = 0.576
     datasets = ["mmmu"]
     few_shot_num = 0
     generation_config = {"max_tokens": 65536, "temperature": 1.0}
