@@ -17,9 +17,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
 
-QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH = "Qwen/Qwen3-30B-A3B-Instruct-2507"
-
-
+QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
 class TestExpertDistributionRecorderModeStatic(CustomTestCase):
     """Testcase: Verify that the model accuracy remains uncompromised when the parameter --moe-dense-tp-size is configured to 1.
 
