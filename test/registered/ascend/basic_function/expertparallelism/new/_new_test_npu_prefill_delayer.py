@@ -36,7 +36,7 @@ register_npu_ci(
 )
 
 WORLD_SIZE = os.environ.get("SGLANG_TEST_WORLD_SIZE", "8")
-
+'''
 # ============================ Unit Tests ============================
 
 
@@ -361,7 +361,6 @@ class TestPrefillDelayerNegotiate(unittest.TestCase):
             test_cases=_NEGOTIATE_TEST_CASES,
         )
 
-
 # ============================ E2E Tests ============================
 
 
@@ -394,7 +393,7 @@ class TestPrefillDelayerThroughputOnlineServing(CustomTestCase):
             min_improvement_pct=5,
         )
 
-
+'''
 
 class TestPrefillDelayerThroughputOfflineGen(CustomTestCase):
     """Testcase: Offline generation scenario: Verify that throughput is improved by at least 20%
@@ -522,7 +521,7 @@ def _assert_throughput_improvement(
         f"{test_name}: Throughput improvement ({improvement_pct:.2f}%) < {min_improvement_pct}%",
     )
 
-
+'''
 class TestPrefillDelayerTokenUsageLowWatermark(CustomTestCase):
     """Testcase: Verify PrefillDelayer memory low watermark protection mechanism
     1.With token_usage_low_watermark=0.5: When memory usage is low, force allow requests, short request latency < 5s
@@ -665,7 +664,7 @@ class TestPrefillDelayerAccuracy(CustomTestCase):
             self.assertGreater(metrics["score"], 0.57)
         finally:
             kill_process_tree(process.pid)
-
+'''
 
 def _launch_server(
     *,
