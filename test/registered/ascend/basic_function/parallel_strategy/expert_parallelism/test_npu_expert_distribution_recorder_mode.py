@@ -6,7 +6,7 @@ import requests
 
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ascend.test_ascend_utils import (
-    DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH,
+    QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
     run_command,
 )
 from sglang.test.ci.ci_register import register_npu_ci
@@ -35,7 +35,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
     @classmethod
     def setUpClass(cls):
         cls.process = popen_launch_server(
-            DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH,
+            QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
             DEFAULT_URL_FOR_TEST,
             DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=[
@@ -46,9 +46,9 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
                 "--mem-fraction-static",
                 "0.8",
                 "--tp-size",
-                "16",
+                "2",
                 "--expert-parallel-size",
-                "16",
+                "2",
                 "--enable-eplb",
                 "--moe-a2a-backend",
                 "deepep",
