@@ -6,7 +6,7 @@ import requests
 
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ascend.test_ascend_utils import run_command
-# from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -17,7 +17,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
 
-DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V3.2-W8A8"
+DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V2-Lite-W8A8"
 class TestExpertDistributionRecorderModeStatic(CustomTestCase):
     """Testcase: Verify that the model accuracy remains uncompromised when the parameter --moe-dense-tp-size is configured to 1.
 
@@ -32,7 +32,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
     @classmethod
     def setUpClass(cls):
         cls.process = popen_launch_server(
-            DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH,
+            DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH,
             DEFAULT_URL_FOR_TEST,
             DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=[
@@ -43,9 +43,9 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
                 "--mem-fraction-static",
                 "0.8",
                 "--tp-size",
-                "16",
+                "4",
                 "--expert-parallel-size",
-                "16",
+                "4",
                 "--enable-eplb",
                 "--moe-a2a-backend",
                 "deepep",
