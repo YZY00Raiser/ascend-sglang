@@ -46,7 +46,7 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
                 cls.ep_dispatch_algorithm,
             ],
             env={
-                # "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
+                "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
                 "HCCL_BUFFSIZE": "1024",
                 "TRANSFORMERS_VERBOSITY": "error",
             },
