@@ -2,7 +2,7 @@ import unittest
 from types import SimpleNamespace
 
 from sglang.srt.utils import kill_process_tree
-# from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
@@ -12,16 +12,16 @@ from sglang.test.test_utils import (
     popen_launch_server,
 )
 
-register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
+register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 
-DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V3.2-W8A8"
+QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
 class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
     """Testcase: Verify that the model accuracy remains uncompromised when the parameter --ep-dispatch-algorithm is configured.
 
     [Test Category] Parameter
     [Test Target] --ep-dispatch-algorithm
     """
-    model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+    model = QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH
     ep_dispatch_algorithm = "static"
 
     @classmethod
@@ -38,15 +38,15 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
                 "--mem-fraction-static",
                 "0.8",
                 "--tp-size",
-                "16",
+                "2",
                 "--expert-parallel-size",
-                "16",
+                "2",
                 "--enable-eplb",
                 "--ep-dispatch-algorithm",
                 cls.ep_dispatch_algorithm,
             ],
             env={
-                "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
+                # "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
                 "HCCL_BUFFSIZE": "1024",
                 "TRANSFORMERS_VERBOSITY": "error",
             },
@@ -68,7 +68,7 @@ class TestEPLBDispatchAlgorithmStatic(CustomTestCase):
             num_shots=5,
         )
         metrics = run_eval(args)
-        self.assertGreater(metrics["score"], 0.79)
+        self.assertGreater(metrics["score"], 0.90)
 
 
 class TestEPLBDispatchAlgorithmDynamic(TestEPLBDispatchAlgorithmStatic):
