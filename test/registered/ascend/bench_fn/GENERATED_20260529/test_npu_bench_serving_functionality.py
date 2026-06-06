@@ -72,6 +72,7 @@ class TestNpuBenchServingFunctionality(CustomTestCase):
                 )
                 args.warmup_requests = 0
                 args.gsp_group_distribution = "uniform"
+                args.gsp_zipf_alpha = 1.5
                 res = run_benchmark(args)
                 self.assertEqual(res["completed"], NUM_CONVERSATIONS * NUM_TURNS)
 
