@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 3: NPU bench serving functionality test - fix gsp_zipf_alpha
+# test round 4: NPU bench serving functionality test - set gsp_zipf_alpha to None
 
 on:
   pull_request:
