@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 5: PD disaggregation tests - use TP=2 to fix OOM
+# test round 6: PD disaggregation tests - use Qwen3-8B model for single NPU
 
 on:
   pull_request:

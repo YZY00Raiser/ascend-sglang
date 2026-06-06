@@ -3,7 +3,7 @@ import unittest
 
 import aiohttp
 
-from sglang.test.ascend.test_ascend_utils import QWEN3_32B_WEIGHTS_PATH
+from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
@@ -28,7 +28,7 @@ class TestNPUDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.model = QWEN3_32B_WEIGHTS_PATH
+        cls.model = QWEN3_8B_WEIGHTS_PATH
         # Use ascend transfer backend for NPU
         cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
         cls.rdma_devices = []
@@ -43,7 +43,7 @@ class TestNPUDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
             "--disaggregation-bootstrap-port",
             cls.bootstrap_port,
             "--tp",
-            "2",
+            "1",
             "--attention-backend",
             "ascend",
             "--disable-cuda-graph",
@@ -70,9 +70,9 @@ class TestNPUDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
             "--disaggregation-bootstrap-port",
             cls.bootstrap_port,
             "--tp",
-            "2",
+            "1",
             "--base-gpu-id",
-            "2",
+            "0",
             "--attention-backend",
             "ascend",
             "--disable-cuda-graph",
