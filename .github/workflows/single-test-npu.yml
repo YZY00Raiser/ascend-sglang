@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 6: PD disaggregation tests - use Qwen3-8B model for single NPU
+# test round 7: PD disaggregation tests - add ASCEND_MF_STORE_URL env variable
 
 on:
   pull_request:

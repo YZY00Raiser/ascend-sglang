@@ -1,4 +1,5 @@
 import asyncio
+import os
 import unittest
 
 import aiohttp
@@ -28,11 +29,17 @@ class TestNPUDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        os.environ["ASCEND_MF_STORE_URL"] = "tcp://127.0.0.1:24667"
         cls.model = QWEN3_8B_WEIGHTS_PATH
         # Use ascend transfer backend for NPU
         cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
         cls.rdma_devices = []
         cls.launch_all()
+
+    @classmethod
+    def tearDownClass(cls):
+        os.environ.pop("ASCEND_MF_STORE_URL", None)
+        super().tearDownClass()
 
     @classmethod
     def start_prefill(cls):

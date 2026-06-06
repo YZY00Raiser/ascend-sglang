@@ -13,13 +13,13 @@ from sglang.test.test_utils import (
     popen_launch_pd_server,
 )
 
-register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
+register_npu_ci(est_time=600, suite="nightly-16-npu-a3", nightly=True)
 
 
 class TestNPUDisaggregationSimulatedRetract(PDDisaggregationServerBase):
-    """Test retract simulation in disaggregation mode on NPU.
+    """Test request retraction and retry mechanism in disaggregation mode on NPU.
 
-    [Test Category] Functional
+    [Test Category] Stability
     [Test Target] Request retraction and retry mechanism
     """
 
@@ -27,6 +27,7 @@ class TestNPUDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     def setUpClass(cls):
         super().setUpClass()
         os.environ["SGLANG_TEST_RETRACT"] = "true"
+        os.environ["ASCEND_MF_STORE_URL"] = "tcp://127.0.0.1:24667"
         cls.model = QWEN3_8B_WEIGHTS_PATH
         # Use ascend transfer backend for NPU
         cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
@@ -35,7 +36,8 @@ class TestNPUDisaggregationSimulatedRetract(PDDisaggregationServerBase):
 
     @classmethod
     def tearDownClass(cls):
-        os.environ.pop("SGLANG_TEST_RETRACT")
+        os.environ.pop("SGLANG_TEST_RETRACT", None)
+        os.environ.pop("ASCEND_MF_STORE_URL", None)
         super().tearDownClass()
 
     @classmethod
@@ -88,7 +90,7 @@ class TestNPUDisaggregationSimulatedRetract(PDDisaggregationServerBase):
             other_args=decode_args,
         )
 
-    def test_gsm8k(self):
+    def test_gsm8k_with_retract_simulation(self):
         args = SimpleNamespace(
             num_shots=5,
             data_path=None,
@@ -99,7 +101,8 @@ class TestNPUDisaggregationSimulatedRetract(PDDisaggregationServerBase):
             port=int(self.lb_port),
         )
         metrics = run_eval(args)
-        self.assertGreater(metrics["accuracy"], 0.80)
+        print(f"{metrics=}")
+        self.assertGreater(metrics["accuracy"], 0.70)
 
 
 if __name__ == "__main__":

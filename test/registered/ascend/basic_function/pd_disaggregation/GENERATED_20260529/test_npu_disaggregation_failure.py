@@ -29,6 +29,7 @@ class TestNPUDisaggregationMooncakeFailure(PDDisaggregationServerBase):
     def setUpClass(cls):
         super().setUpClass()
         os.environ["DISAGGREGATION_TEST_FAILURE_PROB"] = "0.05"
+        os.environ["ASCEND_MF_STORE_URL"] = "tcp://127.0.0.1:24667"
         cls.model = QWEN3_8B_WEIGHTS_PATH
         # Use ascend transfer backend for NPU
         cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
@@ -37,7 +38,8 @@ class TestNPUDisaggregationMooncakeFailure(PDDisaggregationServerBase):
 
     @classmethod
     def tearDownClass(cls):
-        os.environ.pop("DISAGGREGATION_TEST_FAILURE_PROB")
+        os.environ.pop("DISAGGREGATION_TEST_FAILURE_PROB", None)
+        os.environ.pop("ASCEND_MF_STORE_URL", None)
         super().tearDownClass()
 
     @classmethod
