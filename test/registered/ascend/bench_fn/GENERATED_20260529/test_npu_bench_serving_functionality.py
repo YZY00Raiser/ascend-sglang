@@ -151,7 +151,9 @@ class TestNpuBenchServingCustomHeaders(CustomTestCase):
                 self.send_header("Content-Type", "application/json")
                 self.end_headers()
                 if self.path == "/v1/models":
-                    self.wfile.write(json.dumps({"data": [{"id": "Qwen/Qwen3-0.6B"}]}).encode())
+                    self.wfile.write(
+                        json.dumps({"data": [{"id": "Qwen/Qwen3-0.6B"}]}).encode()
+                    )
                 elif self.path == "/generate":
                     self.wfile.write(
                         json.dumps(
