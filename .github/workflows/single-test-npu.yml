@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 4: PD disaggregation tests - failure, pause/resume, retract (fix unused imports)
+# test round 5: PD disaggregation tests - use TP=2 to fix OOM
 
 on:
   pull_request:

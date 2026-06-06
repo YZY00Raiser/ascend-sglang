@@ -10,6 +10,10 @@ from sglang.test.few_shot_gsm8k import run_eval
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
 )
+from sglang.test.test_utils import (
+    DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+    popen_launch_pd_server,
+)
 
 register_npu_ci(est_time=600, suite="nightly-16-npu-a3", nightly=True)
 
@@ -29,26 +33,62 @@ class TestNPUDisaggregationMooncakeFailure(PDDisaggregationServerBase):
         # Use ascend transfer backend for NPU
         cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
         cls.rdma_devices = []
-        cls.extra_prefill_args = [
-            "--attention-backend",
-            "ascend",
-            "--disable-cuda-graph",
-            "--mem-fraction-static",
-            "0.9",
-        ]
-        cls.extra_decode_args = [
-            "--attention-backend",
-            "ascend",
-            "--disable-cuda-graph",
-            "--mem-fraction-static",
-            "0.9",
-        ]
         cls.launch_all()
 
     @classmethod
     def tearDownClass(cls):
         os.environ.pop("DISAGGREGATION_TEST_FAILURE_PROB")
         super().tearDownClass()
+
+    @classmethod
+    def start_prefill(cls):
+        prefill_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "prefill",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "2",
+            "--attention-backend",
+            "ascend",
+            "--disable-cuda-graph",
+            "--mem-fraction-static",
+            "0.85",
+        ]
+        prefill_args += cls.transfer_backend + cls.rdma_devices
+        cls.process_prefill = popen_launch_pd_server(
+            cls.model,
+            cls.prefill_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=prefill_args,
+        )
+
+    @classmethod
+    def start_decode(cls):
+        decode_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "decode",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "2",
+            "--base-gpu-id",
+            "2",
+            "--attention-backend",
+            "ascend",
+            "--disable-cuda-graph",
+            "--mem-fraction-static",
+            "0.85",
+        ]
+        decode_args += cls.transfer_backend + cls.rdma_devices
+        cls.process_decode = popen_launch_pd_server(
+            cls.model,
+            cls.decode_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=decode_args,
+        )
 
     def test_gsm8k_with_failure_simulation(self):
         args = SimpleNamespace(

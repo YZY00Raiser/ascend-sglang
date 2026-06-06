@@ -8,6 +8,10 @@ from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
 )
+from sglang.test.test_utils import (
+    DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+    popen_launch_pd_server,
+)
 
 register_npu_ci(est_time=400, suite="nightly-16-npu-a3", nightly=True)
 
@@ -28,24 +32,60 @@ class TestNPUDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
         # Use ascend transfer backend for NPU
         cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
         cls.rdma_devices = []
-        cls.extra_prefill_args = [
+        cls.launch_all()
+
+    @classmethod
+    def start_prefill(cls):
+        prefill_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "prefill",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "2",
             "--attention-backend",
             "ascend",
             "--disable-cuda-graph",
             "--mem-fraction-static",
-            "0.9",
+            "0.85",
             "--max-running-requests",
             str(cls.MAX_RUNNING),
             "--enable-metrics",
         ]
-        cls.extra_decode_args = [
+        prefill_args += cls.transfer_backend + cls.rdma_devices
+        cls.process_prefill = popen_launch_pd_server(
+            cls.model,
+            cls.prefill_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=prefill_args,
+        )
+
+    @classmethod
+    def start_decode(cls):
+        decode_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "decode",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "2",
+            "--base-gpu-id",
+            "2",
             "--attention-backend",
             "ascend",
             "--disable-cuda-graph",
             "--mem-fraction-static",
-            "0.9",
+            "0.85",
         ]
-        cls.launch_all()
+        decode_args += cls.transfer_backend + cls.rdma_devices
+        cls.process_decode = popen_launch_pd_server(
+            cls.model,
+            cls.decode_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=decode_args,
+        )
 
     def test_retract_pause_no_leak_on_prefill(self):
         asyncio.run(self._run_pause_resume_leak_test("retract"))
