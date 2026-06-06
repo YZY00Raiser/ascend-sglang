@@ -29,8 +29,10 @@ class TestNPUDumperHttp(CustomTestCase):
     @classmethod
     def setUpClass(cls):
         cls.base_url = DEFAULT_URL_FOR_TEST
+        cls.dumper_url = "http://127.0.0.1:30001"
         cls.dump_dir = tempfile.mkdtemp(prefix="npu_dumper_test_")
-        env = {**os.environ, "DUMPER_SERVER_PORT": "reuse"}
+        # Use a dedicated port for dumper HTTP server to avoid conflicts with detokenizer
+        env = {**os.environ, "DUMPER_SERVER_PORT": "30001"}
         cls.process = popen_launch_server(
             QWEN3_0_6B_WEIGHTS_PATH,
             cls.base_url,
@@ -53,7 +55,7 @@ class TestNPUDumperHttp(CustomTestCase):
         kill_process_tree(cls.process.pid)
 
     def _post(self, method: str, **kwargs):
-        resp = requests.post(f"{self.base_url}/dumper/{method}", json=kwargs or None)
+        resp = requests.post(f"{self.dumper_url}/dumper/{method}", json=kwargs or None)
         resp.raise_for_status()
         states = resp.json()
         self.assertIsInstance(states, list)
@@ -157,8 +159,10 @@ class TestNPUDumperE2E(CustomTestCase):
     @classmethod
     def setUpClass(cls):
         cls.base_url = DEFAULT_URL_FOR_TEST
+        cls.dumper_url = "http://127.0.0.1:30001"
         cls.dump_dir = tempfile.mkdtemp(prefix="npu_dumper_e2e_")
-        env = {**os.environ, "DUMPER_SERVER_PORT": "reuse"}
+        # Use a dedicated port for dumper HTTP server to avoid conflicts with detokenizer
+        env = {**os.environ, "DUMPER_SERVER_PORT": "30001"}
         cls.process = popen_launch_server(
             QWEN3_0_6B_WEIGHTS_PATH,
             cls.base_url,

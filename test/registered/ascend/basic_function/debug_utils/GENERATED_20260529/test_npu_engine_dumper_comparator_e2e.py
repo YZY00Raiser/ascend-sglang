@@ -179,12 +179,13 @@ class TestNPUEngineDumperComparatorE2E(CustomTestCase):
         extra_server_args: Optional[list] = None,
     ):
         """Launch SGLang server with source patcher + dumper, send a generate request."""
+        # Use a dedicated port for dumper HTTP server to avoid conflicts with detokenizer
         env = {
             **os.environ,
             "DUMPER_SOURCE_PATCHER_CONFIG": str(config_path),
             "DUMPER_DIR": str(dump_dir),
             "DUMPER_EXP_NAME": EXP_NAME,
-            "DUMPER_SERVER_PORT": "reuse",
+            "DUMPER_SERVER_PORT": "30001",
         }
 
         server_args = [
@@ -212,9 +213,10 @@ class TestNPUEngineDumperComparatorE2E(CustomTestCase):
             other_args=server_args,
             env=env,
         )
+        dumper_url = "http://127.0.0.1:30001"
         try:
             requests.post(
-                f"{base_url}/dumper/configure",
+                f"{dumper_url}/dumper/configure",
                 json={
                     "enable": True,
                     "filter": DUMPER_FILTER,
