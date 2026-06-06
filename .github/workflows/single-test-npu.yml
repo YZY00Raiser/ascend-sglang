@@ -1,5 +1,5 @@
 ﻿name: Single Test (NPU)
-# test round 12: Model loading - prefetch checkpoints only (add trust_remote_code)
+# test round 13: Model loading - both external models and prefetch checkpoints tests
 
 on:
   pull_request:
@@ -40,6 +40,7 @@ jobs:
 
           # Test cases
           test_cases=(
+              "test/registered/ascend/basic_function/model_loading/GENERATED_20260528/test_npu_external_models.py"
               "test/registered/ascend/basic_function/model_loading/GENERATED_20260528/test_npu_prefetch_checkpoints.py"
           )
 

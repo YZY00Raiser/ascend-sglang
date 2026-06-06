@@ -26,8 +26,9 @@ class TestNPUExternalModels(CustomTestCase):
             model_path=model_path,
             attention_backend="ascend",
             disable_cuda_graph=True,
-            mem_fraction_static=0.45,
-            max_total_tokens=32,
+            mem_fraction_static=0.3,
+            max_total_tokens=512,
+            trust_remote_code=True,
         )
         out = engine.generate(prompt)["text"]
         engine.shutdown()
