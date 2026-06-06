@@ -26,6 +26,9 @@ class TestNPUDisaggregationMooncakeFailure(PDDisaggregationServerBase):
         super().setUpClass()
         os.environ["DISAGGREGATION_TEST_FAILURE_PROB"] = "0.05"
         cls.model = QWEN3_32B_WEIGHTS_PATH
+        # Use ascend transfer backend for NPU
+        cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
+        cls.rdma_devices = []
         cls.extra_prefill_args = [
             "--attention-backend",
             "ascend",
