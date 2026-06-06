@@ -192,8 +192,13 @@ jobs:
           echo "            except ValueError:" >> /tmp/dump_metrics.py
           echo "                pass" >> /tmp/dump_metrics.py
           echo "            metrics[m.group(1)] = v" >> /tmp/dump_metrics.py
+          echo "baselines = {}" >> /tmp/dump_metrics.py
+          echo "for k, v in list(metrics.items()):" >> /tmp/dump_metrics.py
+          echo "    if k.endswith('_baseline'):" >> /tmp/dump_metrics.py
+          echo "        baselines[k[:-9]] = v" >> /tmp/dump_metrics.py
+          echo "        del metrics[k]" >> /tmp/dump_metrics.py
           echo "with open('/tmp/metrics.json', 'w') as f:" >> /tmp/dump_metrics.py
-          echo "    json.dump({'test_case': tc, 'test_type': tp, 'status': st, 'metrics': metrics}, f)" >> /tmp/dump_metrics.py
+          echo "    json.dump({'test_case': tc, 'test_type': tp, 'status': st, 'metrics': metrics, 'baselines': baselines}, f)" >> /tmp/dump_metrics.py
           python3 /tmp/dump_metrics.py
           exit ${test_exit_code}
 
