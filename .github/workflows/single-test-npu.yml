@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 13: PD disaggregation tests - fix mamba_indices parameter
+# test round 14: PD disaggregation tests - use sglang from source code
 
 on:
   pull_request:
@@ -66,12 +66,12 @@ jobs:
           export SGLANG_SET_CPU_AFFINITY=1
           echo "SGLANG_SET_CPU_AFFINITY: $SGLANG_SET_CPU_AFFINITY"
 
-          echo "Use sglang from image"
+          echo "Use sglang from source code"
           sglang_pkg_path=/sgl-workspace/sglang/python
-          ascend_test_util_path=${sglang_pkg_path}/sglang/test/ascend
-          mkdir -p ${ascend_test_util_path}
-          mv ${ascend_test_util_path} ${ascend_test_util_path}_bak
-          cp -r ${sglang_source_path}/python/sglang/test/ascend ${ascend_test_util_path}
+          # Backup original sglang package
+          mv ${sglang_pkg_path}/sglang ${sglang_pkg_path}/sglang_bak
+          # Copy sglang from source code
+          cp -r ${sglang_source_path}/python/sglang ${sglang_pkg_path}/sglang
 
           # Set environment of cann
           source /usr/local/Ascend/cann/set_env.sh || true
