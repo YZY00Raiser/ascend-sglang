@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 12: PD disaggregation tests - use mem-fraction-static=0.55
+# test round 13: PD disaggregation tests - fix mamba_indices parameter
 
 on:
   pull_request:
