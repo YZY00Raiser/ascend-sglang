@@ -31,7 +31,7 @@ class TestNPUMixedChunkedPrefill(GSM8KMixin, CustomTestCase):
     extra_args = [
         "--enable-mixed-chunk",
         "--chunked-prefill-size",
-        "32",
+        "64",
         "--attention-backend",
         "ascend",
         "--disable-cuda-graph",
@@ -62,7 +62,7 @@ class TestNPUMixedChunkedPrefillNoRadixCache(TestNPUMixedChunkedPrefill):
     extra_args = [
         "--enable-mixed-chunk",
         "--chunked-prefill-size",
-        "32",
+        "64",
         "--disable-radix-cache",
         "--attention-backend",
         "ascend",
