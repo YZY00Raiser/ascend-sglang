@@ -54,9 +54,7 @@ class TestNPUDumperHttp(CustomTestCase):
         kill_process_tree(cls.process.pid)
 
     def _post(self, method: str, **kwargs):
-        resp = requests.post(
-            f"{self.base_url}/dumper/{method}", json=kwargs or None
-        )
+        resp = requests.post(f"{self.base_url}/dumper/{method}", json=kwargs or None)
         resp.raise_for_status()
         states = resp.json()
         self.assertIsInstance(states, list)
@@ -185,9 +183,7 @@ class TestNPUDumperE2E(CustomTestCase):
         kill_process_tree(cls.process.pid)
 
     def test_step_and_non_intrusive_hooks(self):
-        states = requests.post(
-            f"{self.base_url}/dumper/get_state", json={}
-        ).json()
+        states = requests.post(f"{self.base_url}/dumper/get_state", json={}).json()
         self.assertEqual(len(states), 2, f"Expected 2 ranks (tp=2), got {len(states)}")
         for state in states:
             self.assertFalse(state["config"]["enable"])
@@ -198,9 +194,7 @@ class TestNPUDumperE2E(CustomTestCase):
             json={"enable": True, "dir": self.dump_dir},
         ).raise_for_status()
 
-        states = requests.post(
-            f"{self.base_url}/dumper/get_state", json={}
-        ).json()
+        states = requests.post(f"{self.base_url}/dumper/get_state", json={}).json()
         self.assertEqual(len(states), 2)
         for rank, state in enumerate(states):
             self.assertTrue(
@@ -215,9 +209,7 @@ class TestNPUDumperE2E(CustomTestCase):
         )
         self.assertEqual(resp.status_code, 200, f"Generate failed: {resp.text}")
 
-        states = requests.post(
-            f"{self.base_url}/dumper/get_state", json={}
-        ).json()
+        states = requests.post(f"{self.base_url}/dumper/get_state", json={}).json()
         self.assertEqual(len(states), 2)
         steps = [s["step"] for s in states]
         for rank, step in enumerate(steps):
@@ -278,9 +270,7 @@ class TestNPUDumperE2E(CustomTestCase):
             )
 
         rids_files = [f for f in dump_files if "name=rids" in f.name]
-        rids_loaded = torch.load(
-            rids_files[0], map_location="cpu", weights_only=False
-        )
+        rids_loaded = torch.load(rids_files[0], map_location="cpu", weights_only=False)
         rids_value = rids_loaded["value"]
         self.assertIsInstance(
             rids_value, list, f"rids should be a list, got {type(rids_value)}"

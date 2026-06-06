@@ -124,7 +124,9 @@ class TestNPUEngineDumperComparatorE2E(CustomTestCase):
             tp=BASELINE_TP,
             base_url=base_url,
         )
-        self._verify_patched_fields(dump_dir=baseline_dir, field_names=_FIELDS_TO_VERIFY)
+        self._verify_patched_fields(
+            dump_dir=baseline_dir, field_names=_FIELDS_TO_VERIFY
+        )
 
         target_dir = tmp_path / "target"
         self._run_server_and_generate(
@@ -163,8 +165,9 @@ class TestNPUEngineDumperComparatorE2E(CustomTestCase):
         )
 
         self.assertEqual(
-            result.returncode, 0,
-            f"Comparator failed (rc={result.returncode}). Debug output: {debug_file}"
+            result.returncode,
+            0,
+            f"Comparator failed (rc={result.returncode}). Debug output: {debug_file}",
         )
 
     def _run_server_and_generate(
@@ -234,14 +237,17 @@ class TestNPUEngineDumperComparatorE2E(CustomTestCase):
         for field in field_names:
             matches = list(dump_dir.rglob(f"*name={field}*.pt"))
             self.assertGreater(
-                len(matches), 0,
+                len(matches),
+                0,
                 f"Expected patched field '{field}' not found under {dump_dir}. "
-                f"Available files: {sorted(f.name for f in dump_dir.rglob('*.pt'))[:20]}"
+                f"Available files: {sorted(f.name for f in dump_dir.rglob('*.pt'))[:20]}",
             )
 
     def _save_comparator_output(self, stdout: str, stderr: str) -> Path:
         """Save comparator stdout+stderr to a temp file that persists for debugging."""
-        fd, path_str = tempfile.mkstemp(prefix="comparator_npu_e2e_", suffix=".log", dir="/tmp")
+        fd, path_str = tempfile.mkstemp(
+            prefix="comparator_npu_e2e_", suffix=".log", dir="/tmp"
+        )
         with os.fdopen(fd, "w") as f:
             f.write("=== STDOUT ===\n")
             f.write(stdout)
