@@ -14,8 +14,8 @@ so the YAML only needs ``dumper.dump(...)`` calls.
 
 import os
 import subprocess
-import sys
 import tempfile
+import unittest
 from pathlib import Path
 from typing import Optional
 
