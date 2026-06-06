@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 2: NPU profiling v2 test - fix profiler output pattern
+# test round 3: NPU profiling v2 test - fix rglob recursive search
 
 on:
   pull_request:
