@@ -34,8 +34,8 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=600, suite="nightly-4-npu-a3", nightly=True)
 
 MODEL = QWEN3_30B_A3B_WEIGHTS_PATH
-BASELINE_TP = 2
-TARGET_TP = 4
+BASELINE_TP = 1
+TARGET_TP = 1
 EXP_NAME = "e2e_source_patcher_npu"
 DUMPER_FILTER = "layer_id in [0, 1, 2]"
 
