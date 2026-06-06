@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 7: NPU bench serving functionality test - fix model name
+# test round 8: NPU bench serving functionality test - fix black format
 
 on:
   pull_request:
