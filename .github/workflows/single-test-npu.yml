@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 1: NPU profiling v2 test
+# test round 2: NPU profiling v2 test - fix profiler output pattern
 
 on:
   pull_request:
