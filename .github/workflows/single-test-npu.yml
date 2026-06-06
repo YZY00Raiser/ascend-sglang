@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 5: NPU bench serving functionality test - debug custom headers
+# test round 6: NPU bench serving functionality test - fix lint
 
 on:
   pull_request:
