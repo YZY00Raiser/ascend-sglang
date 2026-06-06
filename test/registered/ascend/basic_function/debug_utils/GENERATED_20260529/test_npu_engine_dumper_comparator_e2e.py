@@ -200,6 +200,7 @@ class TestNPUEngineDumperComparatorE2E(CustomTestCase):
             "128",
             "--mem-fraction-static",
             "0.5",
+            "--skip-server-warmup",
         ]
         if extra_server_args:
             server_args.extend(extra_server_args)

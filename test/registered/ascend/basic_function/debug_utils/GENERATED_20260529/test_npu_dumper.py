@@ -45,6 +45,7 @@ class TestNPUDumperHttp(CustomTestCase):
                 "2",
                 "--max-total-tokens",
                 "128",
+                "--skip-server-warmup",
             ],
             env=env,
         )
@@ -174,6 +175,7 @@ class TestNPUDumperE2E(CustomTestCase):
                 "2",
                 "--max-total-tokens",
                 "128",
+                "--skip-server-warmup",
             ],
             env=env,
         )
