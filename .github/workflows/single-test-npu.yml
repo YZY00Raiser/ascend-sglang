@@ -1,5 +1,5 @@
 ﻿name: Single Test (NPU)
-# test round 11: Model loading - prefetch checkpoints only (revert to original config)
+# test round 12: Model loading - prefetch checkpoints only (add trust_remote_code)
 
 on:
   pull_request:

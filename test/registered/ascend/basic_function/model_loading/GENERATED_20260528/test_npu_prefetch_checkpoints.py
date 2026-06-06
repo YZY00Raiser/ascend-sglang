@@ -34,7 +34,8 @@ class TestNPUPrefetchCheckpoints(CustomTestCase):
             mem_fraction_static=0.3,
             weight_loader_prefetch_checkpoints=True,
             cuda_graph_max_bs=1,
-            max_total_tokens=256,
+            max_total_tokens=512,
+            trust_remote_code=True,
         )
 
     @classmethod
