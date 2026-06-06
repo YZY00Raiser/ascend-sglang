@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 7: Sessions test cases - Updated to CANN 9.0.0 image
+# test round 8: Sessions test cases - Added tabulate dependency
 
 on:
   pull_request:
@@ -25,6 +25,10 @@ jobs:
       - name: Check npu info
         run: |
           npu-smi info
+
+      - name: Install dependencies
+        run: |
+          pip install tabulate
 
       - name: Run test
         timeout-minutes: 120
