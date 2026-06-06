@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 4: NPU bench serving functionality test - set gsp_zipf_alpha to None
+# test round 5: NPU bench serving functionality test - debug custom headers
 
 on:
   pull_request:
