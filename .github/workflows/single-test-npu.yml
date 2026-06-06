@@ -25,7 +25,7 @@ jobs:
   hicache-npu-new-1-npu-a3:
     runs-on: linux-aarch64-a3-1
     container:
-      image: swr.cn-southwest-2.myhuaweicloud.com/base_image/ascend-ci/cann:8.5.0-a3-ubuntu22.04-py3.11
+      image: swr.cn-southwest-2.myhuaweicloud.com/base_image/dockerhub/lmsysorg/sglang:cann9.0.0-a3-20260605
     strategy:
       fail-fast: false
       matrix:
