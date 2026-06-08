@@ -27,6 +27,7 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
         cls.pause_target_urls = [cls.prefill_url, cls.decode_url]
         cls.launch_all()
 
+
     def test_logprob(self):
         prompt = "The capital of france is "
         response = requests.post(
