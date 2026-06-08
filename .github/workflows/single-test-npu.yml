@@ -40,7 +40,8 @@ jobs:
 
           # Test cases - distributed tests (only data parallelism works on current NPU)
           test_cases=(
-            "test/registered/ascend/basic_function/distributed/GENERATED_20260529/test_npu_data_parallelism.py"
+            #"test/registered/ascend/basic_function/distributed/GENERATED_20260529/test_npu_data_parallelism.py"
+            "test/registered/ascend/basic_function/distributed/GENERATED_20260529/test_npu_dp_attention.py"
           )
 
           for test_case in "${test_cases[@]}"; do
