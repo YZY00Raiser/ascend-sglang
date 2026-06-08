@@ -40,7 +40,7 @@ jobs:
 
           # Test cases
           test_cases=(
-            "test/registered/ascend/basic_function/dsa_models_e2e/GENERATED_20260525/test_npu_dsa_dsv32_tp_mtp.py"
+            #"test/registered/ascend/basic_function/dsa_models_e2e/GENERATED_20260525/test_npu_dsa_dsv32_tp_mtp.py"
             "test/registered/ascend/basic_function/dsa_models_e2e/GENERATED_20260525/test_npu_dsa_dsv32_dp_mtp.py"
           )
 
