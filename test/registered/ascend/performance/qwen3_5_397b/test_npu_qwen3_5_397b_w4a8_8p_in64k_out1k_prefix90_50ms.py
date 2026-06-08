@@ -112,6 +112,7 @@ class TestNPUQwen3_5_397B_64K_Prefix90(TestAscendPerformanceTestCaseBase):
     other_args = QWEN3_5_397B_64K_PREFIX_OTHER_ARGS
     envs = QWEN3_5_397B_64K_PREFIX_ENVS
     dataset_name = "generated-shared-prefix"
+    warmup_requests = 0
     max_concurrency = 128
     num_prompts = 128
     repeat_rate = 0.9
@@ -120,6 +121,8 @@ class TestNPUQwen3_5_397B_64K_Prefix90(TestAscendPerformanceTestCaseBase):
     random_range_ratio = 1
     tpot = 50
     request_rate = float("inf")
+    temperature = 0.6
+    top_p = 0.95
     output_token_throughput = 1012.3
 
     def test_npu_qwen3_5_397b_8p_in64k_out1k_prefix90_50ms(self):
