@@ -11,10 +11,10 @@ from sglang.test.kits.pause_generation_kit import PauseResumeInPlaceMixin
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
 )
-from sglang.test.ascend.test_ascend_utils import (
-    QWEN3_8B_WEIGHTS_PATH,
-)
-
+# from sglang.test.ascend.test_ascend_utils import (
+#     QWEN3_8B_WEIGHTS_PATH,
+# )
+QWEN3_8B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-8B"
 register_cuda_ci(est_time=509, stage="base-b", runner_config="2-gpu-large")
 
 
