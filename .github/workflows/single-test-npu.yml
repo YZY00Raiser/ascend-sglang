@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 6: PD disaggregation accuracy test - apply black formatting
+# test round 7: PD disaggregation accuracy test - remove BOM
 
 on:
   pull_request:
