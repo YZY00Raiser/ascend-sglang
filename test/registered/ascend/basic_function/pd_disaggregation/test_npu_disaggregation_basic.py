@@ -11,8 +11,8 @@ from sglang.test.kits.pause_generation_kit import PauseResumeInPlaceMixin
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
 )
-from sglang.test.test_utils import (
-    DEFAULT_MODEL_NAME_FOR_TEST,
+from sglang.test.ascend.test_ascend_utils import (
+    QWEN3_8B_WEIGHTS_PATH,
 )
 
 register_cuda_ci(est_time=509, stage="base-b", runner_config="2-gpu-large")
@@ -22,7 +22,7 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.model = DEFAULT_MODEL_NAME_FOR_TEST
+        cls.model = QWEN3_8B_WEIGHTS_PATH
         cls.pause_generate_url = cls.lb_url
         cls.pause_target_urls = [cls.prefill_url, cls.decode_url]
         cls.launch_all()
