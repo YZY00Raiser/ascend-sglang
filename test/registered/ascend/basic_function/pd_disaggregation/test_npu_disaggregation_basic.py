@@ -1,7 +1,6 @@
 import json
 import unittest
 
-import aiohttp
 import openai
 import requests
 from transformers import AutoTokenizer
