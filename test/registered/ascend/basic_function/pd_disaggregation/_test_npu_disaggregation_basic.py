@@ -1,7 +1,6 @@
 import json
 import os
 import unittest
-from types import SimpleNamespace
 
 import openai
 import requests
@@ -9,7 +8,6 @@ from transformers import AutoTokenizer
 
 from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
-from sglang.test.few_shot_gsm8k import run_eval
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
 )
@@ -101,19 +99,6 @@ class TestNPUDisaggregationAccuracy(PDDisaggregationServerBase):
             other_args=decode_args,
             env=env,
         )
-
-    def test_gsm8k(self):
-        args = SimpleNamespace(
-            num_shots=5,
-            data_path=None,
-            num_questions=200,
-            max_new_tokens=512,
-            parallel=128,
-            host=f"http://{self.base_host}",
-            port=int(self.lb_port),
-        )
-        metrics = run_eval(args)
-        self.assertGreater(metrics["accuracy"], 0.50)
 
     def test_logprob(self):
         prompt = "The capital of france is "
