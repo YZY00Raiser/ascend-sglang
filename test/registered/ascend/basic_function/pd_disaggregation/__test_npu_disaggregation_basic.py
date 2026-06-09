@@ -21,7 +21,7 @@ QWEN3_8B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-8B"
 register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
 
 
-class TestNPUDisaggregationAccuracy(PDDisaggregationServerBase):
+class TestNPUDisaggregationAccuracy(PauseResumeInPlaceMixin,PDDisaggregationServerBase):
     """Test disaggregation accuracy features on NPU.
 
     [Test Category] Functional
