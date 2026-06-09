@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 2: PD disaggregation basic test - fix model path
+# test round 3: PD disaggregation basic test - use Ascend backend
 
 on:
   pull_request:
