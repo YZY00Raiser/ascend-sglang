@@ -1,90 +1,72 @@
-import logging
+import json
 import os
-import random
-import shutil
-import tempfile
-import time
 import unittest
-from typing import Dict
+from types import SimpleNamespace
 
+import openai
 import requests
+from transformers import AutoTokenizer
 
-from sglang.bench_serving import get_tokenizer
-from sglang.test.ascend.test_ascend_utils import QWEN3_32B_WEIGHTS_PATH
+from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
+from sglang.test.few_shot_gsm8k import run_eval
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
 )
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     popen_launch_pd_server,
-    popen_with_error_check,
 )
 
-register_npu_ci(est_time=400, suite="full-4-npu-a3", nightly=True)
+register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
 
 
-class DisaggregationHiCacheBase(PDDisaggregationServerBase):
-    """Testcase: All parameters for testing the PD_disaggregation feature were configured, inference was successful, and cache_tokens continued to grow..
+class TestNPUDisaggregationAccuracy(PDDisaggregationServerBase):
+    """Test disaggregation accuracy features on NPU.
 
     [Test Category] Functional
-    [Test Target] PD disaggregatio on NPU
-    --disaggregation-mode; --disaggregation-transfer-backend; --disaggregation-decode-polling-interval;
-    --disaggregation-decode-enable-offload-kvcache; --num-reserved-decode-tokens; --disaggregation-bootstrap-port;
+    [Test Target] PD disaggregation accuracy in prefill-decode mode
     """
 
     @classmethod
     def setUpClass(cls):
-        super(DisaggregationHiCacheBase, cls).setUpClass()
-
-        cls.model = QWEN3_32B_WEIGHTS_PATH
-
-        cls.tokenizer = get_tokenizer(cls.model)
-        cls.temp_dir = tempfile.mkdtemp()
-        cls.bootstrap_port = "8996"
-        cls.start_prefill()
-        cls.start_decode()
-
-        # Block until both
-        cls.wait_server_ready(cls.prefill_url + "/health")
-        cls.wait_server_ready(cls.decode_url + "/health")
-
-        cls.launch_router()
-        cls.wait_server_ready(cls.lb_url + "/health")
-        time.sleep(10)
+        super().setUpClass()
+        cls.model = QWEN3_8B_WEIGHTS_PATH
+        # Use ascend transfer backend for NPU
+        cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
+        # No RDMA devices needed for ascend backend
+        cls.rdma_devices = []
+        cls.extra_prefill_args = [
+            "--attention-backend",
+            "ascend",
+            "--disable-cuda-graph",
+            "--mem-fraction-static",
+            "0.5",
+        ]
+        cls.extra_decode_args = [
+            "--attention-backend",
+            "ascend",
+            "--disable-cuda-graph",
+            "--mem-fraction-static",
+            "0.5",
+        ]
+        cls.launch_all()
 
     @classmethod
     def start_prefill(cls):
-        # Prefill with HiCache enabled
         prefill_args = [
             "--trust-remote-code",
-            "--attention-backend",
-            "ascend",
             "--disaggregation-mode",
             "prefill",
-            "--disaggregation-transfer-backend",
-            "ascend",
             "--disaggregation-bootstrap-port",
             cls.bootstrap_port,
-            "--tp-size",
-            "2",
-            "--enable-hierarchical-cache",
-            "--hicache-io-backend",
-            "kernel_ascend",
-            "--hicache-mem-layout",
-            "page_first_direct",
-            "--hicache-storage-backend",
-            "file",
-            "--hicache-storage-prefetch-policy",
-            "wait_complete",
-            "--mem-fraction-static",
-            "0.9",
-            "--disable-cuda-graph",
-        ]
+            "--tp",
+            "1",
+        ] + list(cls.extra_prefill_args)
+        prefill_args += cls.transfer_backend + cls.rdma_devices
         env = {
             **os.environ,
-            "SGLANG_HICACHE_FILE_BACKEND_STORAGE_DIR": cls.temp_dir,
-            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:24667",
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
         }
         cls.process_prefill = popen_launch_pd_server(
             cls.model,
@@ -98,37 +80,19 @@ class DisaggregationHiCacheBase(PDDisaggregationServerBase):
     def start_decode(cls):
         decode_args = [
             "--trust-remote-code",
-            "--attention-backend",
-            "ascend",
             "--disaggregation-mode",
             "decode",
-            "--disaggregation-transfer-backend",
-            "ascend",
-            "--tp-size",
-            2,
-            "--mem-fraction-static",
-            "0.9",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
             "--base-gpu-id",
-            cls.base_gpu_id,
-            "--disaggregation-decode-enable-offload-kvcache",
-            "--hicache-io-backend",
-            "kernel_ascend",
-            "--hicache-mem-layout",
-            "page_first_direct",
-            "--hicache-storage-backend",
-            "file",
-            "--hicache-storage-prefetch-policy",
-            "wait_complete",
-            "--num-reserved-decode-tokens",
-            128,
-            "--disaggregation-decode-polling-interval",
-            2,
-        ]
-
+            "1",
+        ] + list(cls.extra_decode_args)
+        decode_args += cls.transfer_backend + cls.rdma_devices
         env = {
             **os.environ,
-            "SGLANG_HICACHE_FILE_BACKEND_STORAGE_DIR": cls.temp_dir,
-            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:24667",
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
         }
         cls.process_decode = popen_launch_pd_server(
             cls.model,
@@ -138,172 +102,122 @@ class DisaggregationHiCacheBase(PDDisaggregationServerBase):
             env=env,
         )
 
+    def test_gsm8k(self):
+        args = SimpleNamespace(
+            num_shots=5,
+            data_path=None,
+            num_questions=200,
+            max_new_tokens=512,
+            parallel=128,
+            host=f"http://{self.base_host}",
+            port=int(self.lb_port),
+        )
+        metrics = run_eval(args)
+        self.assertGreater(metrics["accuracy"], 0.50)
 
-    @classmethod
-    def launch_router(cls):
-        lb_command = [
-            "python3",
-            "-m",
-            "sglang_router.launch_router",
-            "--pd-disaggregation",
-            "--prefill",
-            cls.prefill_url,
-            cls.bootstrap_port,
-            "--decode",
-            cls.decode_url,
-            "--host",
-            cls.base_host,
-            "--port",
-            cls.lb_port,
-        ]
-        cls.process_lb = popen_with_error_check(lb_command)
-        cls.wait_server_ready(cls.lb_url + "/health")
+    def test_logprob(self):
+        prompt = "The capital of france is "
+        response = requests.post(
+            self.lb_url + "/generate",
+            json={
+                "text": prompt,
+                "sampling_params": {"temperature": 0},
+                "return_logprob": True,
+                "return_input_logprob": True,
+                "logprob_start_len": 0,
+            },
+        )
 
-    def gen_prompt(self, token_num: int) -> str:
-        # Generate a string consisting of random tokens.
-        all_available_tokens = list(self.tokenizer.get_vocab().values())
-        selected_tokens = random.choices(all_available_tokens, k=token_num)
-        return self.tokenizer.decode(selected_tokens)
+        j = response.json()
+        completion_tokens = j["meta_info"]["completion_tokens"]
+        input_logprobs = j["meta_info"]["input_token_logprobs"]
+        output_logprobs = j["meta_info"]["output_token_logprobs"]
 
-    def send_request(
-        self, prompt: str, max_tokens: int = 100, temperature: float = 0.0
-    ) -> Dict:
-        # Send a generate request and return response
+        self.assertEqual(
+            len(output_logprobs),
+            completion_tokens,
+            f"output_logprobs and completion_tokens should have the same length, but got {len(output_logprobs)} and {completion_tokens}",
+        )
+        self.assertGreater(
+            len(input_logprobs),
+            0,
+            f"input_logprobs should have at least one token, but got {len(input_logprobs)}",
+        )
+
+    def test_structured_output(self):
+        json_schema = json.dumps(
+            {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string", "pattern": "^[\\w]+$"},
+                    "population": {"type": "integer"},
+                },
+                "required": ["name", "population"],
+            }
+        )
+
         response = requests.post(
             f"{self.lb_url}/generate",
             json={
-                "text": prompt,
+                "text": "Here is the information of the capital of France in the JSON format.\n",
                 "sampling_params": {
-                    "temperature": temperature,
-                    "max_new_tokens": max_tokens,
-                    "ignore_eos": True,
+                    "temperature": 0,
+                    "max_new_tokens": 64,
+                    "json_schema": json_schema,
                 },
             },
-            timeout=60,
         )
+        output = response.json()["text"]
+        json.loads(output)
+
+    def test_first_token_finish(self):
+        client = openai.Client(api_key="empty", base_url=f"{self.lb_url}/v1")
+        tokenizer = AutoTokenizer.from_pretrained(self.model)
+        eos_token = tokenizer.eos_token_id
+        prompt = "The best programming language for AI is"
+
+        # First token EOS
+        res = client.completions.create(
+            model="dummy", prompt=prompt, logit_bias={eos_token: 42}
+        ).model_dump()
 
         self.assertEqual(
-            response.status_code,
-            200,
-            f"Request failed: {response.status_code} - {response.text}",
-        )
-        return response.json()
-
-    def trigger_offloading_and_flush(self):
-        # Helper method to trigger offloading and flush cache
-        # Trigger offloading
-        self.send_request(self.gen_prompt(1), max_tokens=150)
-
-        # Flush device cache to force remote storage access
-        time.sleep(2)
-        requests.post(self.prefill_url + "/flush_cache")
-
-
-class TestDisaggregationDecodeWithHiCache(DisaggregationHiCacheBase):
-    """Decode startup parameters"""
-
-    ascend_devices = os.environ.get("ASCEND_RT_VISIBLE_DEVICES", "0,1,2,3")
-    base_gpu_id = (
-        ascend_devices.split(",")[2] if len(ascend_devices.split(",")) >= 3 else "2"
-    )
-
-    @classmethod
-    def start_decode(cls):
-        decode_args = [
-            "--trust-remote-code",
-            "--attention-backend",
-            "ascend",
-            "--disaggregation-mode",
-            "decode",
-            "--disaggregation-transfer-backend",
-            "ascend",
-            "--tp-size",
-            2,
-            "--mem-fraction-static",
-            "0.9",
-            "--base-gpu-id",
-            cls.base_gpu_id,
-            "--disaggregation-decode-enable-offload-kvcache",
-            "--hicache-io-backend",
-            "kernel_ascend",
-            "--hicache-mem-layout",
-            "page_first_direct",
-            "--hicache-storage-backend",
-            "file",
-            "--hicache-storage-prefetch-policy",
-            "wait_complete",
-            "--num-reserved-decode-tokens",
-            128,
-            "--disaggregation-decode-polling-interval",
-            2,
-        ]
-
-        env = {
-            **os.environ,
-            "SGLANG_HICACHE_FILE_BACKEND_STORAGE_DIR": cls.temp_dir,
-            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:24667",
-        }
-        cls.process_decode = popen_launch_pd_server(
-            cls.model,
-            cls.decode_url,
-            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
-            other_args=decode_args,
-            env=env,
+            res["usage"]["completion_tokens"],
+            1,
+            "Expected completion_tokens to be 1 when first token is EOS, "
+            f"but got {res['usage']['completion_tokens']}",
         )
 
-    def test_prefill_cache_hit(self):
-        """Test that prefill cache works with repeated queries"""
-        repeated_prompt = self.gen_prompt(800)
-        self.send_request(repeated_prompt, max_tokens=100)
-        # Flush cache
-        self.trigger_offloading_and_flush()
+        # First token EOS with ignore_eos
+        res = client.completions.create(
+            model="dummy",
+            prompt=prompt,
+            logit_bias={eos_token: 42},
+            extra_body={"ignore_eos": True},
+        ).model_dump()
 
-        # Second request - should hit cache (faster)
-        response2 = self.send_request(repeated_prompt, max_tokens=100)
-        # Assert cached tokens cnt
-        self.assertGreater(response2["meta_info"]["cached_tokens"], 700)
+        self.assertGreater(
+            res["usage"]["completion_tokens"],
+            1,
+            "Expected completion_tokens to be greater than 1 when ignore_eos is True, "
+            f"but got {res['usage']['completion_tokens']}",
+        )
 
-    def test_multi_turn_conversation_cache(self):
-        # Test multi-turn conversation scenario with cache hit improvement
-        logging.warning("====================Testing request=======================")
-        initial_prompt = self.gen_prompt(300)
-        response1 = self.send_request(initial_prompt, max_tokens=200, temperature=0.1)
-        current_context = initial_prompt + response1["text"]
+        # First token with specified stop token
+        stop_token_id = tokenizer.encode(" hello", add_special_tokens=False)[0]
+        res = client.completions.create(
+            model="dummy",
+            prompt=prompt,
+            logit_bias={stop_token_id: 42},
+            stop=[" hello"],
+        ).model_dump()
 
-        previous_cached_tokens = 0
-
-        for turn in range(2, 5):
-            logging.warning(f"\nTurn {turn}: Continuing from previous context")
-
-            response = self.send_request(
-                current_context, max_tokens=200, temperature=0.1
-            )
-            cached_tokens = response["meta_info"]["cached_tokens"]
-
-            logging.warning(f"Turn {turn} cached tokens: {cached_tokens}")
-            logging.warning(
-                f"Improvement: {cached_tokens - previous_cached_tokens} tokens"
-            )
-
-            # Assert cache improvement
-            self.assertGreater(
-                cached_tokens,
-                previous_cached_tokens,
-                f"Turn {turn} should have more cached tokens than turn {turn - 1}",
-            )
-
-            # Update context and cached tokens for next iteration
-            current_context += response["text"]
-            previous_cached_tokens = cached_tokens
-
-            # Flush prefill cache
-            self.trigger_offloading_and_flush()
-
-    @classmethod
-    def tearDownClass(cls):
-        super().tearDownClass()
-        if os.path.exists(cls.temp_dir):
-            shutil.rmtree(cls.temp_dir)
+        self.assertEqual(
+            res["usage"]["completion_tokens"],
+            1,
+            "Expected completion_tokens to be 1 when first token is stop token, "
+            f"but got {res['usage']['completion_tokens']}",
+        )
 
 
 if __name__ == "__main__":
