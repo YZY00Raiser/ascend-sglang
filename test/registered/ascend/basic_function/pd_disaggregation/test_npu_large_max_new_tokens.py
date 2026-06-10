@@ -52,6 +52,8 @@ class TestLargeMaxNewTokens(CustomTestCase):
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
+                "--tp-size",
+                "2",
             ],
             env={"SGLANG_CLIP_MAX_NEW_TOKENS_ESTIMATION": "256", **os.environ},
             return_stdout_stderr=(cls.stdout, cls.stderr),
