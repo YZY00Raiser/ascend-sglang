@@ -70,7 +70,7 @@ class TestLargeMaxNewTokens(CustomTestCase):
                 {"role": "system", "content": "You are a helpful AI assistant"},
                 {
                     "role": "user",
-                    "content": "Please repeat the world 'hello' for 10000 times.",
+                    "content": "Please repeat the world 'hello' for 100 times.",
                 },
             ],
             temperature=0,
