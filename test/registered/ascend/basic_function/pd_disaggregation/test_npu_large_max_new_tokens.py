@@ -44,7 +44,7 @@ class TestLargeMaxNewTokens(CustomTestCase):
             api_key=cls.api_key,
             other_args=[
                 "--max-total-token",
-                "4096",
+                "2000",
                 "--context-len",
                 "8192",
                 "--decode-log-interval",
@@ -52,8 +52,6 @@ class TestLargeMaxNewTokens(CustomTestCase):
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
-                "--mem-fraction-static",
-                "0.5",
             ],
             env={"SGLANG_CLIP_MAX_NEW_TOKENS_ESTIMATION": "256", **os.environ},
             return_stdout_stderr=(cls.stdout, cls.stderr),
@@ -77,7 +75,7 @@ class TestLargeMaxNewTokens(CustomTestCase):
                 {"role": "system", "content": "You are a helpful AI assistant"},
                 {
                     "role": "user",
-                    "content": "Please repeat the word 'hello' for 100 times.",
+                    "content": "Please repeat the word 'hello' for 10000 times.",
                 },
             ],
             temperature=0,
