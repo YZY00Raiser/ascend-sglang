@@ -8,6 +8,8 @@ from transformers import AutoTokenizer
 
 # from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
+from sglang.test.kits.pause_generation_kit import PauseResumeInPlaceMixin
+
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
 )
@@ -18,9 +20,9 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
 
-QWEN3_8B_WEIGHTS_PATH="/home/weights/Qwen3-8B"
+QWEN3_8B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-8B"
 
-class TestNPUDisaggregationAccuracy(PDDisaggregationServerBase):
+class TestNPUDisaggregationAccuracy(PauseResumeInPlaceMixin,PDDisaggregationServerBase):
     """Test disaggregation accuracy features on NPU.
 
     [Test Category] Functional
