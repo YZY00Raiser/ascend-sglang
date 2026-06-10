@@ -6,7 +6,7 @@ import openai
 import requests
 from transformers import AutoTokenizer
 
-from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
@@ -18,6 +18,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
 
+QWEN3_8B_WEIGHTS_PATH="/home/weights/Qwen3-8B"
 
 class TestNPUDisaggregationAccuracy(PDDisaggregationServerBase):
     """Test disaggregation accuracy features on NPU.
@@ -128,6 +129,35 @@ class TestNPUDisaggregationAccuracy(PDDisaggregationServerBase):
             0,
             f"input_logprobs should have at least one token, but got {len(input_logprobs)}",
         )
+
+    def test_chat_completion_top_logprobs(self):
+        client = openai.Client(api_key="empty", base_url=f"{self.lb_url}/v1")
+        response = client.chat.completions.create(
+            model="dummy",
+            messages=[
+                {"role": "system", "content": "You are a helpful AI assistant."},
+                {"role": "user", "content": "What is the capital of France?"},
+            ],
+            temperature=0,
+            max_tokens=8,
+            logprobs=True,
+            top_logprobs=5,
+        )
+
+        self.assertIsNotNone(response.choices[0].logprobs)
+        content_logprobs = response.choices[0].logprobs.content
+        self.assertGreater(len(content_logprobs), 0)
+
+        first_top_logprobs = next(
+            (item.top_logprobs for item in content_logprobs if item.top_logprobs),
+            None,
+        )
+        self.assertIsNotNone(first_top_logprobs)
+        self.assertGreater(len(first_top_logprobs), 0)
+        self.assertIsInstance(first_top_logprobs[0].token, str)
+
+        print("--------------------------------hat_completion_top_logprobs:response----------------------------------------")
+        print(response)
 
     def test_structured_output(self):
         json_schema = json.dumps(
