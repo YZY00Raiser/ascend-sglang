@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 2: PD disaggregation basic test (NPU) - fix empty file content
+# test round 3: PD disaggregation basic test (NPU) - apply black formatting
 
 on:
   pull_request:
