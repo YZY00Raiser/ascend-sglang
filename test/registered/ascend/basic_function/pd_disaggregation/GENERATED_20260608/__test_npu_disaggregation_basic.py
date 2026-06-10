@@ -16,12 +16,15 @@ from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     popen_launch_pd_server,
 )
+
 # QWEN3_8B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-8B"
 
 register_npu_ci(est_time=400, suite="nightly-2-npu-a3", nightly=True)
 
 
-class TestNPUDisaggregationAccuracy(PauseResumeInPlaceMixin,PDDisaggregationServerBase):
+class TestNPUDisaggregationAccuracy(
+    PauseResumeInPlaceMixin, PDDisaggregationServerBase
+):
     """Test disaggregation accuracy features on NPU.
 
     [Test Category] Functional
@@ -156,7 +159,6 @@ class TestNPUDisaggregationAccuracy(PauseResumeInPlaceMixin,PDDisaggregationServ
         self.assertIsNotNone(first_top_logprobs)
         self.assertGreater(len(first_top_logprobs), 0)
         self.assertIsInstance(first_top_logprobs[0].token, str)
-
 
     def test_structured_output(self):
         json_schema = json.dumps(
