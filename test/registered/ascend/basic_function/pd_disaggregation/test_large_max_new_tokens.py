@@ -21,8 +21,8 @@ from sglang.test.test_utils import (
     CustomTestCase,
     popen_launch_server,
 )
-QWEN3_8B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-8B"
-
+# QWEN3_8B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-8B"
+QWEN3_8B_WEIGHTS_PATH="/home/weights/Llama-3.1-8B-Instruct"
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
 class TestLargeMaxNewTokens(CustomTestCase):
