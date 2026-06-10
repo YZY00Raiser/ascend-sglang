@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 3: PD disaggregation basic test (NPU) - apply black formatting
+# test round 4: PD disaggregation basic test (NPU) - fix pause_generate_url
 
 on:
   pull_request:
