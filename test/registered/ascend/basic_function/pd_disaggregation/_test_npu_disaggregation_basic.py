@@ -134,7 +134,7 @@ class TestNPUDisaggregationAccuracy(PauseResumeInPlaceMixin,PDDisaggregationServ
             f"input_logprobs should have at least one token, but got {len(input_logprobs)}",
         )
         print("--------------------------------test_logprob:response.json----------------------------------------")
-        print(response.json)
+        print(response.json())
 
     def test_chat_completion_top_logprobs(self):
         client = openai.Client(api_key="empty", base_url=f"{self.lb_url}/v1")
