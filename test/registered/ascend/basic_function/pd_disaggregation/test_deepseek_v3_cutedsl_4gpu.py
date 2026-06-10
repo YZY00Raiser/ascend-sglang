@@ -46,8 +46,6 @@ class TestDummyWithSBO(CustomTestCase):
             "--moe-dense-tp-size",
             "1",
             "--enable-dp-attention",
-            "--quantization",
-            "modelopt_fp4",
             "--attention-backend",
             "trtllm_mla",
             "--moe-runner-backend",
