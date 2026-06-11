@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 3: NPU constrained decoding test - grammar fix
+# test round 4: NPU constrained decoding test - switch to xgrammar
 
 on:
   pull_request:
