@@ -21,6 +21,7 @@ from sglang.test.test_utils import (
 register_amd_ci(est_time=600, suite="stage-b-test-large-8-gpu-mi35x-disaggregation-amd")
 
 QWEN3_8B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-8B"
+
 class TestDisaggregationAccuracy(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
