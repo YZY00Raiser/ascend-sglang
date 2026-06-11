@@ -19,7 +19,10 @@ from sglang.test.run_eval import run_eval
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
 )
-
+from sglang.test.test_utils import (
+    DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+    popen_launch_pd_server,
+)
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
 QWEN3_8B_EAGLE3_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-8B_eagle3"
