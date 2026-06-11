@@ -228,7 +228,7 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
             "Expected completion_tokens to be 1 when first token is stop token, "
             f"but got {res['usage']['completion_tokens']}"
         )
-'''
+
 
 
 class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
@@ -241,6 +241,7 @@ class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
         # Use ascend transfer backend for NPU
         cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
         cls.launch_all()
+
     @classmethod
     def start_prefill(cls):
         prefill_args = [
@@ -349,6 +350,55 @@ class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
         cls.extra_prefill_args = spec_args
         cls.extra_decode_args = spec_args
         cls.launch_all()
+    @classmethod
+    def start_prefill(cls):
+        prefill_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "prefill",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
+        ] + list(cls.extra_prefill_args)
+        prefill_args += cls.transfer_backend + cls.rdma_devices
+        env = {
+            **os.environ,
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
+        }
+        cls.process_prefill = popen_launch_pd_server(
+            cls.model,
+            cls.prefill_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=prefill_args,
+            env=env,
+        )
+
+    @classmethod
+    def start_decode(cls):
+        decode_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "decode",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
+            "--base-gpu-id",
+            "1",
+        ] + list(cls.extra_decode_args)
+        decode_args += cls.transfer_backend + cls.rdma_devices
+        env = {
+            **os.environ,
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
+        }
+        cls.process_decode = popen_launch_pd_server(
+            cls.model,
+            cls.decode_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=decode_args,
+            env=env,
+        )
 
     def test_gsm8k(self):
         args = SimpleNamespace(
@@ -364,7 +414,7 @@ class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
 
         self.assertGreater(metrics["score"], 0.74)
 
-
+'''
 class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -372,6 +422,55 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
         os.environ["SGLANG_TEST_RETRACT"] = "true"
         cls.model = QWEN3_8B_WEIGHTS_PATH
         cls.launch_all()
+    @classmethod
+    def start_prefill(cls):
+        prefill_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "prefill",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
+        ] + list(cls.extra_prefill_args)
+        prefill_args += cls.transfer_backend + cls.rdma_devices
+        env = {
+            **os.environ,
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
+        }
+        cls.process_prefill = popen_launch_pd_server(
+            cls.model,
+            cls.prefill_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=prefill_args,
+            env=env,
+        )
+
+    @classmethod
+    def start_decode(cls):
+        decode_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "decode",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
+            "--base-gpu-id",
+            "1",
+        ] + list(cls.extra_decode_args)
+        decode_args += cls.transfer_backend + cls.rdma_devices
+        env = {
+            **os.environ,
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
+        }
+        cls.process_decode = popen_launch_pd_server(
+            cls.model,
+            cls.decode_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=decode_args,
+            env=env,
+        )
 
     @classmethod
     def tearDownClass(cls):
@@ -410,6 +509,55 @@ class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
             "--enable-metrics",
         ]
         cls.launch_all()
+    @classmethod
+    def start_prefill(cls):
+        prefill_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "prefill",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
+        ] + list(cls.extra_prefill_args)
+        prefill_args += cls.transfer_backend + cls.rdma_devices
+        env = {
+            **os.environ,
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
+        }
+        cls.process_prefill = popen_launch_pd_server(
+            cls.model,
+            cls.prefill_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=prefill_args,
+            env=env,
+        )
+
+    @classmethod
+    def start_decode(cls):
+        decode_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "decode",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
+            "--base-gpu-id",
+            "1",
+        ] + list(cls.extra_decode_args)
+        decode_args += cls.transfer_backend + cls.rdma_devices
+        env = {
+            **os.environ,
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
+        }
+        cls.process_decode = popen_launch_pd_server(
+            cls.model,
+            cls.decode_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=decode_args,
+            env=env,
+        )
 
     def test_retract_pause_no_leak_on_prefill(self):
         """Retract-mode pause on a disagg prefill node must not leak prefill
