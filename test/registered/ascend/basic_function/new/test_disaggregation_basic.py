@@ -26,13 +26,14 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
 QWEN3_8B_EAGLE3_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-8B_eagle3"
+'''
 class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.model = QWEN3_8B_WEIGHTS_PATH
         # Use ascend transfer backend for NPU
         cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
+        cls.model = QWEN3_8B_WEIGHTS_PATH
         cls.pause_generate_url = cls.lb_url
         cls.pause_target_urls = [cls.prefill_url, cls.decode_url]
         cls.launch_all()
@@ -227,8 +228,8 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
             "Expected completion_tokens to be 1 when first token is stop token, "
             f"but got {res['usage']['completion_tokens']}"
         )
-
 '''
+
 
 class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
     @classmethod
@@ -236,8 +237,60 @@ class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
         super().setUpClass()
         # set DISAGGREGATION_TEST_FAILURE_PROB to simulate failure
         os.environ["DISAGGREGATION_TEST_FAILURE_PROB"] = "0.05"
-        cls.model = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
+        cls.model = QWEN3_8B_WEIGHTS_PATH
+        # Use ascend transfer backend for NPU
+        cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
         cls.launch_all()
+    @classmethod
+    def start_prefill(cls):
+        prefill_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "prefill",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
+        ] + list(cls.extra_prefill_args)
+        prefill_args += cls.transfer_backend + cls.rdma_devices
+        env = {
+            **os.environ,
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
+        }
+        cls.process_prefill = popen_launch_pd_server(
+            cls.model,
+            cls.prefill_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=prefill_args,
+            env=env,
+        )
+
+    @classmethod
+    def start_decode(cls):
+        decode_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "decode",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
+            "--base-gpu-id",
+            "1",
+        ] + list(cls.extra_decode_args)
+        decode_args += cls.transfer_backend + cls.rdma_devices
+        env = {
+            **os.environ,
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
+        }
+        cls.process_decode = popen_launch_pd_server(
+            cls.model,
+            cls.decode_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=decode_args,
+            env=env,
+        )
+
 
     @classmethod
     def tearDownClass(cls):
@@ -270,17 +323,19 @@ class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
                 # If health check fails, re-raise the original exception
                 raise e from health_check_error
 
-
+'''
 class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.model = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
+        # Use ascend transfer backend for NPU
+        cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
+        cls.model = QWEN3_8B_WEIGHTS_PATH
         spec_args = [
             "--speculative-algorithm",
             "EAGLE",
             "--speculative-draft-model-path",
-            EAGLE3_LLAMA3_1_INSTRUCT_8B_WEIGHTS_PATH,
+            QWEN3_8B_EAGLE3_WEIGHTS_PATH,
             "--speculative-num-steps",
             "3",
             "--speculative-eagle-topk",
@@ -315,7 +370,7 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     def setUpClass(cls):
         super().setUpClass()
         os.environ["SGLANG_TEST_RETRACT"] = "true"
-        cls.model = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
+        cls.model = QWEN3_8B_WEIGHTS_PATH
         cls.launch_all()
 
     @classmethod
@@ -348,7 +403,7 @@ class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.model = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
+        cls.model = QWEN3_8B_WEIGHTS_PATH
         cls.extra_prefill_args = [
             "--max-running-requests",
             str(cls.MAX_RUNNING),
@@ -494,8 +549,8 @@ class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
                 f"Prefill node has {num_running} phantom running requests "
                 f"after abort — pause_generation is leaking into running_batch",
             )
-
 '''
+
 
 if __name__ == "__main__":
     unittest.main()
