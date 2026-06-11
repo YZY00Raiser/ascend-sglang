@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 1: <测试用例描述>
+# test round 2: NPU constrained decoding test
 
 on:
   pull_request:
