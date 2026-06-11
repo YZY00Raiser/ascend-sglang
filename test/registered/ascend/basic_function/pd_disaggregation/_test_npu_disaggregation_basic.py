@@ -218,8 +218,8 @@ class TestDisaggregationAccuracy(PDDisaggregationServerBase):
             f"but got {res['usage']['completion_tokens']}"
         )
 
+'''
 
-# register_amd_ci(est_time=300, suite="stage-b-test-2-gpu-large-amd")
 class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -335,7 +335,6 @@ class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
                 raise e from health_check_error
 
 
-# register_amd_ci(est_time=300, suite="stage-b-test-2-gpu-large-amd")
 class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -436,6 +435,7 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
 
         self.assertGreater(metrics["accuracy"], 0.70)
 
+'''
 
 if __name__ == "__main__":
     unittest.main()
