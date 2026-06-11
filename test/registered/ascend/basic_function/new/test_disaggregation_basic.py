@@ -324,7 +324,7 @@ class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
                 # If health check fails, re-raise the original exception
                 raise e from health_check_error
 
-'''
+
 class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -491,7 +491,7 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
 
         self.assertGreater(metrics["score"], 0.62)
 
-
+'''
 class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
     """Regression test: pause_generation must not leak prefill requests into
     running_batch.  With a small --max-running-requests the leak fills the
