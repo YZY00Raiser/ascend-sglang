@@ -19,9 +19,7 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 
 
-class TestNPUDisaggregation(
-    PauseResumeInPlaceMixin, PDDisaggregationServerBase
-):
+class TestNPUDisaggregation(PauseResumeInPlaceMixin, PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
