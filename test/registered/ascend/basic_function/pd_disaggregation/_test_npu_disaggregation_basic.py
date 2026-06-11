@@ -224,6 +224,8 @@ class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # Use ascend transfer backend for NPU
+        cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
         # Configure ROCm RDMA environment
         os.environ["SGLANG_USE_AITER"] = "1"
         rdma_env = os.environ.get("SGLANG_TEST_RDMA_DEVICE")
@@ -338,6 +340,8 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # Use ascend transfer backend for NPU
+        cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
         # Configure ROCm RDMA environment
         os.environ["SGLANG_USE_AITER"] = "1"
         rdma_env = os.environ.get("SGLANG_TEST_RDMA_DEVICE")
