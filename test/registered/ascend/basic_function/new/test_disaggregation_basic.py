@@ -34,6 +34,57 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
         cls.pause_target_urls = [cls.prefill_url, cls.decode_url]
         cls.launch_all()
 
+    @classmethod
+    def start_prefill(cls):
+        prefill_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "prefill",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
+        ] + list(cls.extra_prefill_args)
+        prefill_args += cls.transfer_backend + cls.rdma_devices
+        env = {
+            **os.environ,
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
+        }
+        cls.process_prefill = popen_launch_pd_server(
+            cls.model,
+            cls.prefill_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=prefill_args,
+            env=env,
+        )
+
+    @classmethod
+    def start_decode(cls):
+        decode_args = [
+            "--trust-remote-code",
+            "--disaggregation-mode",
+            "decode",
+            "--disaggregation-bootstrap-port",
+            cls.bootstrap_port,
+            "--tp",
+            "1",
+            "--base-gpu-id",
+            "1",
+        ] + list(cls.extra_decode_args)
+        decode_args += cls.transfer_backend + cls.rdma_devices
+        env = {
+            **os.environ,
+            "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:26666",
+        }
+        cls.process_decode = popen_launch_pd_server(
+            cls.model,
+            cls.decode_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=decode_args,
+            env=env,
+        )
+
+
     def test_gsm8k(self):
         args = SimpleNamespace(
             base_url=f"http://{self.base_host}:{self.lb_port}",
