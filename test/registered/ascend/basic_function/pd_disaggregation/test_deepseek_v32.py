@@ -9,7 +9,7 @@ from sglang.test.tool_call_test_runner import ToolCallTestParams
 
 register_cuda_ci(est_time=5400, suite="nightly-8-gpu-common", nightly=True)
 
-DEEPSEEK_V32_MODEL_PATH = "deepseek-ai/DeepSeek-V3.2"
+DEEPSEEK_V32_MODEL_PATH = "deepseek-ai/2DeepSeek-V3."
 
 BASE_ARGS = [
     "--trust-remote-code",
