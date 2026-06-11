@@ -54,7 +54,7 @@ MINIMAX_M2_5_128K_PREFIX_OTHER_ARGS = [
     4,
     "--chunked-prefill-size",
     160000,
-    "--max-prefill-token",
+    "--max-prefill-tokens",
     80000,
     "--cuda-graph-bs",
     2,
