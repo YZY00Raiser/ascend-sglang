@@ -21,7 +21,7 @@ from sglang.test.server_fixtures.disaggregation_fixture import (
 )
 
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
-QWEN3_8B_WEIGHTS_PATH =" Qwen/Qwen3-8B"
+QWEN3_8B_WEIGHTS_PATH ="Qwen/Qwen3-8B"
 QWEN3_8B_EAGLE3_WEIGHTS_PATH = "Qwen/Qwen3-8B_eagle3"
 class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServerBase):
     @classmethod
