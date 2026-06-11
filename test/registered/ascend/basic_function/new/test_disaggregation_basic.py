@@ -13,19 +13,21 @@ from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.kits.pause_generation_kit import PauseResumeInPlaceMixin
 from sglang.test.ascend.test_ascend_utils import EAGLE3_LLAMA3_1_INSTRUCT_8B_WEIGHTS_PATH
 from sglang.test.ascend.test_ascend_utils import LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_8B_EAGLE3_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 from sglang.test.run_eval import run_eval
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
 )
 
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
-
-
+QWEN3_8B_WEIGHTS_PATH =" Qwen/Qwen3-8B"
+QWEN3_8B_EAGLE3_WEIGHTS_PATH = "Qwen/Qwen3-8B_eagle3"
 class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.model = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
+        cls.model = QWEN3_8B_WEIGHTS_PATH
         # Use ascend transfer backend for NPU
         cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
         cls.pause_generate_url = cls.lb_url
