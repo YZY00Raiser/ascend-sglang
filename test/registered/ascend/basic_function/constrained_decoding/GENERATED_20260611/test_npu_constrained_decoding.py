@@ -92,7 +92,7 @@ class TestNPULLGuidanceBackend(
     [Test Target] llguidance grammar backend
     """
 
-    backend = "llguidance"
+    backend = "xgrammar"
 
 
 if __name__ == "__main__":
