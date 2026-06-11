@@ -9,26 +9,25 @@ import openai
 import requests
 from transformers import AutoTokenizer
 
-from sglang.test.ci.ci_register import register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.kits.pause_generation_kit import PauseResumeInPlaceMixin
+from sglang.test.ascend.test_ascend_utils import EAGLE3_LLAMA3_1_INSTRUCT_8B_WEIGHTS_PATH
+from sglang.test.ascend.test_ascend_utils import LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
 from sglang.test.run_eval import run_eval
 from sglang.test.server_fixtures.disaggregation_fixture import (
     PDDisaggregationServerBase,
 )
-from sglang.test.test_utils import (
-    DEFAULT_DRAFT_MODEL_EAGLE3,
-    DEFAULT_MODEL_NAME_FOR_TEST,
-    DEFAULT_TARGET_MODEL_EAGLE3,
-)
 
-register_cuda_ci(est_time=509, stage="base-b", runner_config="2-gpu-large")
+register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 
 
 class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.model = DEFAULT_MODEL_NAME_FOR_TEST
+        cls.model = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
+        # Use ascend transfer backend for NPU
+        cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
         cls.pause_generate_url = cls.lb_url
         cls.pause_target_urls = [cls.prefill_url, cls.decode_url]
         cls.launch_all()
@@ -180,7 +179,7 @@ class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
         super().setUpClass()
         # set DISAGGREGATION_TEST_FAILURE_PROB to simulate failure
         os.environ["DISAGGREGATION_TEST_FAILURE_PROB"] = "0.05"
-        cls.model = DEFAULT_MODEL_NAME_FOR_TEST
+        cls.model = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
         cls.launch_all()
 
     @classmethod
@@ -219,12 +218,12 @@ class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.model = DEFAULT_TARGET_MODEL_EAGLE3
+        cls.model = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
         spec_args = [
             "--speculative-algorithm",
             "EAGLE",
             "--speculative-draft-model-path",
-            DEFAULT_DRAFT_MODEL_EAGLE3,
+            EAGLE3_LLAMA3_1_INSTRUCT_8B_WEIGHTS_PATH,
             "--speculative-num-steps",
             "3",
             "--speculative-eagle-topk",
@@ -259,7 +258,7 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     def setUpClass(cls):
         super().setUpClass()
         os.environ["SGLANG_TEST_RETRACT"] = "true"
-        cls.model = DEFAULT_MODEL_NAME_FOR_TEST
+        cls.model = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
         cls.launch_all()
 
     @classmethod
@@ -292,7 +291,7 @@ class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.model = DEFAULT_MODEL_NAME_FOR_TEST
+        cls.model = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
         cls.extra_prefill_args = [
             "--max-running-requests",
             str(cls.MAX_RUNNING),
