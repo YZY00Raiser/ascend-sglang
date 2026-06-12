@@ -413,8 +413,6 @@ class TestDisaggregationAscendSpec(PDDisaggregationServerBase):
 
         self.assertGreater(metrics["score"], 0.74)
 
-
-
 '''
 class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     @classmethod
