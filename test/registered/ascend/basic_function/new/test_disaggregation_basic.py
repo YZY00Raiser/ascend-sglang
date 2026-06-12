@@ -26,7 +26,7 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
 QWEN3_8B_EAGLE3_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-8B_eagle3"
-'''
+
 class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -412,10 +412,10 @@ class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
         print(f"Evaluation metrics: {metrics}")
 
         self.assertGreater(metrics["score"], 0.74)
+
+
+
 '''
-
-
-
 class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -702,7 +702,7 @@ class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
                 f"Prefill node has {num_running} phantom running requests "
                 f"after abort — pause_generation is leaking into running_batch",
             )
-'''
+
 
 
 if __name__ == "__main__":
