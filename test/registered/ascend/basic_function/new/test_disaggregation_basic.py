@@ -420,7 +420,7 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
         super().setUpClass()
         # Use ascend transfer backend for NPU
         cls.transfer_backend = ["--disaggregation-transfer-backend", "ascend"]
-        os.environ["SGLANG_TEST_RETRACT"] = "true"
+        # os.environ["SGLANG_TEST_RETRACT"] = "true"
         cls.model = QWEN3_8B_WEIGHTS_PATH
         cls.launch_all()
     @classmethod
