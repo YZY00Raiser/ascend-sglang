@@ -12,7 +12,6 @@ from sglang.test.test_utils import (
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
     popen_launch_server,
-    try_cached_model,
 )
 DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V2-Lite-W8A8"
 register_cuda_ci(est_time=1800, stage="base-c", runner_config="4-gpu-gb300")
@@ -21,7 +20,7 @@ register_cuda_ci(est_time=1800, stage="base-c", runner_config="4-gpu-gb300")
 class TestDummyWithSBO(CustomTestCase):
     @classmethod
     def setUpClass(cls):
-        cls.model = try_cached_model(DEFAULT_DEEPSEEK_NVFP4_MODEL_FOR_TEST)
+        cls.model = DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         other_args = [
             "--trust-remote-code",
