@@ -341,7 +341,7 @@ class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
             "--speculative-num-steps",
             "3",
             "--speculative-eagle-topk",
-            "4",
+            "1",
             "--speculative-num-draft-tokens",
             "16",
             "--cuda-graph-max-bs",
