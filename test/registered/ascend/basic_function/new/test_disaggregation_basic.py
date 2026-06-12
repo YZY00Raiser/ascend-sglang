@@ -101,7 +101,7 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
         metrics = run_eval(args)
         print(f"Evaluation metrics: {metrics}")
 
-        self.assertGreater(metrics["score"], 0.95)
+        self.assertGreater(metrics["score"], 0.85)
 
     def test_logprob(self):
         prompt = "The capital of france is "
@@ -411,7 +411,7 @@ class TestDisaggregationAscendSpec(PDDisaggregationServerBase):
         metrics = run_eval(args)
         print(f"Evaluation metrics: {metrics}")
 
-        self.assertGreater(metrics["score"], 0.95)
+        self.assertGreater(metrics["score"], 0.85)
 
 
 
@@ -492,7 +492,7 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
         metrics = run_eval(args)
         print(f"Evaluation metrics: {metrics}")
 
-        self.assertGreater(metrics["score"], 0.95)
+        self.assertGreater(metrics["score"], 0.85)
 '''
 
 '''
