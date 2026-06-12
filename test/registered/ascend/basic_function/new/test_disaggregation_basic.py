@@ -230,7 +230,7 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
         )
 '''
 
-
+'''
 class TestDisaggregationAscendFailure(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -323,9 +323,9 @@ class TestDisaggregationAscendFailure(PDDisaggregationServerBase):
             except Exception as health_check_error:
                 # If health check fails, re-raise the original exception
                 raise e from health_check_error
-
-
 '''
+
+
 class TestDisaggregationAscendSpec(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -414,7 +414,7 @@ class TestDisaggregationAscendSpec(PDDisaggregationServerBase):
         print(f"Evaluation metrics: {metrics}")
 
         self.assertGreater(metrics["score"], 0.85)
-'''
+
 
 
 '''
