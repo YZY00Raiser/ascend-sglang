@@ -81,12 +81,7 @@ class TestNPUOutlinesBackend(ServerWithGrammar, JSONConstrainedMixin):
     backend = "outlines"
 
 '''
-class TestNPULLGuidanceBackend(
-    ServerWithGrammar,
-    JSONConstrainedMixin,
-    # EBNFConstrainedMixin,
-    # RegexConstrainedMixin,
-):
+class TestNPULLGuidanceBackend(ServerWithGrammar, JSONConstrainedMixin):
     """Test llguidance backend for constrained decoding on NPU.
 
     [Test Category] Feature
@@ -95,6 +90,9 @@ class TestNPULLGuidanceBackend(
 
     backend = "llguidance"
 
+    @unittest.skip("llguidance backend crashes with concurrent json schema requests")
+    def test_mix_json_and_other(self):
+        pass
 
 if __name__ == "__main__":
     unittest.main()
