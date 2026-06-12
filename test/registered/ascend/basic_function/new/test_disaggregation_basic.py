@@ -26,7 +26,7 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
 QWEN3_8B_EAGLE3_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-8B_eagle3"
-'''
+
 class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -101,7 +101,7 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
         metrics = run_eval(args)
         print(f"Evaluation metrics: {metrics}")
 
-        self.assertGreater(metrics["score"], 0.62)
+        self.assertGreater(metrics["score"], 0.95)
 
     def test_logprob(self):
         prompt = "The capital of france is "
@@ -323,7 +323,7 @@ class TestDisaggregationAscendFailure(PDDisaggregationServerBase):
                 # If health check fails, re-raise the original exception
                 raise e from health_check_error
 
-'''
+
 class TestDisaggregationAscendSpec(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -411,7 +411,7 @@ class TestDisaggregationAscendSpec(PDDisaggregationServerBase):
         metrics = run_eval(args)
         print(f"Evaluation metrics: {metrics}")
 
-        self.assertGreater(metrics["score"], 0.74)
+        self.assertGreater(metrics["score"], 0.95)
 
 
 
@@ -492,7 +492,7 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
         metrics = run_eval(args)
         print(f"Evaluation metrics: {metrics}")
 
-        self.assertGreater(metrics["score"], 0.62)
+        self.assertGreater(metrics["score"], 0.95)
 '''
 
 '''
