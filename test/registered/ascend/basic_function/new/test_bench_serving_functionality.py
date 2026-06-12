@@ -6,9 +6,9 @@ from pathlib import Path
 
 from sglang.bench_serving import run_benchmark
 from sglang.srt.constants import HEALTH_CHECK_RID_PREFIX
-from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ci.ci_register import register_amd_ci, register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     DEFAULT_URL_FOR_TEST,
@@ -17,9 +17,8 @@ from sglang.test.test_utils import (
     popen_launch_server,
 )
 
-register_cuda_ci(est_time=300, suite="nightly-1-gpu", nightly=True)
-register_amd_ci(est_time=300, suite="nightly-amd-1-gpu", nightly=True)
-
+register_npu_ci(est_time=300, suite="nightly-1-npu-a3", nightly=True)
+QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
 MODEL = QWEN3_8B_WEIGHTS_PATH
 NUM_CONVERSATIONS, NUM_TURNS = 4, 3
 
