@@ -325,6 +325,7 @@ class TestDisaggregationAscendFailure(PDDisaggregationServerBase):
                 raise e from health_check_error
 '''
 
+'''
 class TestDisaggregationAscendSpec(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -413,10 +414,10 @@ class TestDisaggregationAscendSpec(PDDisaggregationServerBase):
         print(f"Evaluation metrics: {metrics}")
 
         self.assertGreater(metrics["score"], 0.85)
-
-
-
 '''
+
+
+
 class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -494,7 +495,7 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
         print(f"Evaluation metrics: {metrics}")
 
         self.assertGreater(metrics["score"], 0.85)
-'''
+
 
 '''
 class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
