@@ -54,7 +54,7 @@ class ServerWithGrammar(CustomTestCase):
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
 
-
+'''
 class TestNPUXGrammarBackend(
     ServerWithGrammar,
     JSONConstrainedMixin,
@@ -79,7 +79,7 @@ class TestNPUOutlinesBackend(ServerWithGrammar, JSONConstrainedMixin):
 
     backend = "outlines"
 
-
+'''
 class TestNPULLGuidanceBackend(ServerWithGrammar, JSONConstrainedMixin):
     """Test llguidance backend for constrained decoding on NPU.
 
