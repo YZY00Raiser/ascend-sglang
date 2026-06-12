@@ -229,9 +229,7 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
             f"but got {res['usage']['completion_tokens']}"
         )
 
-'''
 
-'''
 class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -324,7 +322,7 @@ class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
             except Exception as health_check_error:
                 # If health check fails, re-raise the original exception
                 raise e from health_check_error
-'''
+
 
 class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
     @classmethod
@@ -414,10 +412,10 @@ class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
         print(f"Evaluation metrics: {metrics}")
 
         self.assertGreater(metrics["score"], 0.74)
-
-
-
 '''
+
+
+
 class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -495,7 +493,6 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
         print(f"Evaluation metrics: {metrics}")
 
         self.assertGreater(metrics["score"], 0.62)
-'''
 
 '''
 class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
