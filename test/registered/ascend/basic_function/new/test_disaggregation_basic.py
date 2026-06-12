@@ -703,4 +703,4 @@ class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
 
 
 if __name__ == "__main__":
-    unittest.main(argv=["test", TestDisaggregationSimulatedRetract])
+    unittest.main(argv=["", TestDisaggregationSimulatedRetract])
