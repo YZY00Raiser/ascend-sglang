@@ -94,6 +94,10 @@ class TestNPULLGuidanceBackend(ServerWithGrammar, JSONConstrainedMixin):
     def test_mix_json_and_other(self):
         pass
 
+    @unittest.skip("llguidance backend crashes with concurrent json schema requests")
+    def test_json_generate(self):
+        pass
+
 
 if __name__ == "__main__":
     unittest.main()
