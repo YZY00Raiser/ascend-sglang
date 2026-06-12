@@ -1,5 +1,5 @@
 name: Single Test (NPU)
-# test round 3: Constrained Decoding - llguidance only uses JSON (EBNF grammar crashes server)
+# test round 4: Constrained Decoding - skip concurrent test for llguidance (C++ matcher crash)
 
 on:
   pull_request:
