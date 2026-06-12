@@ -1,7 +1,7 @@
 import unittest
 
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ascend.test_ascend_utils import LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.kits.ebnf_constrained_kit import EBNFConstrainedMixin
 from sglang.test.kits.json_constrained_kit import JSONConstrainedMixin
@@ -15,7 +15,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
-
+QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
 class ServerWithGrammar(CustomTestCase):
     """Base server setup for grammar backend testing on NPU.
 
@@ -28,7 +28,7 @@ class ServerWithGrammar(CustomTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.model = LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
+        cls.model = QWEN3_8B_WEIGHTS_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         launch_args = [
             "--max-running-requests",
@@ -92,7 +92,7 @@ class TestNPULLGuidanceBackend(
     [Test Target] llguidance grammar backend
     """
 
-    backend = "xgrammar"
+    backend = "llguidance"
 
 
 if __name__ == "__main__":
