@@ -59,6 +59,7 @@ class TestBenchServingFunctionality(CustomTestCase):
                     gsp_num_turns=NUM_TURNS,
                 )
                 args.warmup_requests = 0
+                args.gsp_group_distribution = "uniform"
                 res = run_benchmark(args)
                 self.assertEqual(res["completed"], NUM_CONVERSATIONS * NUM_TURNS)
 
