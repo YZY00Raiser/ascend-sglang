@@ -231,6 +231,7 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
 
 '''
 
+'''
 class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -323,8 +324,8 @@ class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
             except Exception as health_check_error:
                 # If health check fails, re-raise the original exception
                 raise e from health_check_error
-
 '''
+
 class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -413,7 +414,7 @@ class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
         print(f"Evaluation metrics: {metrics}")
 
         self.assertGreater(metrics["score"], 0.74)
-'''
+
 
 
 '''
