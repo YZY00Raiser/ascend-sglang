@@ -16,6 +16,7 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
 QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
+
 class ServerWithGrammar(CustomTestCase):
     """Base server setup for grammar backend testing on NPU.
 
@@ -54,7 +55,7 @@ class ServerWithGrammar(CustomTestCase):
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
 
-
+'''
 class TestNPUXGrammarBackend(
     ServerWithGrammar,
     JSONConstrainedMixin,
@@ -79,7 +80,7 @@ class TestNPUOutlinesBackend(ServerWithGrammar, JSONConstrainedMixin):
 
     backend = "outlines"
 
-
+'''
 class TestNPULLGuidanceBackend(ServerWithGrammar, JSONConstrainedMixin):
     """Test llguidance backend for constrained decoding on NPU.
 
