@@ -84,8 +84,8 @@ class TestNPUOutlinesBackend(ServerWithGrammar, JSONConstrainedMixin):
 class TestNPULLGuidanceBackend(
     ServerWithGrammar,
     # JSONConstrainedMixin,
-    EBNFConstrainedMixin,
-    # RegexConstrainedMixin,
+    # EBNFConstrainedMixin,
+    RegexConstrainedMixin,
 ):
     """Test llguidance backend for constrained decoding on NPU.
 
@@ -94,9 +94,6 @@ class TestNPULLGuidanceBackend(
     """
 
     backend = "llguidance"
-    @unittest.skip("No backend associated with device type npu")
-    def test_ebnf_generate_all_optional_function_params(self):
-        pass
 
 if __name__ == "__main__":
     unittest.main()
