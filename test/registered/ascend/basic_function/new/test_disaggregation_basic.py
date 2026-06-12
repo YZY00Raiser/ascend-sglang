@@ -230,7 +230,7 @@ class TestDisaggregationAccuracy(PauseResumeInPlaceMixin, PDDisaggregationServer
         )
 
 
-class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
+class TestDisaggregationAscendFailure(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -324,7 +324,7 @@ class TestDisaggregationMooncakeFailure(PDDisaggregationServerBase):
                 raise e from health_check_error
 
 
-class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
+class TestDisaggregationAscendSpec(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -414,8 +414,6 @@ class TestDisaggregationMooncakeSpec(PDDisaggregationServerBase):
         self.assertGreater(metrics["score"], 0.74)
 
 
-
-'''
 class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
     @classmethod
     def setUpClass(cls):
@@ -494,7 +492,6 @@ class TestDisaggregationSimulatedRetract(PDDisaggregationServerBase):
 
         self.assertGreater(metrics["score"], 0.62)
 
-'''
 class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
     """Regression test: pause_generation must not leak prefill requests into
     running_batch.  With a small --max-running-requests the leak fills the
@@ -706,4 +703,4 @@ class TestDisaggregationPauseResumePrefillLeak(PDDisaggregationServerBase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(argv=["test", TestDisaggregationSimulatedRetract])
