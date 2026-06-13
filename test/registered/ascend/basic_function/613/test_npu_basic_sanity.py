@@ -6,7 +6,7 @@ hellaswag accuracy."""
 import unittest
 
 from sglang.srt.utils import is_hip, kill_process_tree
-from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.kits.basic_api_contract_kit import BasicAPIContractMixin
 from sglang.test.kits.basic_decode_correctness_kit import BasicDecodeCorrectnessMixin
@@ -22,7 +22,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=200, suite="full-1-npu-a3", nightly=True)
 
-
+QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
 
 class TestBasicSanity(
     BasicAPIContractMixin,

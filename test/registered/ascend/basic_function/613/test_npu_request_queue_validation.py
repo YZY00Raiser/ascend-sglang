@@ -4,7 +4,7 @@ import re
 import unittest
 
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -19,7 +19,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
-
+QWEN3_0_6B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-0.6B"
 class TestMaxQueuedRequests(CustomTestCase):
     """Testcase：Verify the correctness of request throttling functionality with configured max running&queued requests limits
 
@@ -56,8 +56,8 @@ class TestMaxQueuedRequests(CustomTestCase):
         kill_process_tree(cls.process.pid)
         cls.stdout.close()
         cls.stderr.close()
-        os.remove(STDOUT_FILENAME)
-        os.remove(STDERR_FILENAME)
+        # os.remove(STDOUT_FILENAME)
+        # os.remove(STDERR_FILENAME)
 
     def test_max_queued_requests_validation_with_serial_requests(self):
         """Verify request is not throttled when the max concurrency is 1."""
