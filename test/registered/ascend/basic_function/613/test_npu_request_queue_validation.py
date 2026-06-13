@@ -41,9 +41,9 @@ class TestMaxQueuedRequests(CustomTestCase):
             cls.base_url,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=(
-                "--max-running-requests",
+                "--max-running-requests",   # Enforce max request concurrency is 1
                 "1",
-                "--max-queued-requests",
+                "--max-queued-requests",    # Enforce max queued request number is 1
                 "1",
                 "--attention-backend",
                 "ascend",
@@ -76,8 +76,8 @@ class TestMaxQueuedRequests(CustomTestCase):
         )
         self.assertLessEqual(status_codes.count(200), 2)
 
-        # expected_status_codes = [200, 200, 503, 503, 503, 503, 503, 503, 503, 503]
-        # self.assertEqual(status_codes, expected_status_codes)
+        expected_status_codes = [200, 200, 503, 503, 503, 503, 503, 503, 503, 503]
+        self.assertEqual(status_codes, expected_status_codes)
 
     def test_max_running_requests_and_max_queued_request_validation(self):
         """Verify running request and queued request numbers based on server logs."""
