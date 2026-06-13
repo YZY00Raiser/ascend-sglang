@@ -4,15 +4,17 @@ test_basic_sanity.py with the spec-decoding path active."""
 import unittest
 
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ci.ci_register import register_amd_ci, register_cuda_ci
+from sglang.test.ascend.test_ascend_utils import (
+    QWEN3_8B_EAGLE3_WEIGHTS_PATH,
+    QWEN3_8B_WEIGHTS_PATH,
+)
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.kits.basic_api_contract_kit import BasicAPIContractMixin
 from sglang.test.kits.basic_decode_correctness_kit import BasicDecodeCorrectnessMixin
 from sglang.test.kits.basic_scheduler_stress_kit import BasicSchedulerStressMixin
 from sglang.test.kits.eval_accuracy_kit import GSM8KMixin
 from sglang.test.kits.fwd_occupancy_kit import FwdOccupancyMixin
 from sglang.test.test_utils import (
-    DEFAULT_DRAFT_MODEL_EAGLE3,
-    DEFAULT_TARGET_MODEL_EAGLE3,
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
@@ -20,8 +22,8 @@ from sglang.test.test_utils import (
     popen_launch_server,
 )
 
-register_cuda_ci(est_time=200, stage="base-a", runner_config="1-gpu-small")
-register_amd_ci(est_time=200, suite="stage-a-test-1-gpu-small-amd")
+register_npu_ci(est_time=200, suite="full-2-npu-a3", nightly=True)
+
 
 
 class TestBasicSanityEagle3(
@@ -32,7 +34,7 @@ class TestBasicSanityEagle3(
     GSM8KMixin,
     CustomTestCase,
 ):
-    served_model_name = DEFAULT_TARGET_MODEL_EAGLE3
+    served_model_name = QWEN3_8B_WEIGHTS_PATH
     # CUDA 5090 + Llama-3.1-8B measured ~99 median in CI with async-assert
     # probes off in base-a. AMD EAGLE3 currently sustains lower single-batch
     # occupancy and needs a longer measurement window to avoid too few
@@ -41,7 +43,7 @@ class TestBasicSanityEagle3(
     fwd_occupancy_max_new_tokens = 4096 if is_in_amd_ci() else 2048
     fwd_occupancy_acc_length_threshold: float = 1.6
 
-    model = DEFAULT_TARGET_MODEL_EAGLE3
+    model = QWEN3_8B_WEIGHTS_PATH
     gsm8k_num_questions = 1400
     gsm8k_accuracy_thres = 0.74
 
@@ -49,7 +51,7 @@ class TestBasicSanityEagle3(
     def setUpClass(cls):
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.process = popen_launch_server(
-            DEFAULT_TARGET_MODEL_EAGLE3,
+            QWEN3_8B_WEIGHTS_PATH,
             cls.base_url,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=[
@@ -63,7 +65,7 @@ class TestBasicSanityEagle3(
                 "--speculative-algorithm",
                 "EAGLE3",
                 "--speculative-draft-model-path",
-                DEFAULT_DRAFT_MODEL_EAGLE3,
+                QWEN3_8B_EAGLE3_WEIGHTS_PATH,
                 "--speculative-num-steps",
                 "1",
                 "--speculative-eagle-topk",
