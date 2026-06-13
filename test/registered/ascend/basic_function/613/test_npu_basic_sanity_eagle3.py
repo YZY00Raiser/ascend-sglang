@@ -62,7 +62,7 @@ class TestBasicSanityEagle3(
                 "--dtype",
                 "float16",
                 "--attention-backend",
-                "triton",
+                "ascend",
                 "--speculative-algorithm",
                 "EAGLE3",
                 "--speculative-draft-model-path",
