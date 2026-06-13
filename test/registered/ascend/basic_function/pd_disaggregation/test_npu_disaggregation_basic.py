@@ -9,6 +9,9 @@ import openai
 import requests
 from transformers import AutoTokenizer
 
+from sglang.test.ascend.disaggregation_fixture import (
+    PDDisaggregationServerBase,
+)
 from sglang.test.ascend.test_ascend_utils import (
     QWEN3_8B_EAGLE3_WEIGHTS_PATH,
     QWEN3_8B_WEIGHTS_PATH,
@@ -16,9 +19,6 @@ from sglang.test.ascend.test_ascend_utils import (
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.kits.pause_generation_kit import PauseResumeInPlaceMixin
 from sglang.test.run_eval import run_eval
-from sglang.test.ascend.disaggregation_fixture import (
-    PDDisaggregationServerBase,
-)
 
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 
