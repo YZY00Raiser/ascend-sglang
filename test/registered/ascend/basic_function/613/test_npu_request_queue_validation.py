@@ -47,9 +47,6 @@ class TestMaxQueuedRequests(CustomTestCase):
                 "1",
                 "--attention-backend",
                 "ascend",
-                "--disable-cuda-graph",
-                "--mem-fraction-static",
-                "0.3",
             ),
             return_stdout_stderr=(cls.stdout, cls.stderr),
         )
