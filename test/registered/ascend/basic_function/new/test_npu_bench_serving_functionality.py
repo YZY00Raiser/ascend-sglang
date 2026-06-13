@@ -19,7 +19,8 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=300, suite="nightly-1-npu-a3", nightly=True)
 
-MODEL = QWEN3_0_6B_WEIGHTS_PATH
+MODEL ="/home/weights/Qwen/Qwen3-0.6B"
+
 NUM_CONVERSATIONS, NUM_TURNS = 4, 3
 
 
@@ -98,6 +99,7 @@ class TestNpuBenchServingFunctionality(CustomTestCase):
 
         self.assertGreaterEqual(len(reqs), NUM_CONVERSATIONS * NUM_TURNS)
 
+        # Verify prefix relationships
         reqs_sorted = sorted(reqs, key=len)
         prefix_count = 0
         for i, text in enumerate(reqs_sorted):
