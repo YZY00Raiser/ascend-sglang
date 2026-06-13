@@ -40,6 +40,8 @@ class TestBenchServingFunctionality(CustomTestCase):
                     "--log-requests-target",
                     "stdout",
                     temp_dir,
+                    "--attention-backend",
+                    "ascend",
                 ],
             )
             try:
