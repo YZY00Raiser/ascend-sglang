@@ -1,6 +1,3 @@
-"""Stage-a basic sanity with EAGLE3 spec decoding enabled. Mirrors
-test_basic_sanity.py with the spec-decoding path active."""
-
 import unittest
 
 from sglang.srt.utils import kill_process_tree
