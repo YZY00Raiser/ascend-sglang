@@ -63,6 +63,7 @@ class TestMaxQueuedRequests(CustomTestCase):
         os.remove(STDERR_FILENAME)
 
     def test_max_queued_requests_validation_with_serial_requests(self):
+        """Verify request is not throttled when the max concurrency is 1."""
         status_codes = send_generate_requests(
             self.base_url,
             num_requests=10,
@@ -72,12 +73,14 @@ class TestMaxQueuedRequests(CustomTestCase):
             assert status_code == 200
 
     def test_max_queued_requests_validation_with_concurrent_requests(self):
+        """Verify request throttling with concurrent requests."""
         status_codes = asyncio.run(
             send_concurrent_generate_requests(self.base_url, num_requests=10)
         )
         self.assertLessEqual(status_codes.count(200), 2)
 
     def test_max_running_requests_and_max_queued_request_validation(self):
+        """Verify running request and queued request numbers based on server logs."""
         rr_pattern = re.compile(r"#running-req:\s*(\d+)")
         qr_pattern = re.compile(r"#queue-req:\s*(\d+)")
 
