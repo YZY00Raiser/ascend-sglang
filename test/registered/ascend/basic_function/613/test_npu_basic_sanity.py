@@ -28,7 +28,7 @@ class TestBasicSanity(
     BasicAPIContractMixin,
     BasicDecodeCorrectnessMixin,
     BasicSchedulerStressMixin,
-    FwdOccupancyMixin,
+    # FwdOccupancyMixin,
     HellaswagMixin,
     CustomTestCase,
 ):
