@@ -65,13 +65,16 @@ class TestNPUPpChunkSweep(ScriptedTestCase):
             )
 
     def test_pp_flush_cache_during_inflight_chunk_results(self):
+        """flush_cache landing after the last chunk dispatch but before its batch result is processed must not corrupt the radix tree."""
         self.server.execute_script(self._script_flush_during_inflight_chunk_results)
 
     @staticmethod
     def _script_flush_during_inflight_chunk_results(t: ScriptedContext):
         scheduler = t.scheduler
         r = t.start_req(prompt_len=2 * _CHUNK_SIZE - 3, max_new_tokens=2)
-
+        # Wait for the window where the queues and the current microbatch slot
+        # bindings are all clear, yet dispatched chunk batch results are still
+        # in flight in the PP pipeline, then post flush_cache into that window.
         flushed = False
         for _ in range(DEFAULT_MAX_STEPS):
             in_flight = any(
