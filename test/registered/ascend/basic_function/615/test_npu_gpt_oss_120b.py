@@ -1,16 +1,20 @@
 import unittest
 
-from sglang.test.ci.ci_register import register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.performance_test_runner import PerformanceTestParams
 from sglang.test.run_combined_tests import run_combined_tests
 from sglang.test.test_utils import ModelLaunchSettings
 
 # Runs on both H200 and B200 via nightly-8-gpu-common suite
 # Higher est_time due to 6 variants with both performance and accuracy tests
-register_cuda_ci(est_time=1800, suite="nightly-8-gpu-common", nightly=True)
+register_npu_ci(
+    est_time=400,
+    suite="full-8-npu-a3",
+    nightly=True,
+)
 
-GPT_OSS_120B_MXFP4_MODEL_PATH = "openai/gpt-oss-120b"
-GPT_OSS_120B_EAGLE3_DRAFT_MODEL_PATH = "lmsys/EAGLE3-gpt-oss-120b-bf16"
+GPT_OSS_120B_MXFP4_MODEL_PATH = "/home/weights/gpt-oss-120b"
+GPT_OSS_120B_EAGLE3_DRAFT_MODEL_PATH = "/home/weights/EAGLE3-gpt-oss-120b-bf16"
 
 
 class TestGptOss120B(unittest.TestCase):
