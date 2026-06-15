@@ -11,7 +11,7 @@ from sglang.test.scripted_runtime_chunked_helpers import (
     run_until_finished,
 )
 
-register_npu_ci(est_time=300, suite="full-2-npu-a3", nightly=True)
+register_npu_ci(est_time=300, suite="full-1-npu-a3", nightly=True)
 
 
 _CHUNK_SIZE = 64
