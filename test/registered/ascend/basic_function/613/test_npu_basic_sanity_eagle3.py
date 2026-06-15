@@ -28,11 +28,11 @@ QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
 QWEN3_8B_EAGLE3_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-8B_eagle3"
 
 class TestBasicSanityEagle3(
-    # BasicAPIContractMixin,
-    # BasicDecodeCorrectnessMixin,
-    # BasicSchedulerStressMixin,
-    FwdOccupancyMixin,
-    # GSM8KMixin,
+    BasicAPIContractMixin,
+    BasicDecodeCorrectnessMixin,
+    BasicSchedulerStressMixin,
+    # FwdOccupancyMixin,
+    GSM8KMixin,
     CustomTestCase,
 ):
     served_model_name = QWEN3_8B_WEIGHTS_PATH
@@ -77,7 +77,7 @@ class TestBasicSanityEagle3(
                 "4",
                 "--mem-fraction-static",
                 "0.7",
-                "--enable-metrics",
+                # "--enable-metrics",
                 "--disable-piecewise-cuda-graph",
             ],
             env={"SGLANG_ENABLE_METRICS_DEVICE_TIMER": "1"},
