@@ -13,6 +13,9 @@ register_npu_ci(
     nightly=True,
 )
 
+# from sglang.test.ascend.test_ascend_utils import GPT_OSS_120B_EAGLE3_DRAFT_MODEL_PATH
+# from sglang.test.ascend.test_ascend_utils import GPT_OSS_120B_BF16_WEIGHTS_PATH
+
 GPT_OSS_120B_MXFP4_MODEL_PATH = "/home/weights/gpt-oss-120b-bf16"
 GPT_OSS_120B_EAGLE3_DRAFT_MODEL_PATH = "/home/weights/EAGLE3-gpt-oss-120b-bf16"
 
