@@ -31,7 +31,7 @@ class TestBasicSanityEagle3(
     BasicAPIContractMixin,
     BasicDecodeCorrectnessMixin,
     BasicSchedulerStressMixin,
-    # FwdOccupancyMixin,
+    FwdOccupancyMixin,
     GSM8KMixin,
     CustomTestCase,
 ):
