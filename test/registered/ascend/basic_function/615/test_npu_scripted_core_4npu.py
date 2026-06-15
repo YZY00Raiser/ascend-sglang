@@ -10,14 +10,13 @@ from sglang.test.scripted_runtime_chunked_helpers import (
     run_until_all_finished,
     run_until_finished,
 )
-QWEN3_0_6B_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-0.6B"
 
 register_npu_ci(est_time=900, suite="full-4-npu-a3", nightly=True)
 
 
 _CHUNK_SIZE = 128
 
-
+QWEN3_0_6B_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-0.6B"
 class TestNPUPpChunkSweep(ScriptedTestCase):
     """Test chunked prefill with pipeline parallelism on NPU.
 
@@ -32,6 +31,9 @@ class TestNPUPpChunkSweep(ScriptedTestCase):
         pp_size=4,
         pp_async_batch_depth=2,
         chunked_prefill_size=_CHUNK_SIZE,
+        kv_canary="none",
+        kv_canary_real_data="none",
+        kv_canary_sweep_interval=0,
         attention_backend="ascend",
         mem_fraction_static=0.3,
     )
