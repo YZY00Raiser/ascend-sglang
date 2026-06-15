@@ -32,7 +32,6 @@ class TestNPUPpChunkSweep(ScriptedTestCase):
         pp_async_batch_depth=2,
         chunked_prefill_size=_CHUNK_SIZE,
         attention_backend="ascend",
-        disable_cuda_graph=True,
         mem_fraction_static=0.3,
     )
 
