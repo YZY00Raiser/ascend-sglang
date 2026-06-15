@@ -1,6 +1,6 @@
 import unittest
 
-from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.scripted_runtime.context import ScriptedContext
 from sglang.test.scripted_runtime.test_case import ScriptedTestCase
@@ -10,6 +10,7 @@ from sglang.test.scripted_runtime_chunked_helpers import (
     run_until_all_finished,
     run_until_finished,
 )
+QWEN3_0_6B_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-0.6B"
 
 register_npu_ci(est_time=900, suite="full-4-npu-a3", nightly=True)
 
