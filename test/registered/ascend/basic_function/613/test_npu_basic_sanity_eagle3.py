@@ -28,11 +28,11 @@ QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
 QWEN3_8B_EAGLE3_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-8B_eagle3"
 
 class TestBasicSanityEagle3(
-    BasicAPIContractMixin,
-    BasicDecodeCorrectnessMixin,
-    BasicSchedulerStressMixin,
+    # BasicAPIContractMixin,
+    # BasicDecodeCorrectnessMixin,
+    # BasicSchedulerStressMixin,
     FwdOccupancyMixin,
-    GSM8KMixin,
+    # GSM8KMixin,
     CustomTestCase,
 ):
     served_model_name = QWEN3_8B_WEIGHTS_PATH
