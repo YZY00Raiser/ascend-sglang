@@ -15,7 +15,7 @@ QWEN3_0_6B_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-0.6B"
 register_npu_ci(est_time=900, suite="full-4-npu-a3", nightly=True)
 
 
-_CHUNK_SIZE = 64
+_CHUNK_SIZE = 128
 
 
 class TestNPUPpChunkSweep(ScriptedTestCase):

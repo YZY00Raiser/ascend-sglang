@@ -14,7 +14,7 @@ QWEN3_0_6B_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-0.6B"
 register_npu_ci(est_time=300, suite="full-1-npu-a3", nightly=True)
 
 
-_CHUNK_SIZE = 64
+_CHUNK_SIZE = 128
 _PROMPT_LEN = 4 * _CHUNK_SIZE - 3
 
 _NUM_MIDDLE_CHUNKS = (_PROMPT_LEN - 1) // _CHUNK_SIZE
