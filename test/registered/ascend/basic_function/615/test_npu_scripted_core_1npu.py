@@ -40,6 +40,7 @@ class TestTestScriptedCore(ScriptedTestCase):
     ENGINE_KWARGS = base_engine_kwargs(
         model_path=QWEN3_0_6B_WEIGHTS_PATH,
         chunked_prefill_size=_CHUNK_SIZE,
+        kv_canary="none",
         attention_backend="ascend",
         mem_fraction_static=0.3,
     )
