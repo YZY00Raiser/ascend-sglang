@@ -41,6 +41,7 @@ class TestTestScriptedCore(ScriptedTestCase):
         model_path=QWEN3_0_6B_WEIGHTS_PATH,
         chunked_prefill_size=_CHUNK_SIZE,
         kv_canary="none",
+        kv_canary_real_data="none",
         kv_canary_sweep_interval=0,
         attention_backend="ascend",
         mem_fraction_static=0.3,
