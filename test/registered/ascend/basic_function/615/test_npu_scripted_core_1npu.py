@@ -30,7 +30,7 @@ def _advance_to_stage(r, stage: str):
     )
 
 
-class TestNPUChunkedPrefillCore(ScriptedTestCase):
+class TestTestScriptedCore(ScriptedTestCase):
     """Test core chunked prefill functionality on NPU.
 
     [Test Category] Feature
@@ -41,7 +41,6 @@ class TestNPUChunkedPrefillCore(ScriptedTestCase):
         model_path=QWEN3_0_6B_WEIGHTS_PATH,
         chunked_prefill_size=_CHUNK_SIZE,
         attention_backend="ascend",
-        disable_cuda_graph=True,
         mem_fraction_static=0.3,
     )
 
@@ -88,6 +87,14 @@ class TestNPUChunkedPrefillCore(ScriptedTestCase):
 
         t.pause_generation(mode="retract")
         yield
+
+        # At the last_decode stage the final decode can complete during the
+        # retract; a finished req is removed from the scheduler, so its
+        # output_ids are no longer observable through the harness. That case's
+        # only observable consequence — clean completion — is covered by the
+        # run_until_finished tail below. When the req is not finished,
+        # pause(retract) must park it back in the waiting_queue and the paused
+        # engine must not advance it.
 
         if not r.finished:
             req = r.req
