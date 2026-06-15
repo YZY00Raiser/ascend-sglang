@@ -22,15 +22,15 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=200, suite="full-1-npu-a3", nightly=True)
 
-QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
-
+# QWEN3_8B_WEIGHTS_PATH ="/home/weights/Qwen/Qwen3-8B"
+QWEN3_8B_WEIGHTS_PATH= "/home/weights/Llama-3.1-8B-Instruct"
 class TestBasicSanity(
     # BasicAPIContractMixin,
     # BasicDecodeCorrectnessMixin,
     # BasicSchedulerStressMixin,
     FwdOccupancyMixin,
     # HellaswagMixin,
-    # CustomTestCase,
+    CustomTestCase,
 ):
     served_model_name = QWEN3_8B_WEIGHTS_PATH
     # 5090 + Llama-3.1-8B single-batch decode with overlap scheduler +
