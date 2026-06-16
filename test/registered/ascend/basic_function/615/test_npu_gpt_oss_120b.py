@@ -36,7 +36,7 @@ class TestGptOss120B(unittest.TestCase):
             "--cuda-graph-max-bs=200",
             "--mem-fraction-static=0.93",
             "--base-gpu-id",
-            "1",
+            "2",
         ]
         # Lower batch size for EAGLE3 variants to avoid OOM
         base_args_eagle3 = [
@@ -45,7 +45,7 @@ class TestGptOss120B(unittest.TestCase):
             "--cuda-graph-max-bs=100",
             "--mem-fraction-static=0.85",
             "--base-gpu-id",
-            "1",
+            "2",
         ]
         parser_args = [
             "--reasoning-parser=gpt-oss",
