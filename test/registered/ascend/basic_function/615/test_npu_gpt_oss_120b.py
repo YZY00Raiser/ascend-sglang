@@ -37,6 +37,8 @@ class TestGptOss120B(unittest.TestCase):
             "--mem-fraction-static=0.93",
             "--base-gpu-id",
             "2",
+            "--attention-backend",
+            "ascend",
         ]
         # Lower batch size for EAGLE3 variants to avoid OOM
         base_args_eagle3 = [
@@ -46,6 +48,8 @@ class TestGptOss120B(unittest.TestCase):
             "--mem-fraction-static=0.85",
             "--base-gpu-id",
             "2",
+            "--attention-backend",
+            "ascend",
         ]
         parser_args = [
             "--reasoning-parser=gpt-oss",

@@ -27,6 +27,10 @@ class TestKimiK25(unittest.TestCase):
             "--reasoning-parser=kimi_k2",
             "--model-loader-extra-config",
             '{"enable_multithread_load": true, "num_threads": 64}',
+            "--mem-fraction-static",
+            0.74,
+            "--attention-backend",
+            "ascend",
         ]
 
         dp_attn_args = [
