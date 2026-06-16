@@ -34,6 +34,7 @@ class TestHiddenState(CustomTestCase):
             skip_tokenizer_init=True,
             enable_return_hidden_states=True,
             mem_fraction_static=0.7,
+            attention_backend="ascend",
         )
 
     @classmethod
