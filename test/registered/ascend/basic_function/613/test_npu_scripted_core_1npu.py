@@ -1,5 +1,6 @@
 import unittest
 
+# from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.scripted_runtime.context import ScriptedContext
 from sglang.test.scripted_runtime.test_case import ScriptedTestCase
@@ -10,10 +11,10 @@ from sglang.test.scripted_runtime_chunked_helpers import (
     run_until_finished,
 )
 
-register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
+register_npu_ci(est_time=300, suite="full-1-npu-a3", nightly=True)
 
-
-_CHUNK_SIZE = 64
+QWEN3_0_6B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-0.6B"
+_CHUNK_SIZE = 128
 _PROMPT_LEN = 4 * _CHUNK_SIZE - 3
 
 _NUM_MIDDLE_CHUNKS = (_PROMPT_LEN - 1) // _CHUNK_SIZE
@@ -29,8 +30,22 @@ def _advance_to_stage(r, stage: str):
     )
 
 
-class TestScriptedCore(ScriptedTestCase):
-    ENGINE_KWARGS = base_engine_kwargs(chunked_prefill_size=_CHUNK_SIZE)
+class TestTestScriptedCore(ScriptedTestCase):
+    """Test core chunked prefill functionality on NPU.
+
+    [Test Category] Feature
+    [Test Target] chunked prefill scheduler, radix cache, pause/resume/abort
+    """
+
+    ENGINE_KWARGS = base_engine_kwargs(
+        model_path=QWEN3_0_6B_WEIGHTS_PATH,
+        chunked_prefill_size=_CHUNK_SIZE,
+        kv_canary="none",
+        kv_canary_real_data="none",
+        kv_canary_sweep_interval=0,
+        attention_backend="ascend",
+        mem_fraction_static=0.3,
+    )
 
     def test_chunked_prefill_smoke(self):
         self.server.execute_script(self._script_chunked_prefill_smoke)
@@ -79,10 +94,11 @@ class TestScriptedCore(ScriptedTestCase):
         # At the last_decode stage the final decode can complete during the
         # retract; a finished req is removed from the scheduler, so its
         # output_ids are no longer observable through the harness. That case's
-        # only observable consequence — clean completion — is covered by the
+        # only observable consequence 鈥?clean completion 鈥?is covered by the
         # run_until_finished tail below. When the req is not finished,
         # pause(retract) must park it back in the waiting_queue and the paused
         # engine must not advance it.
+
         if not r.finished:
             req = r.req
             assert req is not None and req in t.scheduler.waiting_queue, (
@@ -141,7 +157,7 @@ class TestScriptedCore(ScriptedTestCase):
 
     @staticmethod
     def _script_chunked_prefill_radix_hit_count(t: ScriptedContext):
-        r = t.start_req(prompt_len=_PROMPT_LEN, max_new_tokens=2)
+        r = t.start_req(prompt_len=_PROMPT_LEN, max_new_tokens=3)
         yield from run_until_finished(r)
         assert r.finished
         _assert_prefill_twice_decode_once(t, prompt_len=_PROMPT_LEN)
@@ -151,8 +167,8 @@ class TestScriptedCore(ScriptedTestCase):
 
     @staticmethod
     def _script_nonchunked_prefill_radix_hit_count(t: ScriptedContext):
-        prompt_len = _CHUNK_SIZE - 20
-        r = t.start_req(prompt_len=prompt_len, max_new_tokens=2)
+        prompt_len = 2 * _CHUNK_SIZE - 30
+        r = t.start_req(prompt_len=prompt_len, max_new_tokens=30)
         yield from run_until_finished(r)
         assert r.finished
         _assert_prefill_twice_decode_once(t, prompt_len=prompt_len)
