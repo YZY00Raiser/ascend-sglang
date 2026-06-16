@@ -37,13 +37,13 @@ class TestKimiK25(unittest.TestCase):
         variants = [
             ModelLaunchSettings(
                 KIMI_K2_5_W4A8_MODEL_PATH,
-                tp_size=8,
+                tp_size=16,
                 extra_args=base_args,
                 variant="TP8",
             ),
             ModelLaunchSettings(
                 KIMI_K2_5_W4A8_MODEL_PATH,
-                tp_size=8,
+                tp_size=16,
                 extra_args=base_args + dp_attn_args,
                 variant="TP8+DP8",
             ),
