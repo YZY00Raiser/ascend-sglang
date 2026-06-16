@@ -1,8 +1,3 @@
-"""
-Usage:
-python3 -m unittest test_srt_engine.TestSRTEngine.test_4_sync_async_stream_combination
-"""
-
 import asyncio
 import json
 import unittest
@@ -18,8 +13,9 @@ from sglang.test.test_utils import (
     CustomTestCase,
 )
 from sglang.test.ascend.test_ascend_utils import GTE_QWEN2_1_5B_INSTRUCT_WEIGHTS_PATH
-from sglang.test.ascend.test_ascend_utils import LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
-DEFAULT_SMALL_MODEL_NAME_FOR_TEST = LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
+from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
+
+DEFAULT_SMALL_MODEL_NAME_FOR_TEST = QWEN3_0_6B_WEIGHTS_PATH
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
 
@@ -31,11 +27,11 @@ class TestSRTEngine(CustomTestCase):
 
         sampling_params = {"temperature": 0, "max_new_tokens": 8}
 
-        engine = sgl.Engine(model_path=model_path, random_seed=42)
+        engine = sgl.Engine(model_path=model_path, random_seed=42, attention_backend="ascend", )
         out1 = engine.generate(prompt, sampling_params)["text"]
         engine.shutdown()
 
-        runtime = sgl.Runtime(model_path=model_path, random_seed=42)
+        runtime = sgl.Runtime(model_path=model_path, random_seed=42, attention_backend="ascend", )
         out2 = json.loads(runtime.generate(prompt, sampling_params))["text"]
         runtime.shutdown()
 
@@ -45,11 +41,11 @@ class TestSRTEngine(CustomTestCase):
         prompt = "Today is a sunny day and I like"
         model_path = GTE_QWEN2_1_5B_INSTRUCT_WEIGHTS_PATH
 
-        engine = sgl.Engine(model_path=model_path, is_embedding=True, random_seed=42)
+        engine = sgl.Engine(model_path=model_path, is_embedding=True, random_seed=42, attention_backend="ascend", )
         out1 = torch.tensor(engine.encode(prompt)["embedding"])
         engine.shutdown()
 
-        runtime = sgl.Runtime(model_path=model_path, is_embedding=True, random_seed=42)
+        runtime = sgl.Runtime(model_path=model_path, is_embedding=True, random_seed=42, attention_backend="ascend", )
         out2 = torch.tensor(json.loads(runtime.encode(prompt))["embedding"])
         runtime.shutdown()
 
@@ -62,7 +58,8 @@ class TestSRTEngine(CustomTestCase):
         sampling_params = {"temperature": 0, "max_new_tokens": 8}
 
         engine = sgl.Engine(
-            model_path=model_path, random_seed=42, disable_radix_cache=True
+            model_path=model_path, random_seed=42, disable_radix_cache=True,
+            attention_backend="ascend",
         )
         out1 = engine.generate(prompt, sampling_params)["text"]
 
@@ -91,6 +88,7 @@ class TestSRTEngine(CustomTestCase):
             model_path=model_path,
             random_seed=42,
             max_total_tokens=128,
+            attention_backend="ascend",
         )
         out1 = engine.generate(prompt, sampling_params)["text"]
         engine.shutdown()
@@ -100,6 +98,7 @@ class TestSRTEngine(CustomTestCase):
             random_seed=42,
             max_total_tokens=128,
             cpu_offload_gb=3,
+            attention_backend="ascend",
         )
         out2 = engine.generate(prompt, sampling_params)["text"]
         engine.shutdown()
@@ -114,6 +113,7 @@ class TestSRTEngine(CustomTestCase):
     def test_7_engine_offline_throughput(self):
         server_args = ServerArgs(
             model_path=DEFAULT_SMALL_MODEL_NAME_FOR_TEST,
+            attention_backend="ascend",
         )
         bench_args = BenchArgs(num_prompts=10)
         result = throughput_test(server_args=server_args, bench_args=bench_args)
@@ -128,6 +128,7 @@ class TestSRTEngine(CustomTestCase):
             is_embedding=True,
             random_seed=42,
             disable_radix_cache=True,
+            attention_backend="ascend",
         )
 
         # Get sync and async embeddings
