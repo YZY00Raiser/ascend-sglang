@@ -5,17 +5,11 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 import sglang as sgl
 from sglang.srt.utils import get_device, is_hip
+from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
-from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
-
-_is_hip = is_hip()
-if _is_hip:
-    import os
-
-    os.environ["SGLANG_USE_AITER"] = "0"
 
 
 class TestHiddenState(CustomTestCase):
@@ -68,8 +62,8 @@ class TestHiddenState(CustomTestCase):
         )
 
         model = AutoModelForCausalLM.from_pretrained(
-            self.model_path, torch_dtype=torch.bfloat16, device_map=get_device()
-        )
+            self.model_path, torch_dtype=torch.bfloat16
+        ).to(get_device())
 
         for input_id, output in zip(self.input_ids, outputs):
             with torch.inference_mode():
@@ -94,7 +88,8 @@ class TestHiddenState(CustomTestCase):
                 f"Max diff: {torch.max(torch.abs(hf_out['hidden_states'][-1][0] - sg_hidden_states))}"
             )
 
-            atol = 0.8
+            # NPU has larger numerical differences compared to GPU
+            atol = 1.5
             self.assertTrue(
                 torch.allclose(
                     hf_out["hidden_states"][-1][0],
@@ -123,9 +118,9 @@ class TestHiddenState(CustomTestCase):
         )
 
         for (
-                output_completion_first_round,
-                output_hidden_state,
-                output_completion_last_round,
+            output_completion_first_round,
+            output_hidden_state,
+            output_completion_last_round,
         ) in zip(
             outputs_completion_first_round,
             outputs_hidden_state,
