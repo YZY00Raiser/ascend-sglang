@@ -8,15 +8,17 @@ import sglang as sgl
 from sglang.bench_offline_throughput import BenchArgs, throughput_test
 from sglang.srt.server_args import ServerArgs
 from sglang.srt.utils.hf_transformers_utils import get_tokenizer
-from sglang.test.ascend.test_ascend_utils import (
-    GTE_QWEN2_1_5B_INSTRUCT_WEIGHTS_PATH,
-    QWEN3_0_6B_WEIGHTS_PATH,
-)
+# from sglang.test.ascend.test_ascend_utils import (
+#     GTE_QWEN2_1_5B_INSTRUCT_WEIGHTS_PATH,
+#     QWEN3_0_6B_WEIGHTS_PATH,
+# )
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     CustomTestCase,
 )
 
+QWEN3_0_6B_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-0.6B"
+GTE_QWEN2_1_5B_INSTRUCT_WEIGHTS_PATH = "gte_Qwen2-1.5B-instruct"
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
 
