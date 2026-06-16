@@ -16,7 +16,7 @@ register_npu_ci(
 # from sglang.test.ascend.test_ascend_utils import GPT_OSS_120B_EAGLE3_DRAFT_MODEL_PATH
 # from sglang.test.ascend.test_ascend_utils import GPT_OSS_120B_BF16_WEIGHTS_PATH
 
-GPT_OSS_120B_MXFP4_MODEL_PATH = "/home/weights/gpt-oss-120b-bf16"
+GPT_OSS_120B_BF16_WEIGHTS_PATH = "/home/weights/gpt-oss-120b-bf16"
 GPT_OSS_120B_EAGLE3_DRAFT_MODEL_PATH = "/home/weights/EAGLE3-gpt-oss-120b-bf16"
 
 
@@ -65,18 +65,18 @@ class TestGptOss120B(unittest.TestCase):
         variants = [
             # Variant 1: MXFP4 baseline
             ModelLaunchSettings(
-                GPT_OSS_120B_MXFP4_MODEL_PATH,
+                GPT_OSS_120B_BF16_WEIGHTS_PATH,
                 tp_size=8,
                 extra_args=base_args,
-                variant="MXFP4",
+                # variant="MXFP4",
             ),
             # Variant 2: MXFP4 + Parsers + EAGLE3 (full featured quantized, lower batch size)
             ModelLaunchSettings(
-                GPT_OSS_120B_MXFP4_MODEL_PATH,
+                GPT_OSS_120B_BF16_WEIGHTS_PATH,
                 tp_size=8,
                 extra_args=base_args_eagle3 + parser_args + eagle3_args,
                 env=eagle3_env,
-                variant="MXFP4+Parsers+EAGLE3",
+                variant="Parsers+EAGLE3",
             ),
         ]
 
