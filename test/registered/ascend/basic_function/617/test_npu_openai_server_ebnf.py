@@ -4,17 +4,16 @@ import openai
 
 from sglang.srt.utils import kill_process_tree
 from sglang.srt.utils.hf_transformers_utils import get_tokenizer
-from sglang.test.ci.ci_register import register_amd_ci, register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
+from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.test_utils import (
-    DEFAULT_SMALL_MODEL_NAME_FOR_TEST,
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
     popen_launch_server,
 )
 
-register_cuda_ci(est_time=44, stage="base-b", runner_config="1-gpu-small")
-register_amd_ci(est_time=20, suite="stage-b-test-1-gpu-small-amd")
+register_npu_ci(est_time=100, suite="full-1-npu-a3", nightly=True)
 
 
 # -------------------------------------------------------------------------
@@ -24,12 +23,14 @@ register_amd_ci(est_time=20, suite="stage-b-test-1-gpu-small-amd")
 class TestOpenAIServerEBNF(CustomTestCase):
     @classmethod
     def setUpClass(cls):
-        cls.model = DEFAULT_SMALL_MODEL_NAME_FOR_TEST
+        cls.model = QWEN3_0_6B_WEIGHTS_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.api_key = "sk-123456"
 
         # passing xgrammar specifically
-        other_args = ["--grammar-backend", "xgrammar"]
+        other_args = ["--grammar-backend", "xgrammar",
+                      "--attention-backend",
+                        "ascend",]
         cls.process = popen_launch_server(
             cls.model,
             cls.base_url,
@@ -38,7 +39,7 @@ class TestOpenAIServerEBNF(CustomTestCase):
             other_args=other_args,
         )
         cls.base_url += "/v1"
-        cls.tokenizer = get_tokenizer(DEFAULT_SMALL_MODEL_NAME_FOR_TEST)
+        cls.tokenizer = get_tokenizer(QWEN3_0_6B_WEIGHTS_PATH)
 
     @classmethod
     def tearDownClass(cls):
