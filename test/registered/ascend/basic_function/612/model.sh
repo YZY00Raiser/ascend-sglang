@@ -10,3 +10,20 @@ register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 "--attention-backend",
                 "ascend",
                 attention_backend="ascend"
+
+
+    def setUpClass(cls):
+        cls.process = popen_launch_server(
+            QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
+            DEFAULT_URL_FOR_TEST,
+            DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=[
+
+                "--expert-distribution-recorder-mode",
+                cls.expert_distribution_recorder_mode,
+            ],
+            env={
+
+                "TRANSFORMERS_VERBOSITY": "error",
+            },
+        )
