@@ -24,6 +24,7 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 # from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH
 # from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
+from sglang.test.ascend.test_ascend_utils import KIMI_VL_A3B_INSTRUCT_WEIGHTS_PATH
 QWEN3_0_6B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-0.6B"
 DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V2-Lite-W8A8"
 class TestDPAttentionDP2TP2(
@@ -147,7 +148,7 @@ class TestDPRetract(
 class TestDPAttentionDP2TP2VLM(CustomTestCase):
     @classmethod
     def setUpClass(cls):
-        cls.model = "moonshotai/Kimi-VL-A3B-Instruct"
+        cls.model = KIMI_VL_A3B_INSTRUCT_WEIGHTS_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.image_url = DEFAULT_IMAGE_URL
         cls.process = popen_launch_server(
