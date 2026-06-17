@@ -4,7 +4,7 @@ import unittest
 import requests
 
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -12,18 +12,15 @@ from sglang.test.test_utils import (
     CustomTestCase,
     popen_launch_server,
 )
+QWEN3_0_6B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-0.6B"
 
-try:
-    import granian  # noqa: F401
+import granian  # noqa: F401
 
-    _HAS_GRANIAN = True
-except ImportError:
-    _HAS_GRANIAN = False
+
 
 register_npu_ci(est_time=100, suite="full--npu-a3", nightly=True)
 
 
-@unittest.skipUnless(_HAS_GRANIAN, "granian not installed (pip install sglang[http2])")
 class TestHTTP2Server(CustomTestCase):
     """Test HTTP/2 server (Granian) on NPU.
 
