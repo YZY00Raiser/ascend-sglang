@@ -16,6 +16,8 @@ QWEN3_0_6B_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-0.6B"
 
 import granian  # noqa: F401
 
+_HAS_GRANIAN = True
+
 
 
 register_npu_ci(est_time=100, suite="full--npu-a3", nightly=True)
