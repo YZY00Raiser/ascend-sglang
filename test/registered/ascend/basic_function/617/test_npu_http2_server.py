@@ -70,6 +70,7 @@ class TestHTTP2Server(CustomTestCase):
         )
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
+        print(data)
         self.assertIn("choices", data)
         self.assertGreater(len(data["choices"][0]["text"]), 0)
 
@@ -85,6 +86,7 @@ class TestHTTP2Server(CustomTestCase):
         )
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
+        print(data)
         self.assertIn("choices", data)
         self.assertGreater(len(data["choices"][0]["message"]["content"]), 0)
 
@@ -105,6 +107,8 @@ class TestHTTP2Server(CustomTestCase):
             text=True,
             timeout=10,
         )
+        print("--------------------------------------result-------------------------------")
+        print(result.stdout)
         self.assertEqual(
             result.stdout.strip(), "2", "Server should respond with HTTP/2"
         )
