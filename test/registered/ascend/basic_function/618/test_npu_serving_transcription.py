@@ -48,6 +48,8 @@ class TestServingTranscription(CustomTestCase):
             other_args=[
                 "--served-model-name",
                 "whisper",
+                "--attention-backend",
+                "ascend",
             ],
         )
 
