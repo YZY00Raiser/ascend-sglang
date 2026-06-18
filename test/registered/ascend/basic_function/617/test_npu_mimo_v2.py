@@ -4,10 +4,9 @@ from sglang.srt.environ import envs
 from sglang.test.ci.ci_register import register_cuda_ci
 from sglang.test.kits.eval_accuracy_kit import GSM8KMixin
 from sglang.test.server_fixtures.mmmu_fixture import MMMUServerBase
-
+from sglang.test.ascend.test_ascend_utils import MIMO_V2_5_WEIGHTS_PATH
 register_cuda_ci(est_time=400, stage="base-c", runner_config="8-gpu-h200")
 
-MIMO_V2_MODEL = "XiaomiMiMo/MiMo-V2.5"
 MIMO_V2_OTHER_ARGS = [
     "--tp",
     "8",
@@ -16,9 +15,9 @@ MIMO_V2_OTHER_ARGS = [
     "--enable-dp-attention",
     "--mm-enable-dp-encoder",
     "--attention-backend",
-    "fa3",
+    "ascend",
     "--mm-attention-backend",
-    "fa3",
+    "ascend_attn",
     "--reasoning-parser",
     "mimo",
     "--enable-hierarchical-cache",
@@ -45,7 +44,7 @@ MIMO_V2_MTP_OTHER_ARGS = MIMO_V2_OTHER_ARGS + [
 class TestMiMoV2(GSM8KMixin, MMMUServerBase):
     gsm8k_accuracy_thres = 0.75
     gsm8k_accept_length_thres = 2.5
-    model = MIMO_V2_MODEL
+    model = MIMO_V2_5_WEIGHTS_PATH
     mem_fraction_static = 0.65
     server_api_key = None
     other_args = MIMO_V2_MTP_OTHER_ARGS

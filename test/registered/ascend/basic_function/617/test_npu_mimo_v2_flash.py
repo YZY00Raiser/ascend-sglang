@@ -5,6 +5,7 @@ from sglang.test.ci.ci_register import register_cuda_ci
 from sglang.test.kits.eval_accuracy_kit import GSM8KMixin
 from sglang.test.kits.spec_decoding_kit import SpecDecodingMixin
 from sglang.test.server_fixtures.default_fixture import DefaultServerBase
+from sglang.test.ascend.test_ascend_utils import MIMO_V2_FLASH_WEIGHTS_PATH
 
 register_cuda_ci(est_time=350, stage="base-c", runner_config="8-gpu-h200")
 
@@ -13,7 +14,7 @@ class TestMiMoV2Flash(GSM8KMixin, SpecDecodingMixin, DefaultServerBase):
     gsm8k_accuracy_thres = 0.75
     gsm8k_num_questions = 1319
     gsm8k_num_threads = 1319
-    model = "XiaomiMiMo/MiMo-V2-Flash"
+    model = MIMO_V2_FLASH_WEIGHTS_PATH
 
     other_args = [
         "--tp",
@@ -23,7 +24,7 @@ class TestMiMoV2Flash(GSM8KMixin, SpecDecodingMixin, DefaultServerBase):
         "--enable-dp-attention",
         "--trust-remote-code",
         "--attention-backend",
-        "fa3",
+        "ascend",
         "--max-running-requests",
         "128",
         "--cuda-graph-max-bs",
