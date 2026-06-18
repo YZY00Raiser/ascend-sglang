@@ -1,8 +1,6 @@
 """
 Test the OpenAI-compatible /v1/audio/transcriptions endpoint with Whisper.
 
-Usage:
-    python3 test_serving_transcription.py -v
 """
 
 import io
