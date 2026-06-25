@@ -25,7 +25,7 @@ class TestOpenAIServerIgnoreEOS(CustomTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.model = LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
+        cls.model = QWEN3_0_6B_WEIGHTS_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.api_key = "sk-123456"
         cls.other_args = [
