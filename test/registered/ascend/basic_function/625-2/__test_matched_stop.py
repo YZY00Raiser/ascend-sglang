@@ -36,7 +36,7 @@ class TestMatchedStop(CustomTestCase, MatchedStopMixin):
     What is 2 + 2?<|end_of_user|>
     """
         # Qwen3 标准EOS终止token id
-        eos_token_ids = [151664]
+        eos_token_ids = [151645]
         self._run_completions_generation(
             prompt=qwen3_format_prompt,
             max_tokens=1000,
