@@ -1,3 +1,4 @@
+import json
 import unittest
 
 import openai
@@ -125,7 +126,7 @@ class TestMatryoshkaEmbeddingModel(CustomTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.model = DEFAULT_SMALL_EMBEDDING_MODEL_NAME_FOR_TEST
+        cls.model = GTE_QWEN2_1_5B_INSTRUCT_WEIGHTS_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.api_key = "sk-123456"
         cls.matryoshka_dims = [128, 256, 512, 768, 1024]
