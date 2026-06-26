@@ -133,13 +133,15 @@ class ServerWithGrammarBackend(CustomTestCase):
 
 
 class TestJSONModeXGrammar(ServerWithGrammarBackend, TestJSONModeMixin):
-    """Testcase: Verify JSON mode functionality with xgrammar grammar backend (non-streaming and streaming).
+    """Testcase: Verify JSON mode functionality with xgrammar ,outlines, llguidance
+    grammar backend (non-streaming and streaming).
 
     [Test Category] Parameter
     [Test Target] --grammar-backend
     """
 
     backend = "xgrammar"
+
 
 class TestJSONModeOutlines(ServerWithGrammarBackend, TestJSONModeMixin):
     backend = "outlines"
