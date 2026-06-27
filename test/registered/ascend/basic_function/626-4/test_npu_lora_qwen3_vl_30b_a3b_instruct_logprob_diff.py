@@ -28,7 +28,7 @@ import os
 import unittest
 
 import torch
-from huggingface_hub import snapshot_download
+
 
 import sglang as sgl
 from sglang.test.ci.ci_register import register_npu_ci
@@ -37,14 +37,14 @@ from sglang.test.ascend.test_ascend_utils import QWEN3_VL_30B_A3B_INSTRUCT_WEIGH
 register_npu_ci(est_time=400, suite="full-4-npu-a3", nightly=True)
 
 BASE_MODEL = QWEN3_VL_30B_A3B_INSTRUCT_WEIGHTS_PATH
-LORA_HF_REPO = "yushengsu/lora-diff-Qwen3-VL-30B-A3B-Instruct"
+LORA_HF_REPO = "/root/.cache/huggingface/hub/lora-diff-Qwen3-VL-30B-A3B-Instruct"
 LORA_BACKEND = "triton"
 MAX_LORA_RANK = 32
 TP_SIZE = 4
 MOE_RUNNER_BACKEND = "triton"
 EXPERTS_SHARED_OUTER_LORAS = True
-PREFILL_ATTENTION_BACKEND = "fa4"
-DECODE_ATTENTION_BACKEND = "fa4"
+PREFILL_ATTENTION_BACKEND = "ascend"
+DECODE_ATTENTION_BACKEND = "ascend"
 
 KL_THRESHOLD = 5e-3
 
@@ -79,7 +79,7 @@ class TestLoRAQwen3VL_30B_A3B_Instruct_LogprobDiff(CustomTestCase):
             tp_size=TP_SIZE,
             enable_lora=True,
             max_lora_rank=MAX_LORA_RANK,
-            lora_paths={"my_lora": adapter_path},
+            lora_paths={"my_lora": LORA_HF_REPO},
             lora_backend=LORA_BACKEND,
             attention_backend="ascend",
             moe_runner_backend=MOE_RUNNER_BACKEND,
@@ -90,7 +90,7 @@ class TestLoRAQwen3VL_30B_A3B_Instruct_LogprobDiff(CustomTestCase):
 
         try:
             cdata = torch.load(
-                os.path.join(adapter_path, "compare_sample_train_data.pt"),
+                os.path.join(LORA_HF_REPO, "compare_sample_train_data.pt"),
                 weights_only=False,
             )
 
@@ -141,6 +141,6 @@ if __name__ == "__main__":
     try:
         unittest.main(warnings="ignore", verbosity=2)
     finally:
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            torch.cuda.synchronize()
+        if torch.npu.is_available():
+            torch.npu.empty_cache()
+            torch.npu.synchronize()
