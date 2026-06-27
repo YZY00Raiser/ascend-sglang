@@ -126,17 +126,17 @@ class TestLoRAQwen3_8BLogprobDiff(CustomTestCase):
         self.assertEqual(detected, expected)
 
     def test_lora_qwen3_8b_logprob_accuracy(self):
-        adapter_path = snapshot_download(
-            LORA_HF_REPO,
-            repo_type="dataset",
-        )
+        # adapter_path = snapshot_download(
+        #     LORA_HF_REPO,
+        #     repo_type="dataset",
+        # )
 
         engine = sgl.Engine(
             model_path=BASE_MODEL,
             tp_size=TP_SIZE,
             enable_lora=True,
             max_lora_rank=MAX_LORA_RANK,
-            lora_paths={"my_lora": adapter_path},
+            lora_paths={"my_lora": LORA_HF_REPO},
             lora_backend=LORA_BACKEND,
             attention_backend="ascend",
             prefill_attention_backend=PREFILL_ATTENTION_BACKEND,
@@ -145,7 +145,7 @@ class TestLoRAQwen3_8BLogprobDiff(CustomTestCase):
 
         try:
             cdata = torch.load(
-                os.path.join(adapter_path, "compare_sample_train_data.pt"),
+                os.path.join(LORA_HF_REPO, "compare_sample_train_data.pt"),
                 weights_only=False,
             )
 
