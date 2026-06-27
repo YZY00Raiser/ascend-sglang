@@ -31,7 +31,7 @@ from unittest.mock import patch
 import torch
 import torch.nn as nn
 from huggingface_hub import snapshot_download
-
+# export ASCEND_GRID_DIM_SPLIT_ENABLE=1
 import sglang as sgl
 from sglang.srt.lora.utils import auto_detect_lora_target_modules
 from sglang.test.ci.ci_register import register_npu_ci
@@ -198,6 +198,7 @@ if __name__ == "__main__":
     try:
         unittest.main(warnings="ignore", verbosity=2)
     finally:
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            torch.cuda.synchronize()
+        if torch.npu.is_available():
+            torch.npu.empty_cache()
+            torch.npu.synchronize()
+
