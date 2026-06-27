@@ -44,8 +44,8 @@ LORA_HF_REPO = "/hoem/weights/lora-diff-Qwen3-8B"
 LORA_BACKEND = "triton"
 MAX_LORA_RANK = 32
 TP_SIZE = 1
-PREFILL_ATTENTION_BACKEND = "fa4"
-DECODE_ATTENTION_BACKEND = "fa4"
+PREFILL_ATTENTION_BACKEND = "ascend"
+DECODE_ATTENTION_BACKEND = "ascend"
 
 KL_THRESHOLD = 5e-3
 
@@ -138,7 +138,7 @@ class TestLoRAQwen3_8BLogprobDiff(CustomTestCase):
             max_lora_rank=MAX_LORA_RANK,
             lora_paths={"my_lora": adapter_path},
             lora_backend=LORA_BACKEND,
-            attention_backend="flashinfer",
+            attention_backend="ascend",
             prefill_attention_backend=PREFILL_ATTENTION_BACKEND,
             decode_attention_backend=DECODE_ATTENTION_BACKEND,
         )
