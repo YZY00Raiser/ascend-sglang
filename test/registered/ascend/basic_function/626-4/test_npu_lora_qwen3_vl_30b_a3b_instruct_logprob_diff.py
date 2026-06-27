@@ -31,14 +31,10 @@ import torch
 from huggingface_hub import snapshot_download
 
 import sglang as sgl
-from sglang.test.ci.ci_register import register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
 from sglang.test.ascend.test_ascend_utils import QWEN3_VL_30B_A3B_INSTRUCT_WEIGHTS_PATH
-register_cuda_ci(
-    est_time=110,
-    stage="base-c",
-    runner_config="4-gpu-b200",
-)
+register_npu_ci(est_time=400, suite="full-4-npu-a3", nightly=True)
 
 BASE_MODEL = QWEN3_VL_30B_A3B_INSTRUCT_WEIGHTS_PATH
 LORA_HF_REPO = "yushengsu/lora-diff-Qwen3-VL-30B-A3B-Instruct"
@@ -73,10 +69,10 @@ def get_prompt_logprobs(engine, input_ids, lora_path):
 class TestLoRAQwen3VL_30B_A3B_Instruct_LogprobDiff(CustomTestCase):
 
     def test_lora_qwen3_vl_30b_a3b_instruct_logprob_accuracy(self):
-        adapter_path = snapshot_download(
-            LORA_HF_REPO,
-            repo_type="dataset",
-        )
+        # adapter_path = snapshot_download(
+        #     LORA_HF_REPO,
+        #     repo_type="dataset",
+        # )
 
         engine = sgl.Engine(
             model_path=BASE_MODEL,
@@ -85,7 +81,7 @@ class TestLoRAQwen3VL_30B_A3B_Instruct_LogprobDiff(CustomTestCase):
             max_lora_rank=MAX_LORA_RANK,
             lora_paths={"my_lora": adapter_path},
             lora_backend=LORA_BACKEND,
-            attention_backend="flashinfer",
+            attention_backend="ascend",
             moe_runner_backend=MOE_RUNNER_BACKEND,
             experts_shared_outer_loras=EXPERTS_SHARED_OUTER_LORAS,
             prefill_attention_backend=PREFILL_ATTENTION_BACKEND,
