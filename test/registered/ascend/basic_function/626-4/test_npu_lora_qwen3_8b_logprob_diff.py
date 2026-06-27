@@ -36,11 +36,13 @@ import sglang as sgl
 from sglang.srt.lora.utils import auto_detect_lora_target_modules
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
-
+from sglang.test.ascend.test_ascend_utils import QWEN3_8B_WEIGHTS_PATH
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
-BASE_MODEL = "/home/weights/Qwen/Qwen3-8B"
-LORA_HF_REPO = "/home/weights/lora-diff-Qwen3-8B"
+# BASE_MODEL = "/home/weights/Qwen/Qwen3-8B"
+# LORA_HF_REPO = "/home/weights/lora-diff-Qwen3-8B"
+BASE_MODEL = QWEN3_8B_WEIGHTS_PATH
+LORA_HF_REPO = "/root/.cache/huggingface/hub//lora-diff-Qwen3-8B"
 LORA_BACKEND = "triton"
 MAX_LORA_RANK = 32
 TP_SIZE = 1
