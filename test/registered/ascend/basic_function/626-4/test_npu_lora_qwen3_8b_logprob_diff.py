@@ -37,7 +37,7 @@ from sglang.srt.lora.utils import auto_detect_lora_target_modules
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
 
-register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
+register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
 BASE_MODEL = "/home/weights/Qwen/Qwen3-8B"
 LORA_HF_REPO = "/home/weights/lora-diff-Qwen3-8B"
