@@ -39,7 +39,7 @@ from sglang.test.test_utils import CustomTestCase
 
 register_cuda_ci(est_time=40, stage="extra-a", runner_config="1-gpu-large")
 
-BASE_MODEL = "/hoem/weights/Qwen/Qwen3-8B"
+BASE_MODEL = "/home/weights/Qwen/Qwen3-8B"
 LORA_HF_REPO = "/hoem/weights/lora-diff-Qwen3-8B"
 LORA_BACKEND = "triton"
 MAX_LORA_RANK = 32
