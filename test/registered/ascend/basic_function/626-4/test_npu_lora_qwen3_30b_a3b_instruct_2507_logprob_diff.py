@@ -31,10 +31,10 @@ import torch
 
 
 import sglang as sgl
-from sglang.test.ci.ci_register import register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
 from sglang.test.ascend.test_ascend_utils import QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH
-register_cuda_ci(est_time=100, stage="extra-b", runner_config="4-gpu-b200")
+register_npu_ci(est_time=400, suite="full-4-npu-a3", nightly=True)
 
 BASE_MODEL = QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH
 # LORA_HF_REPO = "yushengsu/lora-diff-Qwen3-30B-A3B-Instruct-2507"

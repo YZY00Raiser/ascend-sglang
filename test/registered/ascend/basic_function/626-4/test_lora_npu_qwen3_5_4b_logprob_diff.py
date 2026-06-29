@@ -28,16 +28,17 @@ import os
 import unittest
 
 import torch
-from huggingface_hub import snapshot_download
 
 import sglang as sgl
-from sglang.test.ci.ci_register import register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
 
-register_cuda_ci(est_time=90, stage="extra-a", runner_config="1-gpu-large")
+register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
 BASE_MODEL = "Qwen/Qwen3.5-4B"
 LORA_HF_REPO = "opherlie/lora-test-case-Qwen3.5-4B"
+
+
 LORA_BACKEND = "triton"
 MAX_LORA_RANK = 64
 TP_SIZE = 1
@@ -71,23 +72,19 @@ def get_prompt_logprobs(engine, input_ids, lora_path):
 class TestLoRAQwen3_5_4BLogprobDiff(CustomTestCase):
 
     def test_lora_qwen3_5_4b_logprob_accuracy(self):
-        adapter_path = snapshot_download(
-            LORA_HF_REPO,
-            repo_type="dataset",
-        )
-
         engine = sgl.Engine(
             model_path=BASE_MODEL,
             tp_size=TP_SIZE,
             enable_lora=True,
             max_lora_rank=MAX_LORA_RANK,
-            lora_paths={"my_lora": adapter_path},
+            lora_paths={"my_lora": LORA_HF_REPO},
             lora_backend=LORA_BACKEND,
+            attention_backend="ascend",
         )
 
         try:
             cdata = torch.load(
-                os.path.join(adapter_path, "compare_sample_train_data.pt"),
+                os.path.join(LORA_HF_REPO, "compare_sample_train_data.pt"),
                 weights_only=False,
             )
 
@@ -138,6 +135,6 @@ if __name__ == "__main__":
     try:
         unittest.main(warnings="ignore", verbosity=2)
     finally:
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            torch.cuda.synchronize()
+        if torch.npu.is_available():
+            torch.npu.empty_cache()
+            torch.npu.synchronize()
