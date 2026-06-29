@@ -28,7 +28,7 @@ import os
 import unittest
 
 import torch
-from huggingface_hub import snapshot_download
+
 
 import sglang as sgl
 from sglang.test.ci.ci_register import register_cuda_ci
@@ -70,17 +70,17 @@ def get_prompt_logprobs(engine, input_ids, lora_path):
 class TestLoRAQwen3_30B_A3B_Instruct_2507_LogprobDiff(CustomTestCase):
 
     def test_lora_qwen3_30b_a3b_instruct_2507_logprob_accuracy(self):
-        adapter_path = snapshot_download(
-            LORA_HF_REPO,
-            repo_type="dataset",
-        )
+        # adapter_path = snapshot_download(
+        #     LORA_HF_REPO,
+        #     repo_type="dataset",
+        # )
 
         engine = sgl.Engine(
             model_path=BASE_MODEL,
             tp_size=TP_SIZE,
             enable_lora=True,
             max_lora_rank=MAX_LORA_RANK,
-            lora_paths={"my_lora": adapter_path},
+            lora_paths={"my_lora": LORA_HF_REPO},
             lora_backend=LORA_BACKEND,
             attention_backend="ascend",
             # flashinfer_allreduce_fusion_backend="trtllm",
@@ -92,7 +92,7 @@ class TestLoRAQwen3_30B_A3B_Instruct_2507_LogprobDiff(CustomTestCase):
 
         try:
             cdata = torch.load(
-                os.path.join(adapter_path, "compare_sample_train_data.pt"),
+                os.path.join(LORA_HF_REPO, "compare_sample_train_data.pt"),
                 weights_only=False,
             )
 
