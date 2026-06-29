@@ -19,8 +19,6 @@ Compares SGLang LoRA logprobs against reference training logprobs from a
 pre-computed dataset. The LoRA adapter and reference data are downloaded from:
 https://huggingface.co/datasets/opherlie/lora-test-case-Qwen3.5-4B
 
-Usage:
-    python -m unittest test_lora_qwen3_5_4b_logprob_diff
 """
 
 import multiprocessing as mp
@@ -35,8 +33,8 @@ from sglang.test.test_utils import CustomTestCase
 
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
-BASE_MODEL = "Qwen/Qwen3.5-4B"
-LORA_HF_REPO = "opherlie/lora-test-case-Qwen3.5-4B"
+BASE_MODEL = "/root/.cache/modelscope/hub/models/Qwen/Qwen3.5-4B"
+LORA_HF_REPO = "/root/.cache/huggingface/hub/lora-test-case-Qwen3.5-4B"
 
 
 LORA_BACKEND = "triton"
