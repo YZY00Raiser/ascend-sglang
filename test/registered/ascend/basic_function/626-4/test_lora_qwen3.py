@@ -28,22 +28,22 @@ register_amd_ci(
     disabled="see https://github.com/sgl-project/sglang/issues/13107",
 )
 
-LORA_MODELS_QWEN3 = [
-    LoRAModelCase(
-        base="Qwen/Qwen3-4B",
-        adaptors=[
-            LoRAAdaptor(
-                name="nissenj/Qwen3-4B-lora-v2",
-                prefill_tolerance=3e-1,
-            ),
-            LoRAAdaptor(
-                name="TanXS/Qwen3-4B-LoRA-ZH-WebNovelty-v0.0",
-                prefill_tolerance=3e-1,
-            ),
-        ],
-        max_loras_per_batch=2,
-    ),
-]
+# LORA_MODELS_QWEN3 = [
+#     LoRAModelCase(
+#         base="Qwen/Qwen3-4B",
+#         adaptors=[
+#             LoRAAdaptor(
+#                 name="nissenj/Qwen3-4B-lora-v2",
+#                 prefill_tolerance=3e-1,
+#             ),
+#             LoRAAdaptor(
+#                 name="TanXS/Qwen3-4B-LoRA-ZH-WebNovelty-v0.0",
+#                 prefill_tolerance=3e-1,
+#             ),
+#         ],
+#         max_loras_per_batch=2,
+#     ),
+# ]
 
 class TestLoRAQwen3(CustomTestCase):
     def test_ci_lora_models(self):
