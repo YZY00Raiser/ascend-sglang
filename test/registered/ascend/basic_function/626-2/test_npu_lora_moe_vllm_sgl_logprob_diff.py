@@ -296,7 +296,7 @@ class TestMoELoraRegression(unittest.TestCase):
             tp_size=1,
             trust_remote_code=True,
             disable_radix_cache=True,
-            attention_backend="flashinfer",
+            attention_backend="ascend",
             mem_fraction_static=0.80,
         ) as srt_runner:
 
@@ -363,6 +363,6 @@ if __name__ == "__main__":
         unittest.main(warnings="ignore", verbosity=2)
     finally:
         # Final cleanup
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            torch.cuda.synchronize()
+        if torch.npu.is_available():
+            torch.npu.empty_cache()
+            torch.npu.synchronize()

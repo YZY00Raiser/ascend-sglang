@@ -55,7 +55,7 @@ def _run_sglang_moe_lora(
         trust_remote_code=True,
         disable_radix_cache=True,
         port=port,
-        attention_backend="flashinfer",
+        attention_backend="ascend",
         mem_fraction_static=0.80,
     ) as runner:
         outputs = runner.forward(
@@ -164,6 +164,6 @@ if __name__ == "__main__":
     try:
         unittest.main(warnings="ignore", verbosity=2)
     finally:
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            torch.cuda.synchronize()
+        if torch.npu.is_available():
+            torch.npu.empty_cache()
+            torch.npu.synchronize()
