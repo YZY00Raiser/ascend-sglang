@@ -13,14 +13,14 @@
 # ==============================================================================
 
 """
-Regression test for Kimi-K2.5 (VLM + MLA + MoE) LoRA logprob accuracy.
+Regression test for DeepSeek-V3.1-Base MLA LoRA logprob accuracy.
 
 Compares SGLang LoRA logprobs against reference training logprobs from a
 pre-computed dataset. The LoRA adapter and reference data are downloaded from:
-https://huggingface.co/datasets/yushengsu/lora-diff-Kimi-K2.5
+https://huggingface.co/datasets/yushengsu/lora-diff-DeepSeek-V3.1-Base
 
 Usage:
-    python -m unittest test_lora_kimi_k25_logprob_diff
+    python -m unittest test_lora_deepseek_v3_base_logprob_diff
 """
 
 import multiprocessing as mp
@@ -35,8 +35,9 @@ from sglang.test.test_utils import CustomTestCase
 
 register_npu_ci(est_time=400, suite="full-8-npu-a3", nightly=True)
 
-BASE_MODEL = "moonshotai/Kimi-K2.5"
-LORA_HF_REPO = "/root/.cache/huggingface/hub/lora-diff-Kimi-K2.5"
+
+BASE_MODEL = "deepseek-ai/DeepSeek-V3.1-Base"
+LORA_HF_REPO = "yushengsu/lora-diff-DeepSeek-V3.1-Base"
 LORA_BACKEND = "triton"
 MAX_LORA_RANK = 32
 TP_SIZE = 8
@@ -44,8 +45,7 @@ MOE_RUNNER_BACKEND = "triton"
 EXPERTS_SHARED_OUTER_LORAS = True
 PREFILL_ATTENTION_BACKEND = "ascend"
 DECODE_ATTENTION_BACKEND = "ascend"
-
-KL_THRESHOLD = 1.5e-2
+KL_THRESHOLD = 6e-3
 
 
 def kl_v2(a, b):
@@ -55,6 +55,10 @@ def kl_v2(a, b):
 
 
 def get_prompt_logprobs(engine, input_ids, lora_path):
+    if isinstance(input_ids, torch.Tensor):
+        input_ids = [input_ids.tolist()]
+    elif not isinstance(input_ids[0], list):
+        input_ids = [input_ids]
     out = engine.generate(
         input_ids=input_ids,
         sampling_params={"max_new_tokens": 0, "temperature": 0.0},
@@ -62,12 +66,14 @@ def get_prompt_logprobs(engine, input_ids, lora_path):
         logprob_start_len=0,
         lora_path=lora_path,
     )
+    if isinstance(out, list):
+        out = out[0]
     return [logprob for logprob, _, _ in out["meta_info"]["input_token_logprobs"]][1:]
 
 
-class TestLoRAKimiK25LogprobDiff(CustomTestCase):
+class TestLoRADeepSeekV3BaseLogprobDiff(CustomTestCase):
 
-    def test_lora_kimi_k25_logprob_accuracy(self):
+    def test_lora_deepseek_v3_base_logprob_accuracy(self):
 
         engine = sgl.Engine(
             model_path=BASE_MODEL,
@@ -81,7 +87,7 @@ class TestLoRAKimiK25LogprobDiff(CustomTestCase):
             experts_shared_outer_loras=EXPERTS_SHARED_OUTER_LORAS,
             prefill_attention_backend=PREFILL_ATTENTION_BACKEND,
             decode_attention_backend=DECODE_ATTENTION_BACKEND,
-            trust_remote_code=True,
+            disable_shared_experts_fusion=True,
         )
 
         try:
