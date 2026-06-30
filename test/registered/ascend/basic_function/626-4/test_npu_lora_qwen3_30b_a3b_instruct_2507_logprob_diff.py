@@ -25,10 +25,9 @@ register_npu_ci(est_time=400, suite="full-4-npu-a3", nightly=True)
 BASE_MODEL = QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH
 # LORA_HF_REPO = "yushengsu/lora-diff-Qwen3-30B-A3B-Instruct-2507"
 LORA_HF_REPO = "/root/.cache/huggingface/hub/lora-diff-Qwen3-30B-A3B-Instruct-2507"
-LORA_BACKEND = "triton"
+LORA_BACKEND = "ascend"
 MAX_LORA_RANK = 32
 TP_SIZE = 4
-MOE_RUNNER_BACKEND = "triton"
 EXPERTS_SHARED_OUTER_LORAS = True
 PREFILL_ATTENTION_BACKEND = "ascend"
 DECODE_ATTENTION_BACKEND = "ascend"

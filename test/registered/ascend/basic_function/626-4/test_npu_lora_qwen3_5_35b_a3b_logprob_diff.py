@@ -24,10 +24,9 @@ register_npu_ci(est_time=150, suite="full-4-npu-a3", nightly=True)
 
 BASE_MODEL = "Qwen/Qwen3.5-35B-A3B"
 LORA_HF_REPO = "opherlie/lora-test-case-Qwen3.5-35B-A3B"
-LORA_BACKEND = "triton"
+LORA_BACKEND = "ascend"
 MAX_LORA_RANK = 64
 TP_SIZE = 4
-MOE_RUNNER_BACKEND = "triton"
 EXPERTS_SHARED_OUTER_LORAS = True
 LORA_USE_VIRTUAL_EXPERTS = True
 DISABLE_SHARED_EXPERTS_FUSION = True
