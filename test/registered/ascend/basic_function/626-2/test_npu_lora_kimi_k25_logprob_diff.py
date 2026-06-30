@@ -84,6 +84,7 @@ class TestLoRAKimiK25LogprobDiff(CustomTestCase):
             prefill_attention_backend=PREFILL_ATTENTION_BACKEND,
             decode_attention_backend=DECODE_ATTENTION_BACKEND,
             trust_remote_code=True,
+
         )
 
         try:
