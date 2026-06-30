@@ -35,8 +35,10 @@ from sglang.test.test_utils import CustomTestCase
 
 register_npu_ci(est_time=400, suite="full-8-npu-a3", nightly=True)
 
-BASE_MODEL = "moonshotai/Kimi-K2.5"
-LORA_HF_REPO = "/root/.cache/huggingface/hub/lora-diff-Kimi-K2.5"
+# BASE_MODEL = "moonshotai/Kimi-K2.5"
+# LORA_HF_REPO = "/root/.cache/huggingface/hub/lora-diff-Kimi-K2.5"
+BASE_MODEL = "/home/weights/Kimi-K2.5-w4a8"
+LORA_HF_REPO = "/home/weights/lora-diff-Kimi-K2.5"
 LORA_BACKEND = "triton"
 MAX_LORA_RANK = 32
 TP_SIZE = 8
