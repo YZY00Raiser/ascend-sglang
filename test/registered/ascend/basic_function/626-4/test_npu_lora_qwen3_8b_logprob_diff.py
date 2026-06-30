@@ -30,7 +30,6 @@ from unittest.mock import patch
 
 import torch
 import torch.nn as nn
-from huggingface_hub import snapshot_download
 # export ASCEND_GRID_DIM_SPLIT_ENABLE=1
 import sglang as sgl
 from sglang.srt.lora.utils import auto_detect_lora_target_modules
