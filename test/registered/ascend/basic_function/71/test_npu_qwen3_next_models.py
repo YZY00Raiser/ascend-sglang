@@ -17,7 +17,7 @@ class TestQwen3Next(
     kl_div_thres = 0.0025
     other_args = [
         "--tp-size",
-        "16",
+        "8",
         "--chunked-prefill-size",
         "1024",
         "--mamba-scheduler-strategy",
