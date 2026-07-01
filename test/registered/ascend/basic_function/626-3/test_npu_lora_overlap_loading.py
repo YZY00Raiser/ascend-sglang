@@ -15,7 +15,7 @@
 import multiprocessing as mp
 import unittest
 from sglang.test.ci.ci_register import register_amd_ci, register_cuda_ci
-from sglang.test.lora_utils import (
+from sglang.test.ascend.lora_utils import (
     CI_MULTI_LORA_MODELS,
     run_lora_batch_splitting_equivalence_test,
 )
