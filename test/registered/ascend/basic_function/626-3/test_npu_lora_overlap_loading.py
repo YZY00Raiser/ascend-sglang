@@ -14,16 +14,14 @@
 
 import multiprocessing as mp
 import unittest
-from sglang.test.ci.ci_register import register_amd_ci, register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.ascend.lora_utils import (
     CI_MULTI_LORA_MODELS,
     run_lora_batch_splitting_equivalence_test,
 )
 from sglang.test.test_utils import CustomTestCase
 
-register_cuda_ci(est_time=48, stage="base-b", runner_config="1-gpu-large")
-register_amd_ci(est_time=75, suite="stage-b-test-1-gpu-small-amd")
-
+register_npu_ci(est_time=100, suite="full-1-npu-a3", nightly=True)
 
 class TestLoRAOverlapLoading(CustomTestCase):
     def test_ci_lora_models_batch_splitting(self):
