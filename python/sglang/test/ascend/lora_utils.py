@@ -6,7 +6,11 @@ import torch
 
 from sglang.test.runners import HFRunner, SRTRunner
 from sglang.test.test_utils import calculate_rouge_l
-
+from sglang.test.ascend.test_ascend_utils import (
+    LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH,
+    LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
+    LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH
+)
 
 @dataclasses.dataclass
 class LoRAAdaptor:
@@ -80,7 +84,7 @@ MOE_LORA_PATH = "jonahbernard/sglang-lora-moe-test-qwen1.5-MoE-A2.7B"
 
 CI_LORA_MODELS = [
     LoRAModelCase(
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
         adaptors=[
             LoRAAdaptor(
                 name="algoprog/fact-generation-llama-3.1-8b-instruct-lora",
@@ -111,15 +115,15 @@ ALL_OTHER_LORA_MODELS = [
 CI_MULTI_LORA_MODELS = [
     # multi-rank case
     LoRAModelCase(
-        base="meta-llama/Llama-2-7b-hf",
+        base=LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
         adaptors=[
             LoRAAdaptor(
-                name="winddude/wizardLM-LlaMA-LoRA-7B",
+                name=LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH,
                 prefill_tolerance=1e-1,
                 rouge_l_tolerance=0.9,
             ),
             LoRAAdaptor(
-                name="RuterNorway/Llama-2-7b-chat-norwegian-LoRa",
+                name=LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH,
                 prefill_tolerance=3e-1,
                 rouge_l_tolerance=0.9,
             ),
@@ -378,7 +382,7 @@ def run_lora_test_one_by_one(
     model_case: LoRAModelCase,
     torch_dtype: torch.dtype,
     max_new_tokens: int,
-    backend: str = "csgmv",
+    backend: str = "ascend",
     enable_lora_overlap_loading: Optional[bool] = None,
     disable_cuda_graph: bool = False,
     disable_radix_cache: bool = False,
