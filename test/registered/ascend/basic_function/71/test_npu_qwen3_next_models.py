@@ -5,7 +5,7 @@ from sglang.test.kits.kl_divergence_kit import KLDivergenceMixin
 from sglang.test.kits.prefix_cache_branching_kit import PrefixCacheBranchingMixin
 from sglang.test.server_fixtures.default_fixture import DefaultServerBase
 
-QWEN3_NEXT_MODEL = "home/weights/Qwen/Qwen3-Next-80B-A3B-Instruct"
+QWEN3_NEXT_MODEL = "/home/weights/Qwen/Qwen3-Next-80B-A3B-Instruct"
 
 
 class TestQwen3Next(
