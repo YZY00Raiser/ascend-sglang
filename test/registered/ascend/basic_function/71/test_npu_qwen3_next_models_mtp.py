@@ -8,7 +8,7 @@ from sglang.test.server_fixtures.default_fixture import DefaultServerBase
 
 register_cuda_ci(est_time=290, stage="base-c", runner_config="4-gpu-h100")
 
-QWEN3_NEXT_MODEL = "home/weights/Qwen/Qwen3-Next-80B-A3B-Instruct"
+QWEN3_NEXT_MODEL = "/home/weights/Qwen/Qwen3-Next-80B-A3B-Instruct"
 
 
 class TestQwen3NextMTPTopk(
