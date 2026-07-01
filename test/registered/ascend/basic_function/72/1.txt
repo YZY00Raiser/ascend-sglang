@@ -1,0 +1,20 @@
+# For communications compression
+enable_quant_communications: Optional[bool] = False
+--enable-prefix-mm-cache
+
+ep
+
+--ep-dispatch-algorithm
+--init-expert-location json string
+-enable-deepep-waterfill
+--deepep-dispatcher-output-dtype
+
+
+lora
+experts_shared_outer_loras: Optional[bool] = None
+    lora_use_virtual_experts: bool = False
+    lora_strict_loading: bool = False
+    lora_drain_wait_threshold: float = 0.0
+
+
+
