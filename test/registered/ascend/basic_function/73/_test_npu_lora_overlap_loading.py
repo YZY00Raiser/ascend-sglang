@@ -51,6 +51,7 @@ class TestLoRAOverlapLoading(CustomTestCase):
             CI_MULTI_LORA_MODELS,
             enable_lora_overlap_loading=True,
             attention_backend="ascend",
+            lora_backend="ascend",
         )
 
 
