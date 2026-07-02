@@ -825,7 +825,7 @@ def run_lora_multiple_batch_on_model_cases(
 
 def run_lora_batch_splitting_equivalence_test(
     model_cases: List[LoRAModelCase],
-    attention_backend: str = "torch_native",
+    attention_backend: str = "ascend",
     disable_cuda_graph: bool = True,
     disable_radix_cache: bool = True,
     enable_lora_overlap_loading: Optional[bool] = None,
