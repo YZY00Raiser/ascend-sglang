@@ -93,7 +93,6 @@ class TestLoRARadixCache(CustomTestCase):
             test_tag="lora-without-radix-cache",
             backend="ascend",
             attention_backend="ascend",
-
         )
 
 
