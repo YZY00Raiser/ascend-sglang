@@ -731,7 +731,7 @@ def create_multiple_batch_test_samples(
 def run_lora_multiple_batch_on_model_cases(
     model_cases: List[LoRAModelCase],
     use_spec_decoding: bool = False,
-    attention_backend: str = "torch_native",
+    attention_backend: str = "ascend",
     disable_cuda_graph: bool = True,
     enable_deterministic_inference: bool = False,
     disable_radix_cache: bool = True,
