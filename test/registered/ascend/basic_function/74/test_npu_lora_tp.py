@@ -17,7 +17,7 @@ import os
 import unittest
 from typing import List, Optional
 
-from sglang.test.ci.ci_register import register_amd_ci, register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.lora_utils import (
     ALL_OTHER_LORA_MODELS,
     CI_LORA_MODELS,
@@ -29,16 +29,8 @@ from sglang.test.lora_utils import (
 )
 from sglang.test.test_utils import CustomTestCase, is_in_ci
 
-register_cuda_ci(
-    est_time=230,
-    stage="base-c",
-    runner_config="8-gpu-h200",
-)
-register_amd_ci(
-    est_time=116,
-    suite="stage-b-test-2-gpu-large-amd",
-    disabled="see https://github.com/sgl-project/sglang/issues/13107",
-)
+register_npu_ci(est_time=200, suite="full-8-npu-a3", nightly=True)
+
 
 
 class TestLoRATP(CustomTestCase):
