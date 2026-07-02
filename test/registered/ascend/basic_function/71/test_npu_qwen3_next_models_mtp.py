@@ -35,6 +35,8 @@ class TestQwen3NextMTPV2(GSM8KMixin, KLDivergenceMixin, DefaultServerBase):
         "extra_buffer",
         "--mamba-track-interval",
         "128",
+        "--attention-backend",
+        "ascend",
     ]
 
 
