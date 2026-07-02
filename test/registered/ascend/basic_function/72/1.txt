@@ -13,8 +13,8 @@ ep
 lora
 experts_shared_outer_loras: Optional[bool] = None
     lora_use_virtual_experts: bool = False
-    lora_strict_loading: bool = False
-    lora_drain_wait_threshold: float = 0.0
+    lora_strict_loading: bool = False 新增
+    lora_drain_wait_threshold: float = 0.0 新增
 
 
 
