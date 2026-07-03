@@ -68,7 +68,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
     @classmethod
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
-        run_command(f"rm -rf {cls.path}")
+        # run_command(f"rm -rf {cls.path}")
 
     def test_recorder_mode(self):
         # Start recording
