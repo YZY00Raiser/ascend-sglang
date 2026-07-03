@@ -17,9 +17,10 @@ from sglang.test.test_utils import (
 )
 
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
-LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH="/home/weights/Llama-3.2-1B-Instruct"
-LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH="/home/weights/codelion/Llama-3.2-1B-Instruct-tool-calling-lora"
-Qwen3="lora-diff-Qwen3-8B"
+LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH = "/home/weights/Llama-3.2-1B-Instruct"
+LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH = "/home/weights/codelion/Llama-3.2-1B-Instruct-tool-calling-lora"
+Qwen3 = "lora-diff-Qwen3-8B"
+
 
 class TestLora1(CustomTestCase):
     """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
@@ -74,9 +75,6 @@ class TestLora1(CustomTestCase):
         self.assertEqual(response.status_code, 200)
 
 
-
-
-
 class TestLora2(CustomTestCase):
     """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
     inference request successful.
@@ -128,14 +126,6 @@ class TestLora2(CustomTestCase):
         self.assertIn("Paris", response.text)
         response = requests.get(DEFAULT_URL_FOR_TEST + "/server_info")
         self.assertEqual(response.status_code, 200)
-
-
-
-
-
-
-
-
 
 
 '''
@@ -200,7 +190,6 @@ class TestLoraMaxLoraRankErr(CustomTestCase):
                     kill_process_tree(self.process.pid)
 
 '''
-
 
 if __name__ == "__main__":
     unittest.main()
