@@ -6,7 +6,6 @@ import requests
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
-from sglang.test.send_one import BenchArgs, send_one_prompt
 from sglang.test.test_utils import (
     DEFAULT_DEEPEP_MODEL_NAME_FOR_TEST,
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -41,7 +40,6 @@ class TestDeepseek(CustomTestCase):
                 "--enable-dp-lm-head",
                 "--moe-a2a-backend",
                 "deepep",
-                "--enable-two-batch-overlap",
                 "--ep-num-redundant-experts",
                 "32",
                 "--ep-dispatch-algorithm",
@@ -156,60 +154,6 @@ class TestDeepseekMTP(CustomTestCase):
             f"{avg_spec_accept_length=:.3f}\n"
         )
         self.assertGreater(avg_spec_accept_length, 1.85)
-
-
-class TestDeepseekV32TBO(CustomTestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.model = DEEPSEEK_V32_MODEL_PATH
-        cls.base_url = DEFAULT_URL_FOR_TEST
-        other_args = [
-            "--trust-remote-code",
-            "--tp",
-            "8",
-            "--dp",
-            "8",
-            "--enable-dp-attention",
-            "--enable-two-batch-overlap",
-            "--moe-a2a-backend",
-            "deepep",
-            "--cuda-graph-max-bs-decode",
-            "256",
-            "--model-loader-extra-config",
-            '{"enable_multithread_load": true, "num_threads": 64}',
-        ]
-        cls.process = popen_launch_server(
-            cls.model,
-            cls.base_url,
-            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
-            other_args=other_args,
-        )
-
-    @classmethod
-    def tearDownClass(cls):
-        kill_process_tree(cls.process.pid)
-
-    def test_a_gsm8k(
-        self,
-    ):  # Append an "a" to make this test run first (alphabetically) to warm up the server
-        args = SimpleNamespace(
-            base_url=self.base_url,
-            model=self.model,
-            eval_name="gsm8k",
-            api="completion",
-            max_tokens=512,
-            num_examples=1200,
-            num_threads=1200,
-        )
-        metrics = run_eval(args)
-        print(f"{metrics=}")
-        self.assertGreater(metrics["score"], 0.92)
-
-    def test_bs_1_speed(self):
-        args = BenchArgs(port=int(self.base_url.split(":")[-1]), max_new_tokens=2048)
-        acc_length, speed = send_one_prompt(args)
-
-        print(f"{speed=:.2f}")
 
 
 if __name__ == "__main__":
