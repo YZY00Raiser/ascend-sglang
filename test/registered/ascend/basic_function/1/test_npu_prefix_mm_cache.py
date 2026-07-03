@@ -93,6 +93,12 @@ class TestPrefixMMCacheE2E(CustomTestCase):
             timeout=60,
         )
         self.assertEqual(response2.status_code, 200)
+        self.assertEqual(
+            response1.json()["meta_info"]["cached_tokens"], 0
+        )
+        self.assertGreater(
+            response2.json()["meta_info"]["cached_tokens"], 0
+        )
 
     def test_video_encoding_with_cache(self):
         """Test that video encoding works with prefix mm cache enabled."""
@@ -118,6 +124,12 @@ class TestPrefixMMCacheE2E(CustomTestCase):
             timeout=120,
         )
         self.assertEqual(response2.status_code, 200)
+        self.assertEqual(
+            response1.json()["meta_info"]["cached_tokens"], 0
+        )
+        self.assertGreater(
+            response2.json()["meta_info"]["cached_tokens"], 0
+        )
 
     def test_audio_encoding_with_cache(self):
         """Test that audio encoding works with prefix mm cache enabled."""
@@ -143,6 +155,12 @@ class TestPrefixMMCacheE2E(CustomTestCase):
             timeout=60,
         )
         self.assertEqual(response2.status_code, 200)
+        self.assertEqual(
+            response1.json()["meta_info"]["cached_tokens"], 0
+        )
+        self.assertGreater(
+            response2.json()["meta_info"]["cached_tokens"], 0
+        )
 
     def test_mixed_modality_encoding(self):
         """Test that mixed modality encoding works with prefix mm cache enabled."""
