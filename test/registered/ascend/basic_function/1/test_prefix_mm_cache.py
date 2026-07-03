@@ -5,9 +5,11 @@ Tests the prefix multimodal cache functionality in encoder-only mode.
 
 import unittest
 import requests
+
+from sglang.test.ascend.test_ascend_utils import QWEN3_VL_8B_INSTRUCT_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_cuda_ci
+
 from sglang.test.test_utils import (
-    DEFAULT_SMALL_VLM_MODEL_NAME_FOR_TEST,
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     popen_launch_server, CustomTestCase,
 )
@@ -19,7 +21,7 @@ register_cuda_ci(est_time=180, stage="base-c")
 class TestPrefixMMCacheE2E(CustomTestCase):
     """End-to-end test for --enable-prefix-mm-cache with multimodal encoding."""
 
-    model = DEFAULT_SMALL_VLM_MODEL_NAME_FOR_TEST
+    model = QWEN3_VL_8B_INSTRUCT_WEIGHTS_PATH
     base_host = "127.0.0.1"
     encode_port = "30000"
     encode_url = f"http://{base_host}:{encode_port}"
