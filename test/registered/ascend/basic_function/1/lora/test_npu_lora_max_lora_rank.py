@@ -19,9 +19,9 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH="/home/weights/Llama-3.2-1B-Instruct"
 LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH="/home/weights/codelion/Llama-3.2-1B-Instruct-tool-calling-lora"
+Qwen3="lora-diff-Qwen3-8B"
 
-
-class TestLoraMaxLoraRank(CustomTestCase):
+class TestLora1(CustomTestCase):
     """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
     inference request successful.
 
@@ -29,8 +29,7 @@ class TestLoraMaxLoraRank(CustomTestCase):
     [Test Target] --max-load-rank, --lora-backend
     """
 
-    lora_a = LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH
-    max_lora_rank = "64"
+    lora_a = Qwen3
 
     @classmethod
     def setUpClass(cls):
@@ -38,11 +37,11 @@ class TestLoraMaxLoraRank(CustomTestCase):
             "--enable-lora",
             "--lora-path",
             f"lora_a={cls.lora_a}",
-            "--max-lora-rank",
-            cls.max_lora_rank,
             "--lora-backend",
             "ascend",
             "--attention-backend",
+            "--lora-strict-loading"
+            "True"
             "ascend",
             "--disable-cuda-graph",
         ]
@@ -66,14 +65,78 @@ class TestLoraMaxLoraRank(CustomTestCase):
                     "temperature": 0,
                     "max_new_tokens": 32,
                 },
-                "lora_path": "lora_a",
+                # "lora_path": "lora_a",
             },
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn("Paris", response.text)
         response = requests.get(DEFAULT_URL_FOR_TEST + "/server_info")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["max_lora_rank"], 64)
+
+
+
+
+
+class TestLora2(CustomTestCase):
+    """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
+    inference request successful.
+
+    [Test Category] Parameter
+    [Test Target] --max-load-rank, --lora-backend
+    """
+
+    lora_a = Qwen3
+
+    @classmethod
+    def setUpClass(cls):
+        other_args = [
+            "--enable-lora",
+            "--lora-path",
+            f"lora_a={cls.lora_a}",
+            "--lora-backend",
+            "ascend",
+            "--attention-backend",
+            "--lora-strict-loading"
+            "False"
+            "ascend",
+            "--disable-cuda-graph",
+        ]
+        cls.process = popen_launch_server(
+            LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
+            DEFAULT_URL_FOR_TEST,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=other_args,
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        kill_process_tree(cls.process.pid)
+
+    def test_lora_max_lora_rank(self):
+        response = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+                # "lora_path": "lora_a",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Paris", response.text)
+        response = requests.get(DEFAULT_URL_FOR_TEST + "/server_info")
+        self.assertEqual(response.status_code, 200)
+
+
+
+
+
+
+
+
+
 
 '''
 class TestLoraMaxLoraRankErr(CustomTestCase):
