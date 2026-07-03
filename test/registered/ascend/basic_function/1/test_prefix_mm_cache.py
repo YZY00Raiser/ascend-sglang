@@ -4,7 +4,7 @@ Tests the prefix multimodal cache functionality in encoder-only mode.
 """
 
 import unittest
-
+import requests
 from sglang.test.ci.ci_register import register_cuda_ci
 from sglang.test.test_utils import (
     DEFAULT_SMALL_VLM_MODEL_NAME_FOR_TEST,
@@ -64,14 +64,12 @@ class TestPrefixMMCacheE2E(CustomTestCase):
 
     def test_health_check(self):
         """Test that encoder server is healthy."""
-        import requests
-
         response = requests.get(f"{self.encode_url}/health", timeout=10)
         self.assertEqual(response.status_code, 200)
 
     def test_image_encoding_with_cache(self):
         """Test that image encoding works with prefix mm cache enabled."""
-        import requests
+
 
         # First request (cache miss)
         response1 = requests.post(
@@ -97,7 +95,7 @@ class TestPrefixMMCacheE2E(CustomTestCase):
 
     def test_video_encoding_with_cache(self):
         """Test that video encoding works with prefix mm cache enabled."""
-        import requests
+
 
         # First request (cache miss)
         response1 = requests.post(
@@ -123,7 +121,7 @@ class TestPrefixMMCacheE2E(CustomTestCase):
 
     def test_audio_encoding_with_cache(self):
         """Test that audio encoding works with prefix mm cache enabled."""
-        import requests
+
 
         # First request (cache miss)
         response1 = requests.post(
@@ -149,7 +147,7 @@ class TestPrefixMMCacheE2E(CustomTestCase):
 
     def test_mixed_modality_encoding(self):
         """Test that mixed modality encoding works with prefix mm cache enabled."""
-        import requests
+
 
         # Request with image, video, and audio
         response = requests.post(
