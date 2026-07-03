@@ -7,7 +7,7 @@ import unittest
 import requests
 
 from sglang.test.ascend.test_ascend_utils import QWEN3_VL_8B_INSTRUCT_WEIGHTS_PATH
-from sglang.test.ci.ci_register import register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -15,7 +15,7 @@ from sglang.test.test_utils import (
 )
 from sglang.srt.utils import kill_process_tree
 
-register_cuda_ci(est_time=180, stage="base-c")
+register_npu_ci(est_time=200, suite="full-1-npu-a3", nightly=True)
 
 
 class TestPrefixMMCacheE2E(CustomTestCase):
@@ -72,7 +72,6 @@ class TestPrefixMMCacheE2E(CustomTestCase):
     def test_image_encoding_with_cache(self):
         """Test that image encoding works with prefix mm cache enabled."""
 
-
         # First request (cache miss)
         response1 = requests.post(
             f"{self.encode_url}/encode",
@@ -97,7 +96,6 @@ class TestPrefixMMCacheE2E(CustomTestCase):
 
     def test_video_encoding_with_cache(self):
         """Test that video encoding works with prefix mm cache enabled."""
-
 
         # First request (cache miss)
         response1 = requests.post(
@@ -124,7 +122,6 @@ class TestPrefixMMCacheE2E(CustomTestCase):
     def test_audio_encoding_with_cache(self):
         """Test that audio encoding works with prefix mm cache enabled."""
 
-
         # First request (cache miss)
         response1 = requests.post(
             f"{self.encode_url}/encode",
@@ -149,7 +146,6 @@ class TestPrefixMMCacheE2E(CustomTestCase):
 
     def test_mixed_modality_encoding(self):
         """Test that mixed modality encoding works with prefix mm cache enabled."""
-
 
         # Request with image, video, and audio
         response = requests.post(
