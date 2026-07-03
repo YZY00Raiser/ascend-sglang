@@ -104,5 +104,86 @@ class TestLora1(CustomTestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class TestLora2(TestLora1):
+    """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
+    inference request successful.
+
+    [Test Category] Parameter
+    [Test Target] --max-load-rank, --lora-backend
+    """
+
+    lora_a = Qwen3
+
+    @classmethod
+    def setUpClass(cls):
+        other_args = [
+            "--enable-lora",
+            "--lora-path",
+            f"lora_a={cls.lora_a}",
+            "--lora-backend",
+            "ascend",
+            "--lora-strict-loading"
+            "True",
+            "--attention-backend",
+            "ascend",
+            "--disable-cuda-graph",
+            "--experts-shared-outer-loras"
+            "--lora-drain-wait-threshold"
+            "0.0"
+        ]
+        cls.process = popen_launch_server(
+            LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
+            DEFAULT_URL_FOR_TEST,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=other_args,
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        kill_process_tree(cls.process.pid)
+
+    def test_lora_max_lora_rank(self):
+        response1 = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+                "lora_path": "lora_1",
+            },
+        )
+
+        response2 = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+                "lora_path": "lora_2",
+            },
+        )
+        sleep(3)
+        response3 = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+                "lora_path": "lora_3",
+            },
+        )
+
+        self.assertEqual(response1.status_code, 200)
+        self.assertIn("Paris", response1.text)
+        response = requests.get(DEFAULT_URL_FOR_TEST + "/server_info")
+        self.assertEqual(response.status_code, 200)
+
+
 if __name__ == "__main__":
     unittest.main()
