@@ -40,9 +40,9 @@ class TestLora1(CustomTestCase):
             f"lora_a={cls.lora_a}",
             "--lora-backend",
             "ascend",
-            "--attention-backend",
             "--lora-strict-loading"
-            "True"
+            "True",
+            "--attention-backend",
             "ascend",
             "--disable-cuda-graph",
         ]
@@ -95,7 +95,7 @@ class TestLora2(CustomTestCase):
             "ascend",
             "--attention-backend",
             "--lora-strict-loading"
-            "False"
+            "False",
             "ascend",
             "--disable-cuda-graph",
         ]
