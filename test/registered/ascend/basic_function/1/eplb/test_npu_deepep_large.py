@@ -77,6 +77,7 @@ class TestDeepseek(CustomTestCase):
 class TestDeepseek2(TestDeepseek):
     ep_dispatch_algorithm = "fake",
 
+
 class TestDeepseekMTP(CustomTestCase):
     @classmethod
     def setUpClass(cls):
