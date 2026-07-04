@@ -56,10 +56,7 @@ class TestDeepSeekV32(CustomTestCase):
                 "HCCL_BUFFSIZE": "2048",
             },
         )
-        cls.err_log_file.seek(0)
-        content = cls.err_log_file.read()
-        error_message = "DeepEP Waterfill is enabled"
-        cls.assertIn(error_message, content)
+
 
     @classmethod
     def tearDownClass(cls):
@@ -81,6 +78,10 @@ class TestDeepSeekV32(CustomTestCase):
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
         self.assertGreater(metrics["score"], 0.95)
+        self.err_log_file.seek(0)
+        content = self.err_log_file.read()
+        error_message = "DeepEP Waterfill is enabled"
+        self.assertIn(error_message, content)
 
 
 if __name__ == "__main__":
