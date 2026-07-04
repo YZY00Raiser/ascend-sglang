@@ -42,7 +42,7 @@ class TestDeepSeekV32(CustomTestCase):
                 "--quantization",
                 "modelslim",
                 "--disable-radix-cache",
-                "-enable-deepep-waterfill"
+                "--enable-deepep-waterfill"
             ],
         )
 
