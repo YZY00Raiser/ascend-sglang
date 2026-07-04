@@ -38,7 +38,7 @@ class TestDeepSeekV32(CustomTestCase):
                 "ascend",
                 "--disable-cuda-graph",
                 "--tp-size",
-                "16",
+                "8",
                 "--quantization",
                 "modelslim",
                 "--disable-radix-cache",
