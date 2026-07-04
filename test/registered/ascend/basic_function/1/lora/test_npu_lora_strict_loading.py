@@ -32,7 +32,7 @@ class TestLora1(CustomTestCase):
     [Test Target] --max-load-rank, --lora-backend
     """
 
-    lora_a = Qwen3
+    lora_a = LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH
 
     @classmethod
     def setUpClass(cls):
@@ -84,7 +84,7 @@ class TestLora2(CustomTestCase):
     [Test Target] --max-load-rank, --lora-backend
     """
 
-    lora_a = Qwen3
+    lora_a = LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH
 
     @classmethod
     def setUpClass(cls):
