@@ -32,12 +32,13 @@ class TestDtypeAuto(CustomTestCase):
                 "--trust-remote-code",
                 "--tp",
                 "4",
-                "--enable-dp-attention",
-                "--dp",
-                "8",
-                ""
+                "--mem-fraction-static",
+                "0.8",
                 "--deepep-dispatcher-output-dtype",
                 cls.dtype,
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
             ],
         )
 
