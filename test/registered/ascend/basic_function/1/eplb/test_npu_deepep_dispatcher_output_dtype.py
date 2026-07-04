@@ -15,7 +15,7 @@ from sglang.test.test_utils import (
 )
 
 model = "/home/weights/Qwen3.5-35B-A3B-w8a8-mtp"
-register_npu_ci(est_time=200, suite="full-8-npu-a3", nightly=True)
+register_npu_ci(est_time=200, suite="full-4-npu-a3", nightly=True)
 
 
 class TestDtypeAuto(CustomTestCase):
