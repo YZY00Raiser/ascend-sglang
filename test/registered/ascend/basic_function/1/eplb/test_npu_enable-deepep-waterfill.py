@@ -1,6 +1,7 @@
+import tempfile
 import unittest
 from types import SimpleNamespace
-
+from typing import final
 
 # from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
 from sglang.srt.utils import kill_process_tree
@@ -26,29 +27,38 @@ class TestDeepSeekV32(CustomTestCase):
     def setUpClass(cls):
         cls.model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
-        cls.process = popen_launch_server(
-            cls.model,
-            cls.base_url,
-            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
-            other_args=[
-                "--trust-remote-code",
-                "--mem-fraction-static",
-                "0.8",
-                "--attention-backend",
-                "ascend",
-                "--disable-cuda-graph",
-                "--tp-size",
-                "8",
-                "--quantization",
-                "modelslim",
-                "--disable-radix-cache",
-                "--enable-deepep-waterfill"
-            ],
-            return_stdout_stderr=(out_log_file, err_log_file),
-            env={
-                "HCCL_BUFFSIZE": "2048",
-            },
-        )
+        with tempfile.NamedTemporaryFile(
+            mode="w+", delete=True, suffix="out.log"
+        ) as out_log_file, tempfile.NamedTemporaryFile(
+            mode="w+", delete=True, suffix="out.log"
+        ) as err_log_file:
+            cls.process = popen_launch_server(
+                cls.model,
+                cls.base_url,
+                timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+                other_args=[
+                    "--trust-remote-code",
+                    "--mem-fraction-static",
+                    "0.8",
+                    "--attention-backend",
+                    "ascend",
+                    "--disable-cuda-graph",
+                    "--tp-size",
+                    "8",
+                    "--quantization",
+                    "modelslim",
+                    "--disable-radix-cache",
+                    "--enable-deepep-waterfill"
+                ],
+                return_stdout_stderr=(out_log_file, err_log_file),
+                env={
+                    "HCCL_BUFFSIZE": "2048",
+                },
+            )
+            err_log_file.seek(0)
+            content = err_log_file.read()
+            error_message = "DeepEP Waterfill is enabled"
+            cls.assertIn(error_message, content)
 
     @classmethod
     def tearDownClass(cls):
