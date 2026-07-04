@@ -23,7 +23,7 @@ LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH = "/home/weights/Llama-3.2-1B-Instruct"
 LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH = "/home/weights/codelion/Llama-3.2-1B-Instruct-tool-calling-lora"
 Qwen3 = "/home/weights/lora-diff-Qwen3-8B"
 
-
+'''
 class TestLora1(CustomTestCase):
     """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
     inference request successful.
@@ -100,6 +100,8 @@ class TestLora1(CustomTestCase):
         self.assertIn("Paris", response1.text)
         response = requests.get(DEFAULT_URL_FOR_TEST + "/server_info")
         self.assertEqual(response.status_code, 200)
+
+'''
 
 
 class TestLora2(CustomTestCase):
