@@ -23,6 +23,37 @@ LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH = "/home/weights/codelion/L
 LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH="/home/weights/codelion/FastLlama-3.2-LoRA"
 Qwen3 = "/home/weights/lora-diff-Qwen3-8B"
 
+import torch
+import os
+
+adapter_path = "/home/weights/codelion/FastLlama-3.2-LoRA"
+weight_file = os.path.join(adapter_path, "adapter_model.bin")
+
+# 加载权重
+state_dict = torch.load(weight_file, map_location="cpu")
+
+# 将 q_proj 改为 nonexistent_proj
+new_state_dict = {}
+for key, value in state_dict.items():
+    if "q_proj" in key:
+        new_key = key.replace("q_proj", "nonexistent_proj")
+        new_state_dict[new_key] = value
+    else:
+        new_state_dict[key] = value
+
+# 保存
+torch.save(new_state_dict, weight_file)
+
+# 同时修改 adapter_config.json
+import json
+config_path = os.path.join(adapter_path, "adapter_config.json")
+with open(config_path, "r") as f:
+    config = json.load(f)
+
+config["target_modules"] = ["nonexistent_proj", "k_proj", "v_proj", "o_proj"]
+with open(config_path, "w") as f:
+    json.dump(config, f, indent=2)
+
 
 class TestLora1(CustomTestCase):
     """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
