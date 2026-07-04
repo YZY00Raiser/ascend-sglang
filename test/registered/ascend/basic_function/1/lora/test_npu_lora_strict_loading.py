@@ -93,7 +93,7 @@ class TestLora2(CustomTestCase):
             f"lora_a={cls.lora_a}",
             "--lora-backend",
             "ascend",
-            "--lora-strict-loading"
+            "--lora-strict-loading",
             "False",
             "--attention-backend",
             "ascend",

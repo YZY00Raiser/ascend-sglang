@@ -3,7 +3,7 @@ from types import SimpleNamespace
 
 import requests
 
-from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
@@ -13,14 +13,14 @@ from sglang.test.test_utils import (
     CustomTestCase,
     popen_launch_server,
 )
-
+model="/home/weights/"
 register_npu_ci(est_time=200, suite="full-8-npu-a3", nightly=True)
 
 
 class TestDeepseek(CustomTestCase):
     @classmethod
     def setUpClass(cls):
-        cls.model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+        cls.model =model
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.process = popen_launch_server(
             cls.model,
