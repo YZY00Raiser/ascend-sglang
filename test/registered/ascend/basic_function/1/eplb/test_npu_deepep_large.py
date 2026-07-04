@@ -18,6 +18,7 @@ register_npu_ci(est_time=200, suite="full-8-npu-a3", nightly=True)
 
 
 class TestDeepseek(CustomTestCase):
+    ep_dispatch_algorithm="dynamic",
     @classmethod
     def setUpClass(cls):
         cls.model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
@@ -41,7 +42,7 @@ class TestDeepseek(CustomTestCase):
                 "--ep-num-redundant-experts",
                 "32",
                 "--ep-dispatch-algorithm",
-                "dynamic",
+                cls.ep_dispatch_algorithm,
                 "--eplb-algorithm",
                 "deepseek",
                 "--cuda-graph-bs",
@@ -73,6 +74,8 @@ class TestDeepseek(CustomTestCase):
 
         self.assertGreater(metrics["score"], 0.95)
 
+class TestDeepseek2(TestDeepseek):
+    ep_dispatch_algorithm = "fake",
 
 class TestDeepseekMTP(CustomTestCase):
     @classmethod
