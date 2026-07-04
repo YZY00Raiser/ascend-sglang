@@ -1,3 +1,4 @@
+import concurrent.futures
 import tempfile
 import unittest
 from time import sleep
@@ -46,7 +47,8 @@ class TestLora1(CustomTestCase):
             "--attention-backend",
             "ascend",
             "--disable-cuda-graph",
-            "--"
+            "--max-loras-per-batch",
+            "2",
             # "--experts-shared-outer-loras"
             "--lora-drain-wait-threshold",
             "3.0"
@@ -63,29 +65,24 @@ class TestLora1(CustomTestCase):
         kill_process_tree(cls.process.pid)
 
     def test_lora_max_lora_rank(self):
-        response1 = requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": 32,
+        def _generate(lora_path, max_new_tokens):
+            return requests.post(
+                f"{DEFAULT_URL_FOR_TEST}/generate",
+                json={
+                    "text": "The capital of France is",
+                    "sampling_params": {
+                        "temperature": 0,
+                        "max_new_tokens": max_new_tokens,
+                    },
+                    "lora_path": lora_path,
                 },
-                "lora_path": "lora_1",
-            },
-        )
+            )
 
-        response2 = requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": 32,
-                },
-                "lora_path": "lora_2",
-            },
-        )
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            future1 = executor.submit(_generate, "lora_1", 9000)
+            future2 = executor.submit(_generate, "lora_2", 8000)
+            response1 = future1.result()
+            response2 = future2.result()
         sleep(3)
         response3 = requests.post(
             f"{DEFAULT_URL_FOR_TEST}/generate",
