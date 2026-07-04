@@ -41,13 +41,11 @@ class TestLora1(CustomTestCase):
             f"lora_a={cls.lora_a}",
             "--lora-backend",
             "ascend",
-            "--lora-strict-loading"
-            "True",
             "--attention-backend",
             "ascend",
             "--disable-cuda-graph",
             # "--experts-shared-outer-loras"
-            "--lora-drain-wait-threshold"
+            "--lora-drain-wait-threshold",
             "3.0"
         ]
         cls.process = popen_launch_server(
@@ -122,13 +120,11 @@ class TestLora2(TestLora1):
             f"lora_a={cls.lora_a}",
             "--lora-backend",
             "ascend",
-            "--lora-strict-loading"
-            "True",
             "--attention-backend",
             "ascend",
             "--disable-cuda-graph",
             # "--experts-shared-outer-loras"
-            "--lora-drain-wait-threshold"
+            "--lora-drain-wait-threshold",
             "0"
         ]
         cls.process = popen_launch_server(
