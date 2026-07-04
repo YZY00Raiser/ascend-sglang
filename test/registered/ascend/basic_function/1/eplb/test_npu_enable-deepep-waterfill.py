@@ -44,6 +44,10 @@ class TestDeepSeekV32(CustomTestCase):
                 "--disable-radix-cache",
                 "--enable-deepep-waterfill"
             ],
+            return_stdout_stderr=(out_log_file, err_log_file),
+            env={
+                "HCCL_BUFFSIZE": "2048",
+            },
         )
 
     @classmethod
