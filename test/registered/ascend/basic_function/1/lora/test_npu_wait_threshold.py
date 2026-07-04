@@ -104,7 +104,7 @@ class TestLora1(CustomTestCase):
         self.assertEqual(response.status_code, 200)
 
 
-class TestLora2(TestLora1):
+class TestLora2(CustomTestCase):
     """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
     inference request successful.
 
