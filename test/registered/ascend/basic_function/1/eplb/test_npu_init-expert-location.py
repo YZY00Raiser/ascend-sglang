@@ -9,7 +9,9 @@ from sglang.test.test_utils import CustomTestCase
 
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
-
+# 读取专家分布文件内容，作为参数值
+# with open("/home/d30060301/pt/qwen3_30b_a3b_random_no_redundant.json", "r") as f:
+#     init_expert_location = f.read()
 
 class TestQwen330B(GSM8KAscendMixin, CustomTestCase):
     """Testcase: Verify that the inference accuracy of the Qwen/Qwen3-30B-A3B-Instruct-2507 model on the GSM8K dataset is no less than 0.90.
