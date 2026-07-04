@@ -14,7 +14,7 @@ from sglang.test.test_utils import (
     popen_launch_server,
 )
 
-model = "/home/weights/Eco-Tech/Qwen3.5-35B-A3B-w8a8-mtp"
+model = "/home/weights/Qwen3.5-35B-A3B-w8a8-mtp"
 register_npu_ci(est_time=200, suite="full-8-npu-a3", nightly=True)
 
 
