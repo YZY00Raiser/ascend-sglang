@@ -38,7 +38,9 @@ class TestLora1(CustomTestCase):
         other_args = [
             "--enable-lora",
             "--lora-path",
-            f"lora_a={cls.lora_a}",
+            f"lora_1={cls.lora_a}",
+            f"lora_2={cls.lora_a}",
+            f"lora_3={cls.lora_a}",
             "--lora-backend",
             "ascend",
             "--attention-backend",
