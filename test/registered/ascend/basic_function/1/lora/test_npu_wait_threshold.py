@@ -46,6 +46,7 @@ class TestLora1(CustomTestCase):
             "--attention-backend",
             "ascend",
             "--disable-cuda-graph",
+            "--"
             # "--experts-shared-outer-loras"
             "--lora-drain-wait-threshold",
             "3.0"
