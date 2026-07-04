@@ -13,8 +13,10 @@ from sglang.test.test_utils import (
     CustomTestCase,
     popen_launch_server,
 )
-DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V3.2-W8A8"
-register_npu_ci(est_time=200, suite="full-8-npu-a3", nightly=True)
+
+DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
+register_npu_ci(est_time=200, suite="full-16-npu-a3", nightly=True)
+
 
 class TestDeepSeekV32(CustomTestCase):
     """Testcase: Verify that the inference accuracy of the vllm-ascend/DeepSeek-V3.2-W8A8 model on the GSM8K dataset is no less than 0.95.
@@ -56,7 +58,6 @@ class TestDeepSeekV32(CustomTestCase):
                 "HCCL_BUFFSIZE": "2048",
             },
         )
-
 
     @classmethod
     def tearDownClass(cls):
