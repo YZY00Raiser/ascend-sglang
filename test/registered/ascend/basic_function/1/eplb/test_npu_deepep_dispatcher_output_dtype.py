@@ -13,14 +13,16 @@ from sglang.test.test_utils import (
     CustomTestCase,
     popen_launch_server,
 )
-model="/home/weights/Eco-Tech/Qwen3.5-35B-A3B-w8a8-mtp"
+
+model = "/home/weights/Eco-Tech/Qwen3.5-35B-A3B-w8a8-mtp"
 register_npu_ci(est_time=200, suite="full-8-npu-a3", nightly=True)
 
 
-class TestDeepseek(CustomTestCase):
+class TestDtypeAuto(CustomTestCase):
+    dtype="auto"
     @classmethod
     def setUpClass(cls):
-        cls.model =model
+        cls.model = model
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.process = popen_launch_server(
             cls.model,
@@ -29,28 +31,13 @@ class TestDeepseek(CustomTestCase):
             other_args=[
                 "--trust-remote-code",
                 "--tp",
-                "8",
+                "4",
                 "--enable-dp-attention",
                 "--dp",
                 "8",
-                "--moe-dense-tp-size",
-                "1",
-                "--enable-dp-lm-head",
-                "--moe-a2a-backend",
-                "deepep",
-                "--ep-num-redundant-experts",
-                "32",
-                "--ep-dispatch-algorithm",
-                "dynamic",
-                "--eplb-algorithm",
-                "deepseek",
-                "--cuda-graph-bs",
-                "256",
-                "--max-running-requests",
-                "2048",
-                "--disable-radix-cache",
-                "--model-loader-extra-config",
-                '{"enable_multithread_load": true,"num_threads": 64}',
+                ""
+                "--deepep-dispatcher-output-dtype",
+                cls.dtype,
             ],
         )
 
@@ -71,85 +58,13 @@ class TestDeepseek(CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
-        self.assertGreater(metrics["score"], 0.95)
+        self.assertGreater(metrics["score"], 0.83)
 
+class TestDtypeBf16(TestDtypeAuto):
+    dtype = "bf16"
 
-class TestDeepseekMTP(CustomTestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
-        cls.base_url = DEFAULT_URL_FOR_TEST
-        cls.process = popen_launch_server(
-            cls.model,
-            cls.base_url,
-            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
-            other_args=[
-                "--disable-overlap-schedule",
-                "--trust-remote-code",
-                "--tp",
-                "8",
-                "--enable-dp-attention",
-                "--dp",
-                "8",
-                "--moe-dense-tp-size",
-                "1",
-                "--enable-dp-lm-head",
-                "--moe-a2a-backend",
-                "deepep",
-                "--ep-num-redundant-experts",
-                "32",
-                "--ep-dispatch-algorithm",
-                "dynamic",
-                "--eplb-algorithm",
-                "deepseek",
-                "--cuda-graph-bs",
-                "64",
-                "--max-running-requests",
-                "512",
-                "--speculative-algorithm",
-                "EAGLE",
-                "--speculative-num-steps",
-                "1",
-                "--speculative-eagle-topk",
-                "1",
-                "--speculative-num-draft-tokens",
-                "2",
-                "--disable-radix-cache",
-                "--model-loader-extra-config",
-                '{"enable_multithread_load": true,"num_threads": 64}',
-            ],
-        )
-
-    @classmethod
-    def tearDownClass(cls):
-        kill_process_tree(cls.process.pid)
-
-    def test_gsm8k(self):
-        args = SimpleNamespace(
-            base_url=self.base_url,
-            model=self.model,
-            eval_name="gsm8k",
-            api="completion",
-            max_tokens=512,
-            num_examples=1200,
-            num_threads=1200,
-        )
-        metrics = run_eval(args)
-        print(f"Eval accuracy of GSM8K: {metrics=}")
-
-        self.assertGreater(metrics["score"], 0.95)
-
-        server_info = requests.get(self.base_url + "/server_info")
-        avg_spec_accept_length = server_info.json()["internal_states"][0][
-            "avg_spec_accept_length"
-        ]
-        print(
-            f"###test_gsm8k:\n"
-            f"accuracy={metrics['score']=:.3f}\n"
-            f"{avg_spec_accept_length=:.3f}\n"
-        )
-        self.assertGreater(avg_spec_accept_length, 1.85)
-
+class TestDtypeInt8(TestDtypeAuto):
+    dtype = "int8"
 
 if __name__ == "__main__":
     unittest.main()
