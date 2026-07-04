@@ -36,7 +36,7 @@ class TestQwen330B(GSM8KAscendMixin, CustomTestCase):
         "--ep-dispatch-algorithm",
         "static",
         "--init-expert-location",
-        "/root/.cache/modelscope/hub/models/hot_map/235B_3_5k_decode.pt",
+        "/expert_distribution_recorder_1783050002.7005026.json",
     ]
 
 
