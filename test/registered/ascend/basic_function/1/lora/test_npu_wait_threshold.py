@@ -117,8 +117,8 @@ class TestLora1(CustomTestCase):
         self.assertEqual(response.status_code, 200)
         self.err_log_file.seek(0)
         content = self.err_log_file.read()
-        message = "draining"
-        self.assertIn(message, content)
+        self.assertIn("draining", content)
+        self.assertIn("finished draining", content)
 
 
 class TestLora2(CustomTestCase):
