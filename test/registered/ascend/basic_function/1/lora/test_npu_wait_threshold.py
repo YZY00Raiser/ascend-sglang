@@ -180,7 +180,7 @@ class TestLora2(CustomTestCase):
         cls.out_log_file.close()
         cls.err_log_file.close()
 
-    def test_lora_wait_threshold(self):
+    def test_un_lora_wait_threshold(self):
         def send_request(max_new_tokens, lora_path):
             return requests.post(
                 f"{DEFAULT_URL_FOR_TEST}/generate",
