@@ -67,25 +67,25 @@ class TestLora1(CustomTestCase):
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
 
-    def _generate(lora_path, max_new_tokens):
-        return requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": max_new_tokens,
-                },
-                "lora_path": lora_path,
-            },
-        )
+
 
     def test_lora_max_lora_rank(self):
-
+        def _generate(lora_path, max_new_tokens):
+            return requests.post(
+                f"{DEFAULT_URL_FOR_TEST}/generate",
+                json={
+                    "text": "The capital of France is",
+                    "sampling_params": {
+                        "temperature": 0,
+                        "max_new_tokens": max_new_tokens,
+                    },
+                    "lora_path": lora_path,
+                },
+            )
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            future1 = executor.submit(self._generate, "lora_1", 1000)
-            future2 = executor.submit(self._generate, "lora_2", 1500)
+            future1 = executor.submit(_generate, "lora_1", 1000)
+            future2 = executor.submit(_generate, "lora_2", 1500)
             response1 = future1.result()
             response2 = future2.result()
         sleep(3)
