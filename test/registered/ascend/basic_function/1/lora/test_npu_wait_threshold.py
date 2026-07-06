@@ -92,9 +92,9 @@ class TestLora1(CustomTestCase):
                 "text": "The capital of France is",
                 "sampling_params": {
                     "temperature": 0,
-                    "max_new_tokens": 32,
+                    "max_new_tokens": 200,
                 },
-                "lora_path": "lora_3",
+                "lora_path": "lora_1",
             },
         )
         response2 = requests.post(
@@ -103,9 +103,9 @@ class TestLora1(CustomTestCase):
                 "text": "The capital of France is",
                 "sampling_params": {
                     "temperature": 0,
-                    "max_new_tokens": 32,
+                    "max_new_tokens": 300,
                 },
-                "lora_path": "lora_3",
+                "lora_path": "lora_2",
             },
         )
         sleep(3)
