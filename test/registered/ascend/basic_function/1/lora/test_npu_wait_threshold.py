@@ -48,6 +48,8 @@ class TestLora1(CustomTestCase):
             "--disable-cuda-graph",
             "--max-loras-per-batch",
             "2",
+            "--max-running-requests",
+            "2",
             # "--experts-shared-outer-loras"
             "--lora-drain-wait-threshold",
             "3.0"
