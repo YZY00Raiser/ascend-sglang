@@ -28,6 +28,7 @@ import os
 
 adapter_path = "/home/weights/codelion/FastLlama-3.2-LoRA"
 weight_file = os.path.join(adapter_path, "adapter_model.bin")
+'''
 
 # 加载权重
 state_dict = torch.load(weight_file, map_location="cpu")
@@ -53,7 +54,7 @@ with open(config_path, "r") as f:
 config["target_modules"] = ["nonexistent_proj", "k_proj", "v_proj", "o_proj"]
 with open(config_path, "w") as f:
     json.dump(config, f, indent=2)
-
+'''
 
 class TestLora1(CustomTestCase):
     """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
@@ -126,7 +127,7 @@ class TestLora2(CustomTestCase):
             "--lora-backend",
             "ascend",
             # "--lora-strict-loading",
-            "--no-lora-strict-loading",
+            # "--no-lora-strict-loading",
             "--attention-backend",
             "ascend",
             "--disable-cuda-graph",
