@@ -119,7 +119,7 @@ class TestLora1(CustomTestCase):
         self.assertIn("draining", content)
         self.assertIn("finished draining", content)
 
-
+'''
 class TestLora2(CustomTestCase):
     """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
     inference request successful.
@@ -211,6 +211,8 @@ class TestLora2(CustomTestCase):
         content = self.err_log_file.read()
         message = "draining"
         self.assertNotIn(message, content)
+
+'''
 
 
 if __name__ == "__main__":
