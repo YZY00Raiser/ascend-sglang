@@ -56,12 +56,7 @@ class TestDeepSeekV32(CustomTestCase):
                 2,
                 "--lora-path",
                 f"lora_a={cls.lora_a}",
-                "--ep-dispatch-algorithm",
-                "static",
-                "--moe-a2a-backend",
-                "deepep",
-                "--deepep-mode",
-                "normal",
+                "--experts-shared-outer-loras",
             ],
             return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
         )
