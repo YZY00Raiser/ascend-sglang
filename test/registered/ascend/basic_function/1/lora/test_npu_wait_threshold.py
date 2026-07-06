@@ -52,7 +52,7 @@ class TestLora1(CustomTestCase):
             "--disable-cuda-graph",
             "--mem-fraction-static",
             "0.3",
-            "-log-level",
+            "--log-level",
             "debug",
             # "--max-running-requests",
             # "2",
