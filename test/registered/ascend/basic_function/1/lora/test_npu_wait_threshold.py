@@ -107,7 +107,6 @@ class TestLora1(CustomTestCase):
             future2 = executor.submit(send_request, 300, "lora_b")
             response1 = future1.result()
             response2 = future2.result()
-
         sleep(3)
         # response3 = send_request(32, "lora_a")
 
