@@ -4,7 +4,7 @@ from sglang.test.ascend.gsm8k_ascend_mixin import GSM8KAscendMixin
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
 
-QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH="/home/weights/Qwen3-30B-A3B"
+QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
 
 
 class TestQwen330B(GSM8KAscendMixin, CustomTestCase):
@@ -38,7 +38,7 @@ class TestQwen330B(GSM8KAscendMixin, CustomTestCase):
         "--init-expert-location",
         #"/tmp/pt/expert_distribution_recorder_1783072007.920626.pt",
         #"/home/d30060301/pt/expert_distribution_recorder.pt"
-        "/home/d30060301/pt/expert_distribution_recorder.json"
+        "/expert_distribution_recorder.json"
     ]
 
     env = {

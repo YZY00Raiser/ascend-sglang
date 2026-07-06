@@ -5,10 +5,10 @@ from sglang.test.ascend.gsm8k_ascend_mixin import GSM8KAscendMixin
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
 
-QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH = "/home/weights/Qwen3-30B-A3B"
+QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
 
 # 读取专家分布文件内容，作为参数值
-with open("/home/d30060301/pt/qwen3_30b_a3b_random_no_redundant.json", "r") as f:
+with open("/qwen3_30b_a3b_random_no_redundant.json", "r") as f:
     init_expert_location = f.read()
 
 class TestQwen330B(GSM8KAscendMixin, CustomTestCase):
