@@ -32,6 +32,8 @@ class TestDtypeAuto(CustomTestCase):
                 "--trust-remote-code",
                 "--tp",
                 "4",
+                "--base-gpu-id",
+                "2",
                 "--mem-fraction-static",
                 "0.8",
                 "--deepep-dispatcher-output-dtype",
