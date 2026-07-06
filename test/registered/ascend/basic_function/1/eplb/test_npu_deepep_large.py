@@ -17,6 +17,7 @@ DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V3.2-W8A8"
 register_npu_ci(est_time=200, suite="full-8-npu-a3", nightly=True)
 
 
+
 class TestDeepseek(CustomTestCase):
     ep_dispatch_algorithm="dynamic",
     @classmethod
