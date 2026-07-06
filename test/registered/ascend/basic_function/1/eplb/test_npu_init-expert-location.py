@@ -43,7 +43,7 @@ class TestQwen330B(GSM8KAscendMixin, CustomTestCase):
         "--ep-dispatch-algorithm",
         "static",
         "--init-expert-location",
-        "/expert_distribution_recorder_1783050002.7005026.json",
+        "trivial",
     ]
     env = {
         "HCCL_BUFFSIZE": "1024",
