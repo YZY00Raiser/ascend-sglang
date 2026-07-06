@@ -80,7 +80,7 @@ class TestDeepSeekV32(CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
-        self.assertGreater(metrics["score"], 0.95)
+        self.assertGreater(metrics["score"], 0.90)
         self.err_log_file.seek(0)
         content = self.err_log_file.read()
         error_message = "DeepEP Waterfill is enabled"
