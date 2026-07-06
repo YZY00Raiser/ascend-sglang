@@ -80,10 +80,7 @@ class TestInitExpertLocationJson(GSM8KAscendMixin, CustomTestCase):
         "--deepep-mode",
         "normal",
         "--init-expert-location",
-        # "expert_distribution_recorder_1783072007.920626.pt",
         "expert_distribution_recorder.json"
-        # "expert_distribution_recorder.pt",
-        # "qwen3_30b_a3b_random_no_redundant.json",
     ]
 
     env = {
