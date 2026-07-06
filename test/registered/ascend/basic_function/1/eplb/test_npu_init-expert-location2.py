@@ -38,7 +38,7 @@ class TestQwen330B(GSM8KAscendMixin, CustomTestCase):
         "--init-expert-location",
         #"/tmp/pt/expert_distribution_recorder_1783072007.920626.pt",
         #"/home/d30060301/pt/expert_distribution_recorder.pt"
-        "/expert_distribution_recorder.json"
+        "expert_distribution_recorder.json"
     ]
 
     env = {
