@@ -42,6 +42,8 @@ class TestLora1(CustomTestCase):
             f"lora_1={cls.lora_a}",
             f"lora_2={cls.lora_b}",
             f"lora_3={cls.lora_a}",
+            "--lora-target-modules",
+            "all",
             "--lora-backend",
             "ascend",
             "--attention-backend",
