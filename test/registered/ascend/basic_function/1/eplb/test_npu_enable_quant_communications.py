@@ -35,11 +35,16 @@ class TestDtypeAuto(CustomTestCase):
                 "4",
                 "--mem-fraction-static",
                 "0.8",
+                "--moe-a2a-backend",
+                "deepep",
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
                 "--enable-quant-communications"
             ],
+            env={
+                "HCCL_BUFFSIZE": "1536",
+            },
         )
 
     @classmethod
