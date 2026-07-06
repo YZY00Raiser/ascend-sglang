@@ -44,7 +44,7 @@ class TestInitExpertLocationString(GSM8KAscendMixin, CustomTestCase):
         "--deepep-mode",
         "normal",
         "--init-expert-location",
-        init_expert_location  # 直接使用文件内容，而非文件路径
+        init_expert_location
     ]
 
     env = {
