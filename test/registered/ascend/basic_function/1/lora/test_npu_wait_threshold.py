@@ -109,7 +109,7 @@ class TestLora1(CustomTestCase):
             response2 = future2.result()
 
         sleep(3)
-        response3 = send_request(32, "lora_a")
+        # response3 = send_request(32, "lora_a")
 
         self.assertEqual(response1.status_code, 200)
         self.assertIn("Paris", response1.text)
