@@ -37,6 +37,8 @@ class TestEnableQuantCommunications(CustomTestCase):
                 "0.8",
                 "--moe-a2a-backend",
                 "deepep",
+                "--deepep-mode",
+                "auto",
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
