@@ -52,6 +52,8 @@ class TestLora1(CustomTestCase):
             "--disable-cuda-graph",
             "--mem-fraction-static",
             "0.3",
+            "-log-level",
+            "debug",
             # "--max-running-requests",
             # "2",
             "--lora-drain-wait-threshold",
@@ -73,53 +75,27 @@ class TestLora1(CustomTestCase):
 
 
     def test_lora_wait_threshold(self):
-        # def _generate(lora_path, max_new_tokens):
-        #     return requests.post(
-        #         f"{DEFAULT_URL_FOR_TEST}/generate",
-        #         json={
-        #             "text": "The capital of France is",
-        #             "sampling_params": {
-        #                 "temperature": 0,
-        #                 "max_new_tokens": max_new_tokens,
-        #             },
-        #             "lora_path": lora_path,
-        #         },
-        #     )
+        def send_request(max_new_tokens, lora_path):
+            return requests.post(
+                f"{DEFAULT_URL_FOR_TEST}/generate",
+                json={
+                    "text": "The capital of France is",
+                    "sampling_params": {
+                        "temperature": 0,
+                        "max_new_tokens": max_new_tokens,
+                    },
+                    "lora_path": lora_path,
+                },
+            )
 
-        response1 = requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": 200,
-                },
-                "lora_path": "lora_a",
-            },
-        )
-        response2 = requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": 300,
-                },
-                "lora_path": "lora_a",
-            },
-        )
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            future1 = executor.submit(send_request, 2000, "lora_a")
+            future2 = executor.submit(send_request, 3000, "lora_b")
+            response1 = future1.result()
+            response2 = future2.result()
+
         sleep(3)
-        response3 = requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": 32,
-                },
-                "lora_path": "lora_b",
-            },
-        )
+        response3 = send_request(32, "lora_a")
 
         self.assertEqual(response1.status_code, 200)
         self.assertIn("Paris", response1.text)
