@@ -52,9 +52,9 @@ class TestLora1(CustomTestCase):
             "2",
             # "--experts-shared-outer-loras"
             "--lora-drain-wait-threshold",
-            "3.0"
+            "3.0",
             "--base-gpu-id",
-            "2"
+            "2",
         ]
         cls.process = popen_launch_server(
             LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
