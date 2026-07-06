@@ -72,9 +72,9 @@ class TestLora1(CustomTestCase):
         other_args = [
             "--enable-lora",
             "--max-lora-rank",
-            "64",
+            "16",
             "--lora-target-modules",
-            "all",
+            "gate_proj",
             "--lora-backend",
             "ascend",
             "--lora-strict-loading",
@@ -100,6 +100,7 @@ class TestLora1(CustomTestCase):
             DEFAULT_URL_FOR_TEST + "/load_lora_adapter",
             json={"lora_name": "lora_a", "lora_path": self.lora_a, },
         )
+        print(response.json())
 
         # response = requests.post(
         #     f"{DEFAULT_URL_FOR_TEST}/generate",
