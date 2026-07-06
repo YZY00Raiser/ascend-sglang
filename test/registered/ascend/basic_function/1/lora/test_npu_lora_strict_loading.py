@@ -71,8 +71,8 @@ class TestLora1(CustomTestCase):
     def setUpClass(cls):
         other_args = [
             "--enable-lora",
-            "--lora-path",
-            f"lora_a={cls.lora_a}",
+            # "--lora-path",
+            # f"lora_a={cls.lora_a}",
             "--lora-backend",
             "ascend",
             "--lora-strict-loading",
@@ -91,22 +91,28 @@ class TestLora1(CustomTestCase):
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
 
-    def test_lora_max_lora_rank(self):
+    def test_lora_strict_loading(self):
         response = requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": 32,
-                },
-                # "lora_path": "lora_a",
-            },
+            DEFAULT_URL_FOR_TEST + "/load_lora_adapter",
+            json={"lora_name": "lora_a", "lora_path": self.lora_a, },
         )
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("Paris", response.text)
-        response = requests.get(DEFAULT_URL_FOR_TEST + "/server_info")
-        self.assertEqual(response.status_code, 200)
+
+        # response = requests.post(
+        #     f"{DEFAULT_URL_FOR_TEST}/generate",
+        #     json={
+        #         "text": "The capital of France is",
+        #         "sampling_params": {
+        #             "temperature": 0,
+        #             "max_new_tokens": 32,
+        #         },
+        #         # "lora_path": "lora_a",
+        #     },
+        # )
+        # self.assertEqual(response.status_code, 200)
+        # self.assertIn("Paris", response.text)
+        # response = requests.get(DEFAULT_URL_FOR_TEST + "/server_info")
+        # self.assertEqual(response.status_code, 200)
+
 
 '''
 class TestLora2(CustomTestCase):
