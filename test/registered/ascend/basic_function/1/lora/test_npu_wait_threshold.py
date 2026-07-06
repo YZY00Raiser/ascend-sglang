@@ -81,8 +81,8 @@ class TestLora1(CustomTestCase):
             )
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            future1 = executor.submit(_generate, "lora_1", 9000)
-            future2 = executor.submit(_generate, "lora_2", 8000)
+            future1 = executor.submit(_generate, "lora_1", 1000)
+            future2 = executor.submit(_generate, "lora_2", 1500)
             response1 = future1.result()
             response2 = future2.result()
         sleep(3)
