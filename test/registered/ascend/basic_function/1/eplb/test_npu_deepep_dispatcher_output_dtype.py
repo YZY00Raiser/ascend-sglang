@@ -38,6 +38,8 @@ class TestDtypeAuto(CustomTestCase):
                 "0.8",
                 "--moe-a2a-backend",
                 "deepep",
+                "--deepep-mode",
+                "auto",
                 "--deepep-dispatcher-output-dtype",
                 cls.dtype,
                 "--attention-backend",
