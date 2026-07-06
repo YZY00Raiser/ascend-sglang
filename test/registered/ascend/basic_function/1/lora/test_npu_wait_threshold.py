@@ -117,6 +117,7 @@ class TestLora1(CustomTestCase):
         self.err_log_file.seek(0)
         content = self.err_log_file.read()
         self.assertIn("draining", content)
+        self.err_log_file.seek(0)
         self.assertIn("finished draining", content)
 
 '''
