@@ -21,6 +21,7 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH = "/home/weights/Llama-3.2-1B-Instruct"
 LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH = "/home/weights/codelion/Llama-3.2-1B-Instruct-tool-calling-lora"
+LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH = "/home/weights/codelion/FastLlama-3.2-LoRA"
 
 
 class TestLora1(CustomTestCase):
@@ -32,14 +33,14 @@ class TestLora1(CustomTestCase):
     """
 
     lora_a = LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH
-
+    lora_b = LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH
     @classmethod
     def setUpClass(cls):
         other_args = [
             "--enable-lora",
             "--lora-path",
             f"lora_1={cls.lora_a}",
-            f"lora_2={cls.lora_a}",
+            f"lora_2={cls.lora_b}",
             f"lora_3={cls.lora_a}",
             "--lora-backend",
             "ascend",
@@ -66,23 +67,25 @@ class TestLora1(CustomTestCase):
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
 
-    def test_lora_max_lora_rank(self):
-        def _generate(lora_path, max_new_tokens):
-            return requests.post(
-                f"{DEFAULT_URL_FOR_TEST}/generate",
-                json={
-                    "text": "The capital of France is",
-                    "sampling_params": {
-                        "temperature": 0,
-                        "max_new_tokens": max_new_tokens,
-                    },
-                    "lora_path": lora_path,
+    def _generate(lora_path, max_new_tokens):
+        return requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": max_new_tokens,
                 },
-            )
+                "lora_path": lora_path,
+            },
+        )
+
+    def test_lora_max_lora_rank(self):
+
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            future1 = executor.submit(_generate, "lora_1", 1000)
-            future2 = executor.submit(_generate, "lora_2", 1500)
+            future1 = executor.submit(self._generate, "lora_1", 1000)
+            future2 = executor.submit(self._generate, "lora_2", 1500)
             response1 = future1.result()
             response2 = future2.result()
         sleep(3)
