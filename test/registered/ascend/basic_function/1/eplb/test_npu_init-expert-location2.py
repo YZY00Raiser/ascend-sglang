@@ -37,8 +37,8 @@ class TestQwen330B(GSM8KAscendMixin, CustomTestCase):
         "normal",
         "--init-expert-location",
         # "expert_distribution_recorder_1783072007.920626.pt",
-        "expert_distribution_recorder.pt"
-        # "expert_distribution_recorder.json",
+        # "expert_distribution_recorder.pt"
+        "expert_distribution_recorder.json",
         # "qwen3_30b_a3b_random_no_redundant.json",
     ]
 
