@@ -71,8 +71,10 @@ class TestLora1(CustomTestCase):
     def setUpClass(cls):
         other_args = [
             "--enable-lora",
-            # "--lora-path",
-            # f"lora_a={cls.lora_a}",
+            "--max-lora-rank",
+            "64",
+            "--lora-target-modules",
+            "all",
             "--lora-backend",
             "ascend",
             "--lora-strict-loading",
