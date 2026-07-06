@@ -44,6 +44,7 @@ class TestEnableQuantCommunications(CustomTestCase):
             ],
             env={
                 "HCCL_BUFFSIZE": "1536",
+                "TRANSFORMERS_VERBOSITY":"error",
             },
         )
 
