@@ -29,6 +29,8 @@ class TestDtypeAuto(CustomTestCase):
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=[
                 "--trust-remote-code",
+                "--base-gpu-id",
+                "2",
                 "--tp",
                 "4",
                 "--mem-fraction-static",
