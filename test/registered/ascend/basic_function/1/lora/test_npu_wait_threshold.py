@@ -72,7 +72,7 @@ class TestLora1(CustomTestCase):
 
 
 
-    def test_lora_max_lora_rank(self):
+    def test_lora_wait_threshold(self):
         # def _generate(lora_path, max_new_tokens):
         #     return requests.post(
         #         f"{DEFAULT_URL_FOR_TEST}/generate",
