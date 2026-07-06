@@ -72,7 +72,7 @@ class TestLora1(CustomTestCase):
         other_args = [
             "--enable-lora",
             "--max-lora-rank",
-            "16",
+            "64",
             "--lora-target-modules",
             "gate_proj",
             "--lora-backend",
