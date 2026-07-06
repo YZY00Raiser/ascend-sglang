@@ -24,7 +24,7 @@ class TestDeepSeekV32(CustomTestCase):
     [Test Category] Model
     [Test Target] vllm-ascend/DeepSeek-V3.2-W8A8
     """
-
+    lora_a = LORA_HF_REPO
     @classmethod
     def setUpClass(cls):
         cls.model = QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH
@@ -42,21 +42,28 @@ class TestDeepSeekV32(CustomTestCase):
             other_args=[
                 "--trust-remote-code",
                 "--mem-fraction-static",
-                "0.9",
+                0.7,
+                "--expert-distribution-recorder-mode",
+                "stat",
+                "--max-running-requests",
+                32,
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
+                "--cuda-graph-max-bs",
+                32,
                 "--tp-size",
-                "16",
-                "--quantization",
-                "modelslim",
-                "--disable-radix-cache",
-                "--enable-deepep-waterfill"
+                2,
+                "--lora-path",
+                f"lora_a={cls.lora_a}",
+                "--ep-dispatch-algorithm",
+                "static",
+                "--moe-a2a-backend",
+                "deepep",
+                "--deepep-mode",
+                "normal",
             ],
             return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
-            env={
-                "HCCL_BUFFSIZE": "2048",
-            },
         )
 
     @classmethod
