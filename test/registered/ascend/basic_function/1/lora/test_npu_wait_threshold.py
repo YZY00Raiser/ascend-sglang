@@ -76,7 +76,8 @@ class TestLora1(CustomTestCase):
             other_args=other_args,
             return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
         )
-    def verify_lora(self,message):
+
+    def verify_lora(self, message):
         self.err_log_file.seek(0)
         content = self.err_log_file.read()
         message = message
@@ -120,7 +121,7 @@ class TestLora1(CustomTestCase):
         self.err_log_file.seek(0)
         self.assertIn("finished draining", content)
 
-'''
+
 class TestLora2(CustomTestCase):
     """Testcase：Verify set the --max-load-rank, --lora-backend parameter, load lora that match the number of ranks,
     inference request successful.
@@ -174,7 +175,6 @@ class TestLora2(CustomTestCase):
             return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
         )
 
-
     @classmethod
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
@@ -212,8 +212,6 @@ class TestLora2(CustomTestCase):
         content = self.err_log_file.read()
         message = "draining"
         self.assertNotIn(message, content)
-
-'''
 
 
 if __name__ == "__main__":
