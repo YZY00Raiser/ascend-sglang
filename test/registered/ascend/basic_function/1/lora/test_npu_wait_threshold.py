@@ -94,7 +94,7 @@ class TestLora1(CustomTestCase):
                     "temperature": 0,
                     "max_new_tokens": 200,
                 },
-                "lora_path": "lora_1",
+                "lora_path": "lora_a",
             },
         )
         response2 = requests.post(
@@ -105,7 +105,7 @@ class TestLora1(CustomTestCase):
                     "temperature": 0,
                     "max_new_tokens": 300,
                 },
-                "lora_path": "lora_2",
+                "lora_path": "lora_a",
             },
         )
         sleep(3)
@@ -117,7 +117,7 @@ class TestLora1(CustomTestCase):
                     "temperature": 0,
                     "max_new_tokens": 32,
                 },
-                "lora_path": "lora_3",
+                "lora_path": "lora_b",
             },
         )
 
