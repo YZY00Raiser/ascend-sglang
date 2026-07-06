@@ -37,8 +37,6 @@ class TestLora1(CustomTestCase):
     @classmethod
     def setUpClass(cls):
         other_args = [
-            "--tp-size",
-            "2",
             "--enable-lora",
             "--lora-path",
             f"lora_a={cls.lora_a}",
