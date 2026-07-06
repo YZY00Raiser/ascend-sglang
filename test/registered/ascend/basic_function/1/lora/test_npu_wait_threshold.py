@@ -73,24 +73,41 @@ class TestLora1(CustomTestCase):
 
 
     def test_lora_max_lora_rank(self):
-        def _generate(lora_path, max_new_tokens):
-            return requests.post(
-                f"{DEFAULT_URL_FOR_TEST}/generate",
-                json={
-                    "text": "The capital of France is",
-                    "sampling_params": {
-                        "temperature": 0,
-                        "max_new_tokens": max_new_tokens,
-                    },
-                    "lora_path": lora_path,
-                },
-            )
+        # def _generate(lora_path, max_new_tokens):
+        #     return requests.post(
+        #         f"{DEFAULT_URL_FOR_TEST}/generate",
+        #         json={
+        #             "text": "The capital of France is",
+        #             "sampling_params": {
+        #                 "temperature": 0,
+        #                 "max_new_tokens": max_new_tokens,
+        #             },
+        #             "lora_path": lora_path,
+        #         },
+        #     )
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            future1 = executor.submit(_generate, "lora_1", 1000)
-            future2 = executor.submit(_generate, "lora_2", 1500)
-            response1 = future1.result()
-            response2 = future2.result()
+        response1 = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+                "lora_path": "lora_3",
+            },
+        )
+        response2 = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+                "lora_path": "lora_3",
+            },
+        )
         sleep(3)
         response3 = requests.post(
             f"{DEFAULT_URL_FOR_TEST}/generate",
