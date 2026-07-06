@@ -14,8 +14,8 @@ from sglang.test.test_utils import (
 from sglang.test.ascend.test_ascend_utils import (
     QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
 )
-LORA_HF_REPO = "yushengsu/lora-diff-Qwen3-30B-A3B-Instruct-2507"
-register_npu_ci(est_time=200, suite="full-16-npu-a3", nightly=True)
+LORA_HF_REPO = "/root/.cache/huggingface/hub/lora-diff-Qwen3-30B-A3B-Instruct-2507"
+register_npu_ci(est_time=200, suite="full-2-npu-a3", nightly=True)
 
 
 class TestDeepSeekV32(CustomTestCase):
@@ -83,7 +83,7 @@ class TestDeepSeekV32(CustomTestCase):
         self.assertGreater(metrics["score"], 0.90)
         self.err_log_file.seek(0)
         content = self.err_log_file.read()
-        error_message = "DeepEP Waterfill is enabled"
+        error_message = "Shared outer LoRA mode enabled"
         self.assertIn(error_message, content)
 
 
