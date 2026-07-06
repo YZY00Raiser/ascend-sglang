@@ -50,7 +50,6 @@ class TestLora1(CustomTestCase):
             "2",
             "--max-running-requests",
             "2",
-            # "--experts-shared-outer-loras"
             "--lora-drain-wait-threshold",
             "3.0",
             "--base-gpu-id",
