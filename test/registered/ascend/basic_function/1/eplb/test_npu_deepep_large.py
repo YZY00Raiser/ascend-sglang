@@ -77,7 +77,7 @@ class TestDeepseek(CustomTestCase):
         self.assertGreater(metrics["score"], 0.95)
 
 
-class TestDeepseek2(CustomTestCase):
+class TestDeepseek2(TestDeepseek):
     @classmethod
     def setUpClass(cls):
         cls.model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
