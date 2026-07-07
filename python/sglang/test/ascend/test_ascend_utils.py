@@ -387,6 +387,8 @@ INVOICE_WITH_BARCODE_LOGO_IMAGES_PATH = os.path.join(
 # Other
 DEEPSEEK_CODER_JSON_PATH = "/__w/sglang/sglang/test/registered/ascend/basic_function/parameter/deepseek_coder.json"
 FR_SPEC_TOKEN_MAP_PATH = "/root/.cache/sglang/FR-Spec/freq_32768.pt"
+expert_distribution_recorder = "/root/.cache/sglang/hot_map/expert_distribution_recorder.pt"
+
 CONFIG_YAML_PATH = (
     "/__w/sglang/sglang/test/registered/ascend/basic_function/config/config.yaml"
 )
