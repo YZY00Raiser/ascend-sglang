@@ -55,7 +55,7 @@ class TestDeepseek(CustomTestCase):
                 "--model-loader-extra-config",
                 '{"enable_multithread_load": true,"num_threads": 64}',
                 "--mem-fraction-static",
-                "0.9",
+                "0.75",
             ],
         )
 
@@ -114,7 +114,7 @@ class TestDeepseek2(TestDeepseek):
                 "--model-loader-extra-config",
                 '{"enable_multithread_load": true,"num_threads": 64}',
                 "--mem-fraction-static",
-                "0.9",
+                "0.75",
             ],
         )
 
@@ -163,7 +163,7 @@ class TestDeepseekMTP(CustomTestCase):
                 "--model-loader-extra-config",
                 '{"enable_multithread_load": true,"num_threads": 64}',
                 "--mem-fraction-static",
-                "0.9",
+                "0.75",
             ],
         )
 
