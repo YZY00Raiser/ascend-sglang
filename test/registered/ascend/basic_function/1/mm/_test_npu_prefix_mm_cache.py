@@ -24,9 +24,6 @@ _INLINE_IMAGE_URL = (
 
 
 class TestDisaggregatedVLM(TestDisaggregationBase):
-    __test__ = False
-    encoder_transfer_backend: str = None
-    """Verify encoder-only + language-only configuration."""
 
     @classmethod
     def setUpClass(cls):
@@ -36,7 +33,7 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
         # SGLANG_MM_SKIP_COMPUTE_HASH: Ascend NPU backend does not support
         # _local_scalar_dense_npu for UInt64, which is used in multimodal hash
         # computation. This env var replaces hash with a random UUID instead.
-        os.environ["SGLANG_MM_SKIP_COMPUTE_HASH"] = "True"
+        #os.environ["SGLANG_MM_SKIP_COMPUTE_HASH"] = "True"
 
         cls.start_encoder()
         cls.start_language()
@@ -230,9 +227,6 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
         os.environ.pop("SGLANG_MM_SKIP_COMPUTE_HASH", None)
         super().tearDownClass()
 
-
-class TestDisaggregatedVLM_ZMQ_Tokenizer(TestDisaggregatedVLM):
-    encoder_transfer_backend = "zmq_to_tokenizer"
 
 
 if __name__ == "__main__":
