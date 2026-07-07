@@ -1,9 +1,7 @@
-import glob
-import os
 import unittest
+from sglang.test.run_eval import run_eval
 
-import requests
-
+from types import SimpleNamespace
 from sglang.srt.utils import kill_process_tree
 # from sglang.test.ascend.test_ascend_utils import (
 #     QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
@@ -65,26 +63,20 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
 
-    def test_recorder_mode(self):
-        # Start recording
-        requests.post(f"{DEFAULT_URL_FOR_TEST}/start_expert_distribution_record")
+    def test_gsm8k(self):
+        args = SimpleNamespace(
+            base_url=self.base_url,
+            model=self.model,
+            eval_name="gsm8k",
+            api="completion",
+            max_tokens=512,
+            num_examples=1200,
+            num_threads=1200,
+        )
+        metrics = run_eval(args)
+        print(f"Eval accuracy of GSM8K: {metrics=}")
 
-        response = requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": 32,
-                },
-            },
-        )
-        self.assertEqual(
-            response.status_code, 200, "The request status code is not 200."
-        )
-        self.assertIn(
-            "Paris", response.text, "The inference result does not include Paris."
-        )
+        self.assertGreater(metrics["score"], 0.95)
 
 
 
