@@ -13,13 +13,14 @@ from sglang.test.test_utils import (
     CustomTestCase,
     popen_launch_server,
 )
-DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V3.2-W8A8"
+
+DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
 register_npu_ci(est_time=200, suite="full-16-npu-a3", nightly=True)
 
 
-
 class TestDeepseek(CustomTestCase):
-    ep_dispatch_algorithm="dynamic",
+    ep_dispatch_algorithm = "dynamic",
+
     @classmethod
     def setUpClass(cls):
         cls.model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
@@ -74,6 +75,7 @@ class TestDeepseek(CustomTestCase):
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
         self.assertGreater(metrics["score"], 0.95)
+
 
 class TestDeepseek2(TestDeepseek):
     ep_dispatch_algorithm = "fake",
