@@ -120,6 +120,7 @@ class TestEpDispatchAlgorithmDynamicMtp(CustomTestCase):
             env={
                 "HCCL_BUFFSIZE": "1024",
                 "TRANSFORMERS_VERBOSITY": "error",
+                "SGLANG_ENABLE_SPEC_V2": "1",
             },
         )
 
