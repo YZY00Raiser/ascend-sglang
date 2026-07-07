@@ -45,8 +45,6 @@ class TestDeepSeekV32(CustomTestCase):
                 "--trust-remote-code",
                 "--mem-fraction-static",
                 0.7,
-                "--expert-distribution-recorder-mode",
-                "stat",
                 "--max-running-requests",
                 32,
                 "--attention-backend",
