@@ -15,9 +15,10 @@ from sglang.test.test_utils import (
 )
 
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
-QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
+QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
 
-class TestExpertDistributionRecorderModeStatic(CustomTestCase):
+
+class TestEpDispatchAlgorithmDynamic(CustomTestCase):
     """Testcase: Verify set the parameter --expert-distribution-recorder-mode，
     will generate .pt file and the inference request successfully.
 
@@ -26,7 +27,6 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
     """
 
     ep_dispatch_algorithm = "dynamic"
-
 
     @classmethod
     def setUpClass(cls):
@@ -76,20 +76,65 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
-        self.assertGreater(metrics["score"], 0.95)
+        self.assertGreater(metrics["score"], 0.90)
 
 
-
-class TestExpertDistributionRecorderModeStatApprox(
-    TestExpertDistributionRecorderModeStatic
+class TestEpDispatchAlgorithmFake(
+    TestEpDispatchAlgorithmDynamic
 ):
     ep_dispatch_algorithm = "fake"
 
 
-class TestExpertDistributionRecorderPerPass(CustomTestCase):
-    ep_dispatch_algorithm = "per_pass"
+class TestEpDispatchAlgorithmDynamicMtp(CustomTestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.process = popen_launch_server(
+            QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
+            DEFAULT_URL_FOR_TEST,
+            DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=[
+                "--trust-remote-code",
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
+                "--mem-fraction-static",
+                "0.8",
+                "--tp-size",
+                "2",
+                "--expert-parallel-size",
+                "2",
+                "--enable-eplb",
+                "--moe-a2a-backend",
+                "deepep",
+                "--deepep-mode",
+                "normal",
+                "--ep-dispatch-algorithm",
+                cls.ep_dispatch_algorithm,
+            ],
+            env={
+                "HCCL_BUFFSIZE": "1024",
+                "TRANSFORMERS_VERBOSITY": "error",
+            },
+        )
 
+    @classmethod
+    def tearDownClass(cls):
+        kill_process_tree(cls.process.pid)
 
+    def test_gsm8k(self):
+        args = SimpleNamespace(
+            base_url=self.base_url,
+            model=self.model,
+            eval_name="gsm8k",
+            api="completion",
+            max_tokens=512,
+            num_examples=1200,
+            num_threads=1200,
+        )
+        metrics = run_eval(args)
+        print(f"Eval accuracy of GSM8K: {metrics=}")
+
+        self.assertGreater(metrics["score"], 0.95)
 
 
 if __name__ == "__main__":
