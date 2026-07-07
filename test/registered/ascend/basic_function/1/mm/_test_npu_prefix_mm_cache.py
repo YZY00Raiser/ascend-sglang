@@ -269,7 +269,7 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
 
     @classmethod
     def tearDownClass(cls):
-        os.environ.pop("SGLANG_MM_SKIP_COMPUTE_HASH", None)
+        # os.environ.pop("SGLANG_MM_SKIP_COMPUTE_HASH", None)
         super().tearDownClass()
 
 
