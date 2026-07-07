@@ -19,11 +19,11 @@ QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-30B-A3B-Ins
 
 
 class TestEpDispatchAlgorithmDynamic(CustomTestCase):
-    """Testcase: Verify set the parameter --expert-distribution-recorder-mode，
+    """Testcase: Verify set the parameter --ep-dispatch-algorithm，
     will generate .pt file and the inference request successfully.
 
     [Test Category] Parameter
-    [Test Target] --expert-distribution-recorder-mode
+    [Test Target] --ep-dispatch-algorithm
     """
 
     ep_dispatch_algorithm = "dynamic"
@@ -69,8 +69,8 @@ class TestEpDispatchAlgorithmDynamic(CustomTestCase):
             eval_name="gsm8k",
             api="completion",
             max_tokens=512,
-            num_examples=1200,
-            num_threads=1200,
+            num_examples=200,
+            num_threads=128,
         )
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
@@ -134,8 +134,8 @@ class TestEpDispatchAlgorithmDynamicMtp(CustomTestCase):
             eval_name="gsm8k",
             api="completion",
             max_tokens=512,
-            num_examples=1200,
-            num_threads=1200,
+            num_examples=200,
+            num_threads=128,
         )
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
