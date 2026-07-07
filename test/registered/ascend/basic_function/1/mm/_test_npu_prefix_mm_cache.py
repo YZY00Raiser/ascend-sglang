@@ -21,6 +21,7 @@ _INLINE_IMAGE_URL = (
     "cua9HOR7Y6w6swBwMy0qLTpkeI77qdEBpBFAHBBDAGH8WrwJKI4AAegUCfAKgEgpQDvh3CR"
     "3oQCuav58qlAw73kKCSgAAAABJRU5ErkJggg=="
 )
+image_url = "logo.png"
 
 
 class TestDisaggregatedVLM(TestDisaggregationBase):
