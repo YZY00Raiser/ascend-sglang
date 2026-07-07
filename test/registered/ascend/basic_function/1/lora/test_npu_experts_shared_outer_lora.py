@@ -45,6 +45,7 @@ class TestDeepSeekV32(CustomTestCase):
                 "--trust-remote-code",
                 "--mem-fraction-static",
                 0.7,
+                "--enable-lora",
                 "--max-running-requests",
                 32,
                 "--attention-backend",
