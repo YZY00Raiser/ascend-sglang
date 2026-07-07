@@ -64,8 +64,8 @@ class TestEpDispatchAlgorithmDynamic(CustomTestCase):
 
     def test_gsm8k(self):
         args = SimpleNamespace(
-            base_url=self.base_url,
-            model=self.model,
+            base_url=DEFAULT_URL_FOR_TEST,
+            model=QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
             eval_name="gsm8k",
             api="completion",
             max_tokens=512,
@@ -107,7 +107,7 @@ class TestEpDispatchAlgorithmDynamicMtp(CustomTestCase):
                 "--deepep-mode",
                 "normal",
                 "--ep-dispatch-algorithm",
-                cls.ep_dispatch_algorithm,
+                "dynamic",
                 "--speculative-algorithm",
                 "EAGLE",
                 "--speculative-num-steps",
