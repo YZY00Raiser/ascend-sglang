@@ -235,7 +235,7 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
                     "content": [
                         {
                             "type": "image_url",
-                            "image_url": {"url": _INLINE_IMAGE_URL},
+                            "image_url": {"url": image_url},
                         },
                         {"type": "text", "text": "Describe the image briefly."},
                     ],
