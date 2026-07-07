@@ -13,8 +13,9 @@ from sglang.test.test_utils import (
     CustomTestCase,
     popen_launch_server,
 )
+QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
 
-DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
+# DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
 register_npu_ci(est_time=200, suite="full-16-npu-a3", nightly=True)
 
 
@@ -27,7 +28,7 @@ class TestDeepSeekV32(CustomTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+        cls.model = QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.out_log_file = tempfile.NamedTemporaryFile(
             mode="w+", delete=True, suffix="out.log"
@@ -42,15 +43,20 @@ class TestDeepSeekV32(CustomTestCase):
             other_args=[
                 "--trust-remote-code",
                 "--mem-fraction-static",
-                "0.75",
+                0.7,
+                "--max-running-requests",
+                32,
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
+                "--cuda-graph-max-bs",
+                32,
                 "--tp-size",
-                "16",
-                "--quantization",
-                "modelslim",
-                "--disable-radix-cache",
+                2,
+                "--moe-a2a-backend",
+                "deepep",
+                "--deepep-mode",
+                "normal",
                 "--enable-deepep-waterfill"
             ],
             return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
