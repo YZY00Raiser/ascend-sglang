@@ -44,7 +44,7 @@ class TestDeepseek(CustomTestCase):
                 "--ep-num-redundant-experts",
                 "32",
                 "--ep-dispatch-algorithm",
-                cls.ep_dispatch_algorithm,
+                "dynamic",
                 "--eplb-algorithm",
                 "deepseek",
                 "--cuda-graph-bs",
@@ -77,8 +77,42 @@ class TestDeepseek(CustomTestCase):
         self.assertGreater(metrics["score"], 0.95)
 
 
-class TestDeepseek2(TestDeepseek):
-    ep_dispatch_algorithm = "fake",
+class TestDeepseek2(CustomTestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.model = DEEPSEEK_V3_2_W8A8_WEIGHTS_PATH
+        cls.base_url = DEFAULT_URL_FOR_TEST
+        cls.process = popen_launch_server(
+            cls.model,
+            cls.base_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=[
+                "--trust-remote-code",
+                "--tp",
+                "16",
+                "--enable-dp-attention",
+                "--dp",
+                "16",
+                "--moe-dense-tp-size",
+                "1",
+                "--enable-dp-lm-head",
+                "--moe-a2a-backend",
+                "deepep",
+                "--ep-num-redundant-experts",
+                "32",
+                "--ep-dispatch-algorithm",
+                "fake",
+                "--eplb-algorithm",
+                "deepseek",
+                "--cuda-graph-bs",
+                "256",
+                "--max-running-requests",
+                "2048",
+                "--disable-radix-cache",
+                "--model-loader-extra-config",
+                '{"enable_multithread_load": true,"num_threads": 64}',
+            ],
+        )
 
 
 class TestDeepseekMTP(CustomTestCase):
