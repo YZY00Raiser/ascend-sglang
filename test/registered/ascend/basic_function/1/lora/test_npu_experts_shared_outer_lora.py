@@ -14,7 +14,7 @@ from sglang.test.test_utils import (
 from sglang.test.ascend.test_ascend_utils import (
     QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
 )
-LORA_HF_REPO = "/root/.cache/huggingface/hub/lora-diff-Qwen3-30B-A3B-Instruct-2507"
+LORA_HF_REPO = "/home/weights/Qwen3-30B-A3B-Instruct-2507-theo-style-lora"
 register_npu_ci(est_time=200, suite="full-2-npu-a3", nightly=True)
 
 
