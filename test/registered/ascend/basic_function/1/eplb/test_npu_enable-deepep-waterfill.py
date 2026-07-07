@@ -60,9 +60,9 @@ class TestDeepSeekV32(CustomTestCase):
                 "--enable-deepep-waterfill"
             ],
             return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
-            env={
-                "HCCL_BUFFSIZE": "2048",
-            },
+            # env={
+            #     "HCCL_BUFFSIZE": "2048",
+            # },
         )
 
     @classmethod
