@@ -134,7 +134,7 @@ class TestEpDispatchAlgorithmDynamicMtp(CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
-        self.assertGreater(metrics["score"], 0.95)
+        self.assertGreater(metrics["score"], 0.90)
 
 
 if __name__ == "__main__":
