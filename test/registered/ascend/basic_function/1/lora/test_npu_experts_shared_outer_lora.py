@@ -1,32 +1,35 @@
 import tempfile
 import unittest
-from types import SimpleNamespace
+
+import requests
 
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ci.ci_register import register_npu_ci
-from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
     popen_launch_server,
 )
+
 # from sglang.test.ascend.test_ascend_utils import (
 #     QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
 # )
 
-QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
+QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
 LORA_HF_REPO = "/home/weights/Qwen3-30B-A3B-Instruct-2507-theo-style-lora"
 register_npu_ci(est_time=200, suite="full-2-npu-a3", nightly=True)
 
 
 class TestDeepSeekV32(CustomTestCase):
-    """Testcase: Verify that the inference accuracy of the vllm-ascend/DeepSeek-V3.2-W8A8 model on the GSM8K dataset is no less than 0.95.
+    """Testcase: Verify set --experts-shared-outer-loras parameter, Reasoning request succeeded,
+    relevant information is contained in the logs
 
-    [Test Category] Model
-    [Test Target] vllm-ascend/DeepSeek-V3.2-W8A8
+    [Test Category] Parameter
+    [Test Target] --experts-shared-outer-loras
     """
     lora_a = LORA_HF_REPO
+
     @classmethod
     def setUpClass(cls):
         cls.model = QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH
@@ -69,19 +72,22 @@ class TestDeepSeekV32(CustomTestCase):
         cls.err_log_file.close()
 
     def test_gsm8k(self):
-        args = SimpleNamespace(
-            base_url=self.base_url,
-            model=self.model,
-            eval_name="gsm8k",
-            api="completion",
-            max_tokens=512,
-            num_examples=128,
-            num_threads=200,
+        response = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+                "lora_path": "lora_a",
+            },
         )
-        metrics = run_eval(args)
-        print(f"Eval accuracy of GSM8K: {metrics=}")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Paris", response.text)
+        response = requests.get(DEFAULT_URL_FOR_TEST + "/server_info")
+        self.assertEqual(response.status_code, 200)
 
-        self.assertGreater(metrics["score"], 0.90)
         self.err_log_file.seek(0)
         content = self.err_log_file.read()
         error_message = "Shared outer LoRA mode enabled"
