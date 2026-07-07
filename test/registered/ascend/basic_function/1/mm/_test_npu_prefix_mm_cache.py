@@ -4,7 +4,7 @@ import unittest
 import requests
 
 from sglang.test.ascend.disaggregation_utils import TestDisaggregationBase
-from sglang.test.ascend.test_ascend_utils import QWEN3_VL_30B_A3B_INSTRUCT_WEIGHTS_PATH
+# from sglang.test.ascend.test_ascend_utils import QWEN3_VL_30B_A3B_INSTRUCT_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
@@ -12,7 +12,7 @@ from sglang.test.test_utils import (
 )
 
 register_npu_ci(est_time=400, suite="full-4-npu-a3", nightly=True)
-
+QWEN3_VL_30B_A3B_INSTRUCT_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-VL-8B-Instruct"
 
 _INLINE_IMAGE_URL = (
     "data:image/png;base64,"
