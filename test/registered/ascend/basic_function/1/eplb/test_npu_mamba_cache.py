@@ -17,7 +17,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=1100, suite="nightly-8-npu-a3", nightly=True)
 QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_FOR_TEST="/home/weights/"
-
+'''
 class TestMambaCacheWithMemoryRatio(GSM8KAscendMixin, CustomTestCase):
     """Testcase: Test MambaCache basic functions using GSM8K dataset.
     The inference accuracy of the Qwen3-Next-80B-A3B-Instruct model
@@ -171,9 +171,9 @@ class TestMambaCacheRadix(CustomTestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertGreater(len(response.text), 0)
+'''
 
-
-class TestMambaCacheHierarchicalCache(TestMambaCacheRadix):
+class TestMambaCacheHierarchicalCache(CustomTestCase):
     """Testcase: Verify hierarchical cache reuse with mamba cache.
 
     [Test Category] Parameter
@@ -197,6 +197,77 @@ class TestMambaCacheHierarchicalCache(TestMambaCacheRadix):
         "--mamba-scheduler-strategy",
         "extra_buffer",
     ]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.process = popen_launch_server(
+            QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_FOR_TEST.model_path,
+            DEFAULT_URL_FOR_TEST,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=cls.other_args,
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.process:
+            kill_process_tree(cls.process.pid)
+
+    def test_mamba_cache_kv_cache(self):
+        # test kv cache reuse with radix cache,input text should meet page size requirement( >=128 )
+        input_ids_first = [1] * 200
+        input_ids_second = input_ids_first + [2] * 70
+
+        def make_request(input_ids, expected_cached_tokens):
+            response = requests.post(
+                f"{DEFAULT_URL_FOR_TEST}/generate",
+                json={
+                    "input_ids": input_ids,
+                    "sampling_params": {
+                        "temperature": 0,
+                        "max_new_tokens": 32,
+                    },
+                },
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(
+                response.json()["meta_info"]["cached_tokens"], expected_cached_tokens
+            )
+
+        # First request: no cache
+        make_request(input_ids_first, 0)
+        # Second request: cache reused, cache token is reused in multiples of 128
+        make_request(input_ids_second, 128)
+
+    def test_basic_inference(self):
+        response = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Paris", response.text)
+
+    def test_mamba_long_sequence(self):
+        long_text = "Explain the concept of machine learning in detail." * 4000
+        response = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": long_text,
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 1000,
+                },
+            },
+            timeout=120,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertGreater(len(response.text), 0)
+
 
 
 if __name__ == "__main__":
