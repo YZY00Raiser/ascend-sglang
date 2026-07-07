@@ -19,8 +19,8 @@ QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-30B-A3B-Ins
 
 
 class TestEpDispatchAlgorithmDynamic(CustomTestCase):
-    """Testcase: Verify set the parameter --ep-dispatch-algorithm，
-    will generate .pt file and the inference request successfully.
+    """Testcase: Verify set the parameter --ep-dispatch-algorithm，the inference accuracy of the model on the
+    GSM8K dataset is no less than 0.90
 
     [Test Category] Parameter
     [Test Target] --ep-dispatch-algorithm
