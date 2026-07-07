@@ -31,10 +31,10 @@ class TestDeepseek(CustomTestCase):
             other_args=[
                 "--trust-remote-code",
                 "--tp",
-                "8",
+                "16",
                 "--enable-dp-attention",
                 "--dp",
-                "8",
+                "16",
                 "--moe-dense-tp-size",
                 "1",
                 "--enable-dp-lm-head",
