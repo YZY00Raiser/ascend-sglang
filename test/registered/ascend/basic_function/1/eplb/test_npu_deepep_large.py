@@ -19,7 +19,7 @@ register_npu_ci(est_time=200, suite="full-16-npu-a3", nightly=True)
 
 
 class TestDeepseek(CustomTestCase):
-    ep_dispatch_algorithm = "dynamic",
+    ep_dispatch_algorithm ="dynamic",
 
     @classmethod
     def setUpClass(cls):
