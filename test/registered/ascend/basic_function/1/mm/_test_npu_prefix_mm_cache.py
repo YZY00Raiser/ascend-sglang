@@ -30,9 +30,6 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
 
     @classmethod
     def setUpClass(cls):
-        if cls is TestDisaggregatedVLM:
-            raise unittest.SkipTest("Base class, skipping setup")
-
         super().setUpClass()
         cls.model = QWEN3_VL_30B_A3B_INSTRUCT_WEIGHTS_PATH
 
