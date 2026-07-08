@@ -14,7 +14,7 @@ from sglang.test.test_utils import (
 
 )
 
-register_npu_ci(est_time=400, suite="full-4-npu-a3", nightly=True)
+register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 
 
 image_url = INVOICE_WITH_BARCODE_LOGO_IMAGES_PATH
