@@ -1,3 +1,4 @@
+export PYTHONPATH=/sgl-workspace/sglang/python:$PYTHONPATH
 while true; do
     LOG_FILE="$LOG_DIR/bench_serving_$(date +%Y%m%d_%H%M%S).log"
     echo "=== Starting bench_serving at $(date) ==="
