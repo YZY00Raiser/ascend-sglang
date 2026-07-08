@@ -6,7 +6,7 @@ from sglang.test.kits.kl_divergence_kit import KLDivergenceMixin
 from sglang.test.server_fixtures.default_fixture import DefaultServerBase, openai_api_env
 from sglang.test.test_utils import popen_launch_server
 
-register_npu_ci(est_time=600, suite="full-4-npu-a3", nightly=True)
+register_npu_ci(est_time=600, suite="full-8-npu-a3", nightly=True)
 
 from sglang.test.ascend.test_ascend_utils import (
     QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH,
@@ -27,10 +27,12 @@ class TestQwen3NextMTPV2(GSM8KMixin, KLDivergenceMixin, DefaultServerBase):
         "1",
         "--speculative-num-draft-tokens",
         "4",
+        "--mamba-ssm-dtype",
+        "bfloat16",
         "--mem-fraction-static",
-        "0.8",
-        "--tp",
-        "4",
+        "0.75",
+        "--tp-size",
+        "8",
         "--chunked-prefill-size",
         "2048",
         "--mamba-scheduler-strategy",
@@ -39,6 +41,7 @@ class TestQwen3NextMTPV2(GSM8KMixin, KLDivergenceMixin, DefaultServerBase):
         "128",
         "--attention-backend",
         "ascend",
+        "--disable-cuda-graph",
     ]
 
     @classmethod
