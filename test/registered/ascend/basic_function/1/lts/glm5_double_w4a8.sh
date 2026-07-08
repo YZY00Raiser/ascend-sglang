@@ -31,16 +31,16 @@ export SGLANG_NPU_PROFILING=0
 export SGLANG_NPU_PROFILING_BS=16
 #export PYTHONPATH=/home/luochen/glm/sglang_glm52/sglang/python:$PYTHONPATH
 
-LOG_DIR=/data/y/glm5_double_w8a8_logs
+LOG_DIR=/data/y/glm5_2_double_w8a8_logs
 mkdir -p $LOG_DIR
 
-SCRIPT_LOG="$LOG_DIR/glm5_double_w8a8_$(date +%Y%m%d_%H%M%S).log"
+SCRIPT_LOG="$LOG_DIR/glm5_2_double_w8a8_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$SCRIPT_LOG") 2>&1
 
 echo "=== Script started at $(date) ==="
 echo "=== Master log: $SCRIPT_LOG ==="
 
-D_IP=('61.47.19.68' '61.47.19.67')
+D_IP=('172.22.3.71' '172.22.3.77')
 LOCAL_HOST1=`hostname -I|awk -F " " '{print$1}'`
 LOCAL_HOST2=`hostname -I|awk -F " " '{print$2}'`
 export DEEP_NORMAL_MODE_USE_INT8_QUANT=1
@@ -62,7 +62,7 @@ do
         --attention-backend ascend \
         --device npu \
         --host ${D_IP[$i]} \
-        --dist-init-addr 61.47.19.68:50000  \
+        --dist-init-addr 172.22.3.71:50000  \
         --tp-size 32 \
         --nnodes 2 --node-rank $i \
         --dp-size 32 \
@@ -71,7 +71,7 @@ do
         --max-prefill-tokens 28672 \
         --trust-remote-code \
         --mem-fraction-static 0.8 \
-        --served-model-name GLM-5.1-w4a8 \
+        --served-model-name GLM-5.2-w8a8 \
         --cuda-graph-bs 1 \
         --max-running-requests 32 \
         --quantization modelslim \
@@ -96,8 +96,8 @@ while true; do
     python -m sglang.bench_serving \
     --dataset-name random --backend sglang \
     --model /root/.cache/modelscope/hub/models/Eco-Tech/GLM-5.2-w8a8 \
-    --dataset-path /home/chenxu/ShareGPT_V3_unfiltered_cleaned_split.json \
-    --host 61.47.19.68 --port 6688 --max-concurrency 128 \
+    --dataset-path /data/chenxu/dataset/ShareGPT_V3_unfiltered_cleaned_split.json \
+    --host 172.22.3.71 --port 6688 --max-concurrency 128 \
     --random-input-len 3500 --random-output-len 1500 \
     --num-prompts 128 --random-range-ratio 1 \
     > "$LOG_FILE" 2>&1
