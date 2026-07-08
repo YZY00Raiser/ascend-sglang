@@ -3,6 +3,9 @@ import unittest
 from sglang.test.ascend.gsm8k_ascend_mixin import GSM8KAscendMixin
 from sglang.test.ascend.test_ascend_utils import (
     QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
+    HOT_MAP_PT,
+    HOT_MAP_JSON,
+    HOT_MAP_STRING,
 )
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
@@ -10,7 +13,7 @@ from sglang.test.test_utils import CustomTestCase
 register_npu_ci(est_time=200, suite="full-2-npu-a3", nightly=True)
 
 # Read the content of the expert distribution file
-with open("qwen3_30b_a3b_random_no_redundant.json", "r") as f:
+with open(HOT_MAP_STRING, "r") as f:
     init_expert_location = f.read()
 
 
@@ -57,13 +60,13 @@ class TestInitExpertLocationString(GSM8KAscendMixin, CustomTestCase):
 class TestInitExpertLocationJson(TestInitExpertLocationString):
     """test json format"""
 
-    init_expert_location = "expert_distribution_recorder.json"
+    init_expert_location = HOT_MAP_JSON
 
 
 class TestInitExpertLocationPt(TestInitExpertLocationString):
     """test pt format"""
 
-    init_expert_location = "expert_distribution_recorder.pt"
+    init_expert_location = HOT_MAP_PT
 
 class TestInitExpertLocationTrivial(TestInitExpertLocationString):
     init_expert_location = "trivial"

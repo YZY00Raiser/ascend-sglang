@@ -6,10 +6,14 @@ from sglang.test.test_utils import CustomTestCase
 
 from sglang.test.ascend.test_ascend_utils import (
     QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
+    HOT_MAP_PT,
+    HOT_MAP_JSON,
+    HOT_MAP_STRING,
 )
 register_npu_ci(est_time=200, suite="full-2-npu-a3", nightly=True)
+
 # Read the content of the expert distribution file
-with open("qwen3_30b_a3b_random_no_redundant.json", "r") as f:
+with open(HOT_MAP_STRING, "r") as f:
     init_expert_location = f.read()
 
 
@@ -80,7 +84,7 @@ class TestInitExpertLocationJson(GSM8KAscendMixin, CustomTestCase):
         "--deepep-mode",
         "normal",
         "--init-expert-location",
-        "expert_distribution_recorder.json"
+        HOT_MAP_JSON,
     ]
 
     env = {
@@ -117,7 +121,7 @@ class TestInitExpertLocationPt(GSM8KAscendMixin, CustomTestCase):
         "--deepep-mode",
         "normal",
         "--init-expert-location",
-        "expert_distribution_recorder.pt",
+        HOT_MAP_PT,
     ]
 
     env = {
