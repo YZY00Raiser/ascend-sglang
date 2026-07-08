@@ -3,9 +3,9 @@ import unittest
 from types import SimpleNamespace
 
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ascend.test_ascend_utils import (
-    DEEPSEEK_R1_0528_W8A8_WEIGHTS_PATH,
-)
+# from sglang.test.ascend.test_ascend_utils import (
+#     QWEN3_5_35B_W8A8_MODEL_PATH,
+# )
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
@@ -17,10 +17,10 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=200, suite="full-2-npu-a3", nightly=True)
 
-
+QWEN3_5_35B_W8A8_MODEL_PATH="/root/.cache/modelscope/hub/models/Eco-Tech/Qwen3.5-35B-A3B-w8a8-mtp"
 class TestEnableDeepepWaterFill(CustomTestCase):
     """Testcase: Verify set --enable-deepep-waterfill the inference accuracy of the model on the
-    GSM8K dataset is no less than 0.90, relevant information is contained in the logs.
+    GSM8K dataset is no less than 0.82, relevant information is contained in the logs.
 
     [Test Category] Parameters
     [Test Target] --enable-deepep-waterfill
@@ -28,7 +28,7 @@ class TestEnableDeepepWaterFill(CustomTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.model = QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH
+        cls.model = QWEN3_5_35B_W8A8_MODEL_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.out_log_file = tempfile.NamedTemporaryFile(
             mode="w+", delete=True, suffix="out.log"
@@ -42,21 +42,17 @@ class TestEnableDeepepWaterFill(CustomTestCase):
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=[
                 "--trust-remote-code",
+                "--tp",
+                "4",
                 "--mem-fraction-static",
-                0.7,
-                "--max-running-requests",
-                32,
-                "--attention-backend",
-                "ascend",
-                "--disable-cuda-graph",
-                "--cuda-graph-max-bs",
-                32,
-                "--tp-size",
-                2,
+                "0.8",
                 "--moe-a2a-backend",
                 "deepep",
                 "--deepep-mode",
-                "normal",
+                "auto",
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
                 "--enable-deepep-waterfill",
             ],
             return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
@@ -84,7 +80,7 @@ class TestEnableDeepepWaterFill(CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
-        self.assertGreater(metrics["score"], 0.95)
+        self.assertGreater(metrics["score"], 0.82)
         self.err_log_file.seek(0)
         content = self.err_log_file.read()
         error_message = "DeepEP Waterfill is enabled"
