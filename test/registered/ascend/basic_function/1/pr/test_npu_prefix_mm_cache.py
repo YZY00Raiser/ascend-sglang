@@ -5,7 +5,7 @@ import requests
 
 from sglang.test.ascend.disaggregation_utils import TestDisaggregationBase
 from sglang.test.ascend.test_ascend_utils import (
-    QWEN3_VL_30B_A3B_INSTRUCT_WEIGHTS_PATH,
+    QWEN3_VL_8B_INSTRUCT_WEIGHTS_PATH,
     INVOICE_WITH_BARCODE_LOGO_IMAGES_PATH,
 )
 from sglang.test.ci.ci_register import register_npu_ci
@@ -26,7 +26,7 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.model = QWEN3_VL_30B_A3B_INSTRUCT_WEIGHTS_PATH
+        cls.model = QWEN3_VL_8B_INSTRUCT_WEIGHTS_PATH
         cls.start_encoder()
         cls.start_language()
 
@@ -68,7 +68,7 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
             "ascend",
             "--trust-remote-code",
             "--mem-fraction-static",
-            "0.958",
+            "0.8",
             "--enable-cache-report",
         ]
         cls.process_decode = popen_launch_server(
