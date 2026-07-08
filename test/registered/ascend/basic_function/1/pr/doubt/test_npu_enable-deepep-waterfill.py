@@ -20,7 +20,7 @@ register_npu_ci(est_time=200, suite="full-4-npu-a3", nightly=True)
 # QWEN3_5_35B_W8A8_MODEL_PATH="/root/.cache/modelscope/hub/models/Eco-Tech/Qwen3.5-35B-A3B-w8a8-mtp"
 class TestEnableDeepepWaterFill(CustomTestCase):
     """Testcase: Verify set --enable-deepep-waterfill the inference accuracy of the model on the
-    GSM8K dataset is no less than 0.82, relevant information is contained in the logs.
+    GSM8K dataset is no less than 0.77, relevant information is contained in the logs.
 
     [Test Category] Parameters
     [Test Target] --enable-deepep-waterfill
