@@ -3,9 +3,9 @@ import unittest
 from types import SimpleNamespace
 
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ascend.test_ascend_utils import (
-    QWEN3_5_35B_W8A8_MODEL_PATH,
-)
+# from sglang.test.ascend.test_ascend_utils import (
+#     QWEN3_5_35B_W8A8_MODEL_PATH,
+# )
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
@@ -58,6 +58,7 @@ class TestEnableDeepepWaterFill(CustomTestCase):
             return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
             env={
                 "HCCL_BUFFSIZE": "2048",
+                "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",
             },
         )
 
