@@ -38,8 +38,6 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
         encoder_args = [
             "--trust-remote-code",
             "--encoder-only",
-            "--tp-size",
-            "1",
             "--encoder-transfer-backend",
             "zmq_to_scheduler",
             "--attention-backend",
@@ -64,15 +62,13 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
             cls.prefill_url,
             "--encoder-transfer-backend",
             "zmq_to_scheduler",
-            "--tp-size",
-            "1",
             "--base-gpu-id",
             "1",
             "--attention-backend",
             "ascend",
             "--trust-remote-code",
             "--mem-fraction-static",
-            "0.8",
+            "0.958",
             "--enable-cache-report",
         ]
         cls.process_decode = popen_launch_server(
