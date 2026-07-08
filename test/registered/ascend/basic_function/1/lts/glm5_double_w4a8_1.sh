@@ -26,10 +26,19 @@ export HCCL_SOCKET_IFNAME=enp196s0f0
 export GLOO_SOCKET_IFNAME=enp196s0f0
 export TRANSFORMERS_VERBOSITY=error
 
-MODEL_PATH=/data/.cache/modelscope/hub/models/Eco-Tech/GLM-5.2-w8a8
+MODEL_PATH=/root/.cache/modelscope/hub/models/Eco-Tech/GLM-5.2-w8a8
 export SGLANG_NPU_PROFILING=0
 export SGLANG_NPU_PROFILING_BS=16
 #export PYTHONPATH=/home/luochen/glm/sglang_glm52/sglang/python:$PYTHONPATH
+
+LOG_DIR=/data/y/glm5_2_double_w8a8_logs
+mkdir -p $LOG_DIR
+
+SCRIPT_LOG="$LOG_DIR/glm5_2_double_w8a8_$(date +%Y%m%d_%H%M%S).log"
+exec > >(tee -a "$SCRIPT_LOG") 2>&1
+
+echo "=== Script started at $(date) ==="
+echo "=== Master log: $SCRIPT_LOG ==="
 
 D_IP=('172.22.3.71' '172.22.3.77')
 LOCAL_HOST1=`hostname -I|awk -F " " '{print$1}'`
@@ -45,6 +54,9 @@ for i in "${!D_IP[@]}";
 do
     if [[ "$LOCAL_HOST1" == "${D_IP[$i]}" || "$LOCAL_HOST2" == "${D_IP[$i]}" ]];
     then
+      LOG_FILE="$LOG_DIR/launch_server_${D_IP[$i]}_$(date +%Y%m%d_%H%M%S).log"
+      echo "=== Starting launch_server on ${D_IP[$i]} at $(date) ==="
+      echo "=== Server log: $LOG_FILE ==="
       python3 -m sglang.launch_server \
         --model-path $MODEL_PATH \
         --attention-backend ascend \
@@ -66,8 +78,9 @@ do
         --speculative-draft-model-quantization unquant \
         --moe-a2a-backend deepep --deepep-mode auto \
         --load-balance-method round_robin \
-        --speculative-algorithm NEXTN --speculative-num-steps 4 --speculative-eagle-topk 1 --speculative-num-draft-tokens 5  \
-        --device npu --port 6688 --tokenizer-worker-num 32
+        --speculative-algorithm NEXTN --speculative-num-steps 1 --speculative-eagle-topk 1 --speculative-num-draft-tokens 2  \
+        --device npu --port 6688 --tokenizer-worker-num 32 \
+        > "$LOG_FILE" 2>&1
         NODE_RANK=$i
         break
     fi
@@ -75,10 +88,3 @@ done
 
 exit
 
-python -m sglang.bench_serving \
---dataset-name random --backend sglang \
---model MODEL_PATH=/root/.cache/modelscope/hub/models/Eco-Tech/GLM-5.2-w8a8 \
---dataset-path /data/chenxu/dataset/ShareGPT_V3_unfiltered_cleaned_split.json \
---host 172.22.3.71 --port 6688 --max-concurrency 128 \
---random-input-len 3500 --random-output-len 1500 \
---num-prompts 128 --random-range-ratio 1
