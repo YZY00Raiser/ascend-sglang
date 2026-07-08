@@ -29,7 +29,7 @@ export TRANSFORMERS_VERBOSITY=error
 MODEL_PATH=/root/.cache/modelscope/hub/models/Eco-Tech/GLM-5.2-w8a8
 export SGLANG_NPU_PROFILING=0
 export SGLANG_NPU_PROFILING_BS=16
-export PYTHONPATH=/sgl-workspace/sglang/python:$PYTHONPATH
+#export PYTHONPATH=/sgl-workspace/sglang/python:$PYTHONPATH
 
 LOG_DIR=/data/y/glm5_2_double_w8a8_logs
 mkdir -p $LOG_DIR
