@@ -3,9 +3,9 @@ import unittest
 from types import SimpleNamespace
 
 from sglang.srt.utils import kill_process_tree
-# from sglang.test.ascend.test_ascend_utils import (
-#     QWEN3_5_35B_W8A8_MODEL_PATH,
-# )
+from sglang.test.ascend.test_ascend_utils import (
+    QWEN3_5_35B_W8A8_MODEL_PATH,
+)
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
@@ -17,7 +17,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=200, suite="full-4-npu-a3", nightly=True)
 
-QWEN3_5_35B_W8A8_MODEL_PATH="/root/.cache/modelscope/hub/models/Eco-Tech/Qwen3.5-35B-A3B-w8a8-mtp"
+# QWEN3_5_35B_W8A8_MODEL_PATH="/root/.cache/modelscope/hub/models/Eco-Tech/Qwen3.5-35B-A3B-w8a8-mtp"
 class TestEnableDeepepWaterFill(CustomTestCase):
     """Testcase: Verify set --enable-deepep-waterfill the inference accuracy of the model on the
     GSM8K dataset is no less than 0.82, relevant information is contained in the logs.
@@ -49,7 +49,7 @@ class TestEnableDeepepWaterFill(CustomTestCase):
                 "--moe-a2a-backend",
                 "deepep",
                 "--deepep-mode",
-                "auto",
+                "normal",
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
@@ -58,7 +58,7 @@ class TestEnableDeepepWaterFill(CustomTestCase):
             return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
             env={
                 "HCCL_BUFFSIZE": "2048",
-                "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",
+                "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1", #Quantize activations to INT8 before dispatch
             },
         )
 
