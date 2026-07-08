@@ -71,8 +71,40 @@ class TestDtypeAuto(CustomTestCase):
 
         self.assertGreater(metrics["score"], 0.83)
 
-# class TestDtypeBf16(TestDtypeAuto):
-#     dtype = "bf16"
+class TestDtypeBf16(TestDtypeAuto):
+    dtype = "bf16"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.model = "/home/weights/Qwen3.5-35B-A3B"
+        cls.base_url = DEFAULT_URL_FOR_TEST
+        cls.process = popen_launch_server(
+            cls.model,
+            cls.base_url,
+            timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+            other_args=[
+                "--trust-remote-code",
+                "--tp",
+                "4",
+                "--base-gpu-id",
+                "2",
+                "--mem-fraction-static",
+                "0.8",
+                "--moe-a2a-backend",
+                "deepep",
+                "--deepep-mode",
+                "auto",
+                "--deepep-dispatcher-output-dtype",
+                cls.dtype,
+                "--attention-backend",
+                "ascend",
+                "--disable-cuda-graph",
+            ],
+            env={
+                "HCCL_BUFFSIZE": "1536",
+            },
+        )
+
 
 class TestDtypeInt8(TestDtypeAuto):
     dtype = "int8"
