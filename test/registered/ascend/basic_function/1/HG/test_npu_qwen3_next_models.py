@@ -29,9 +29,11 @@ class TestQwen3Next(
         "--mamba-scheduler-strategy",
         "extra_buffer",
         "--mamba-track-interval",
-        "2",
+        "128",
         "--page-size",
-        "1",
+        "128",
+        "--mem-fraction-static",
+        0.8,
         "--attention-backend",
         "ascend",
     ]
