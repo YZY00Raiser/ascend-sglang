@@ -1,13 +1,13 @@
 import unittest
-
+import datetime
 from sglang.test.ascend.e2e.test_npu_performance_utils import (
     AISBENCHMARK_DATASET_DEFAULT,
     BENCHMARK_TOOL_DEFAULT,
-    DEEPSEEK_V4_FLASH_W8A8_MTP_MODEL_PATH,
+    # DEEPSEEK_V4_FLASH_W8A8_MTP_MODEL_PATH,
     TestAscendPerformanceTestCaseBase,
 )
 from sglang.test.ci.ci_register import register_npu_ci
-
+DEEPSEEK_V4_FLASH_W8A8_MTP_MODEL_PATH="/home/weights/DeepSeek-V4-Flash-w8a8-mtp"
 register_npu_ci(
     est_time=3600,
     suite="",
@@ -120,7 +120,16 @@ class TestNPUDeepSeekV4FlashW8A88PIn8kOut1k50ms(TestAscendPerformanceTestCaseBas
 
     def test_npu_deepseek_v4_flash_w8a8_8p_in8k_out1k_50ms(self):
         """Run NPU performance test for DeepSeek-V4-Flash W8A8 8p in8k out1k."""
-        self.run_throughput()
+        i = 0
+        while True:
+            i = i + 1
+            current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            print(
+                f"=============={current_time}  Execute the {i}-th long-term stability test=============="
+            )
+            self.run_throughput()
+
+
 
 
 if __name__ == "__main__":
