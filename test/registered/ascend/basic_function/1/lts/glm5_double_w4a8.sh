@@ -26,15 +26,15 @@ export HCCL_SOCKET_IFNAME=enp196s0f0
 export GLOO_SOCKET_IFNAME=enp196s0f0
 export TRANSFORMERS_VERBOSITY=error
 
-MODEL_PATH=/home/weights/GLM-5.2-0610-Provider-w4a8
+MODEL_PATH=/root/.cache/modelscope/hub/models/Eco-Tech/GLM-5.2-w8a8
 export SGLANG_NPU_PROFILING=0
 export SGLANG_NPU_PROFILING_BS=16
-export PYTHONPATH=/home/luochen/glm/sglang_glm52/sglang/python:$PYTHONPATH
+#export PYTHONPATH=/home/luochen/glm/sglang_glm52/sglang/python:$PYTHONPATH
 
-LOG_DIR=/data/y/glm5_double_w4a8_logs
+LOG_DIR=/data/y/glm5_double_w8a8_logs
 mkdir -p $LOG_DIR
 
-SCRIPT_LOG="$LOG_DIR/glm5_double_w4a8_$(date +%Y%m%d_%H%M%S).log"
+SCRIPT_LOG="$LOG_DIR/glm5_double_w8a8_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "$SCRIPT_LOG") 2>&1
 
 echo "=== Script started at $(date) ==="
@@ -95,7 +95,7 @@ while true; do
     echo "=== Bench log: $LOG_FILE ==="
     python -m sglang.bench_serving \
     --dataset-name random --backend sglang \
-    --model /home/weights/GLM-5.2-0610-Provider-w4a8 \
+    --model /root/.cache/modelscope/hub/models/Eco-Tech/GLM-5.2-w8a8 \
     --dataset-path /home/chenxu/ShareGPT_V3_unfiltered_cleaned_split.json \
     --host 61.47.19.68 --port 6688 --max-concurrency 128 \
     --random-input-len 3500 --random-output-len 1500 \
