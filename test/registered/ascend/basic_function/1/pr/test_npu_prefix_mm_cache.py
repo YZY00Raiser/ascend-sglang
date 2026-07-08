@@ -16,11 +16,15 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 
-
 image_url = INVOICE_WITH_BARCODE_LOGO_IMAGES_PATH
 
 
-class TestDisaggregatedVLM(TestDisaggregationBase):
+class TestPrefixMmCache(TestDisaggregationBase):
+    """Testcase: Verify set --enable-prefix-mm-cache Send multimodal requests, and the cache will be reused，
+
+    [Test Category] Parameters
+    [Test Target] --enable-prefix-mm-cache
+    """
 
     @classmethod
     def setUpClass(cls):
@@ -77,7 +81,6 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
             other_args=language_args,
         )
 
-
     def test_image_encoding_with_cache(self):
         """Test that image encoding works with prefix mm cache enabled."""
         payload = {
@@ -112,20 +115,12 @@ class TestDisaggregatedVLM(TestDisaggregationBase):
             json=payload,
             timeout=120,
         )
-        print("first response1.json()")
-        print(response1.json())
-        print("second response2.json()")
-        print(response2.json())
         self.assertEqual(response1.json()["usage"]["prompt_tokens_details"]["cached_tokens"], 0)
         self.assertGreater(response2.json()["usage"]["prompt_tokens_details"]["cached_tokens"], 0)
 
-
-
     @classmethod
     def tearDownClass(cls):
-        # os.environ.pop("SGLANG_MM_SKIP_COMPUTE_HASH", None)
         super().tearDownClass()
-
 
 
 if __name__ == "__main__":
