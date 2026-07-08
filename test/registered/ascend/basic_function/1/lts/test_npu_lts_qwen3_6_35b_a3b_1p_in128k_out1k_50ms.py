@@ -3,11 +3,11 @@ import datetime
 from sglang.test.ascend.e2e.test_npu_performance_utils import (
     AISBENCHMARK_DATASET_DEFAULT,
     BENCHMARK_TOOL_DEFAULT,
-    QWEN3_6_35B_A3B_MODEL_PATH,
+    # QWEN3_6_35B_A3B_MODEL_PATH,
     TestAscendPerformanceTestCaseBase,
 )
 from sglang.test.ci.ci_register import register_npu_ci
-
+QWEN3_6_35B_A3B_MODEL_PATH="/home/weights/Qwen3.6-35B-A3B"
 register_npu_ci(
     est_time=3600,
     suite="",
