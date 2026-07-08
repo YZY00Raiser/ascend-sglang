@@ -31,7 +31,7 @@ export SGLANG_NPU_PROFILING=0
 export SGLANG_NPU_PROFILING_BS=16
 export PYTHONPATH=/home/luochen/glm/sglang_glm52/sglang/python:$PYTHONPATH
 
-LOG_DIR=/tmp/glm5_double_w4a8_logs
+LOG_DIR=/data/y30082119/glm5_double_w4a8_logs
 mkdir -p $LOG_DIR
 
 SCRIPT_LOG="$LOG_DIR/glm5_double_w4a8_$(date +%Y%m%d_%H%M%S).log"
