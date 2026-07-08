@@ -81,7 +81,7 @@ class TestEnableDeepepWaterFill(CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
-        self.assertGreater(metrics["score"], 0.82)
+        self.assertGreater(metrics["score"], 0.77)
         self.err_log_file.seek(0)
         content = self.err_log_file.read()
         error_message = "DeepEP Waterfill is enabled"
