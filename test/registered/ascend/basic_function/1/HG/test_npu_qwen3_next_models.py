@@ -28,6 +28,8 @@ class TestQwen3Next(
         "1024",
         "--mamba-scheduler-strategy",
         "extra_buffer",
+        "--mamba-ssm-dtype",
+        "bfloat16",
         "--mamba-track-interval",
         "128",
         "--page-size",
