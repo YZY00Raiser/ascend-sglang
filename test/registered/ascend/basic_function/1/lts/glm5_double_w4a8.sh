@@ -31,7 +31,7 @@ export SGLANG_NPU_PROFILING=0
 export SGLANG_NPU_PROFILING_BS=16
 export PYTHONPATH=/home/luochen/glm/sglang_glm52/sglang/python:$PYTHONPATH
 
-D_IP=('61.47.19.68' '61.47.19.67')
+D_IP=('172.22.3.71' '172.22.3.77')
 LOCAL_HOST1=`hostname -I|awk -F " " '{print$1}'`
 LOCAL_HOST2=`hostname -I|awk -F " " '{print$2}'`
 export DEEP_NORMAL_MODE_USE_INT8_QUANT=1
