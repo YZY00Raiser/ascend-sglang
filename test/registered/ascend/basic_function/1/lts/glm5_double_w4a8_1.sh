@@ -71,7 +71,7 @@ do
         --max-prefill-tokens 28672 \
         --trust-remote-code \
         --mem-fraction-static 0.8 \
-        --served-model-name GLM-5.1-w4a8 \
+        --served-model-name GLM-5.2-w8a8 \
         --cuda-graph-bs 1 \
         --max-running-requests 32 \
         --quantization modelslim \
