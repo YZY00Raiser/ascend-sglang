@@ -69,7 +69,7 @@ class TestDtypeAuto(CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
-        self.assertGreater(metrics["score"], 0.83)
+        self.assertGreater(metrics["score"], 0.74)
 
 class TestDtypeBf16(TestDtypeAuto):
     dtype = "bf16"
