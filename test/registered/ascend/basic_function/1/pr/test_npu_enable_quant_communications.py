@@ -1,7 +1,7 @@
+import tempfile
 import unittest
 from types import SimpleNamespace
 
-from sglang.test.ascend.gsm8k_ascend_mixin import GSM8KAscendMixin
 from sglang.test.ascend.test_ascend_utils import QWEN3_5_35B_W8A8_MODEL_PATH
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ci.ci_register import register_npu_ci
@@ -16,7 +16,7 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=200, suite="full-4-npu-a3", nightly=True)
 
 
-class TestEnableQuantCommunications(GSM8KAscendMixin, CustomTestCase):
+class TestEnableQuantCommunications(CustomTestCase):
     """Testcase: Verify set --enable-quant-communications the inference accuracy of the model on the
     GSM8K dataset is no less than 0.74.
 
@@ -24,9 +24,14 @@ class TestEnableQuantCommunications(GSM8KAscendMixin, CustomTestCase):
     [Test Target] --enable-quant-communications
     """
 
-    accuracy = 0.90
     @classmethod
     def setUpClass(cls):
+        cls.out_log_file = tempfile.NamedTemporaryFile(
+            mode="w+", delete=True, suffix="out.log"
+        )
+        cls.err_log_file = tempfile.NamedTemporaryFile(
+            mode="w+", delete=True, suffix="err.log"
+        )
         cls.model = QWEN3_5_35B_W8A8_MODEL_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.process = popen_launch_server(
@@ -42,13 +47,18 @@ class TestEnableQuantCommunications(GSM8KAscendMixin, CustomTestCase):
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
-                "--enable-quant-communications"
+                "--enable-quant-communications",
+                "--log-level",
+                "info",
             ],
+            return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
         )
 
     @classmethod
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
+        cls.out_log_file.close()
+        cls.err_log_file.close()
 
     def test_gsm8k(self):
         args = SimpleNamespace(
@@ -62,8 +72,11 @@ class TestEnableQuantCommunications(GSM8KAscendMixin, CustomTestCase):
         )
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
-
         self.assertGreater(metrics["score"], 0.74)
+        self.err_log_file.seek(0)
+        content = self.err_log_file.read()
+        error_message = "enable_quant_communications=True"
+        self.assertIn(error_message, content)
 
 
 if __name__ == "__main__":
