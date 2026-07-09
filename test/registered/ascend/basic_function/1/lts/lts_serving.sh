@@ -1,5 +1,6 @@
 LOG_DIR=/data/y/glm5_2_double_w8a8_logs
-LOG_FILE="$LOG_DIR/bench_serving.log"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+LOG_FILE="$LOG_DIR/bench_serving_${TIMESTAMP}.log"
 #mkdir -p "$LOG_DIR"  # 自动创建日志目录
 
 while true; do
