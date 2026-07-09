@@ -1,3 +1,5 @@
+import os
+import sys
 import unittest
 import datetime
 from sglang.test.ascend.e2e.test_npu_performance_utils import (
@@ -133,4 +135,20 @@ class TestNPUDeepSeekV4FlashW8A88PIn8kOut1k50ms(TestAscendPerformanceTestCaseBas
 
 
 if __name__ == "__main__":
-    unittest.main()
+    time_str = datetime.datetime.now().strftime("%Y%m%d%H%M")
+    os.makedirs("log", exist_ok=True)
+    log_file = (
+        f"./log/lts_{os.path.splitext(os.path.basename(__file__))[0]}_{time_str}.log"
+    )
+
+    with open(log_file, "w", encoding="utf-8") as f:
+        original_stdout = sys.stdout
+        original_stderr = sys.stderr
+        sys.stdout = f
+        sys.stderr = f
+
+        try:
+            unittest.main(verbosity=2)
+        finally:
+            sys.stdout = original_stdout
+            sys.stderr = original_stderr
