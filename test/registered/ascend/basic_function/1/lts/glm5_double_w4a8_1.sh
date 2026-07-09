@@ -79,7 +79,7 @@ do
         --moe-a2a-backend deepep --deepep-mode auto \
         --load-balance-method round_robin \
         --speculative-algorithm NEXTN --speculative-num-steps 1 --speculative-eagle-topk 1 --speculative-num-draft-tokens 2  \
-        --device npu --port 6688 --tokenizer-worker-num 32 \
+        --port 6688 --tokenizer-worker-num 32 \
         > "$LOG_FILE" 2>&1
         NODE_RANK=$i
         break
