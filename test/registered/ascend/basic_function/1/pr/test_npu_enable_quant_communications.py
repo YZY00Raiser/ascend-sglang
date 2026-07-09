@@ -1,6 +1,7 @@
 import unittest
 from types import SimpleNamespace
 
+from sglang.test.ascend.gsm8k_ascend_mixin import GSM8KAscendMixin
 from sglang.test.ascend.test_ascend_utils import QWEN3_5_35B_W8A8_MODEL_PATH
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ci.ci_register import register_npu_ci
@@ -15,7 +16,15 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=200, suite="full-4-npu-a3", nightly=True)
 
 
-class TestDtypeAuto(CustomTestCase):
+class TestEnableQuantCommunications(GSM8KAscendMixin, CustomTestCase):
+    """Testcase: Verify set --enable-quant-communications the inference accuracy of the model on the
+    GSM8K dataset is no less than 0.74.
+
+    [Test Category] Parameters
+    [Test Target] --enable-quant-communications
+    """
+
+    accuracy = 0.90
     @classmethod
     def setUpClass(cls):
         cls.model = QWEN3_5_35B_W8A8_MODEL_PATH
