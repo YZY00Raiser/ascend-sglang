@@ -13,13 +13,15 @@ from sglang.test.test_utils import (
     CustomTestCase,
     popen_launch_server,
 )
+
 # /root/.cache/modelscope/hub/models/Eco-Tech/Qwen3.5-35B-A3B-w8a8-mtp
 model = "/home/weights/Qwen3.5-35B-A3B-w8a8-mtp"
 register_npu_ci(est_time=200, suite="full-4-npu-a3", nightly=True)
 
 
 class TestDtypeAuto(CustomTestCase):
-    dtype="auto"
+    dtype = "auto"
+
     @classmethod
     def setUpClass(cls):
         cls.model = model
@@ -44,10 +46,8 @@ class TestDtypeAuto(CustomTestCase):
                 cls.dtype,
                 "--attention-backend",
                 "ascend",
-                "--disable-cuda-graph",
             ],
             env={
-                "HCCL_BUFFSIZE": "1536",
                 "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",  # Quantize activations to INT8 before dispatch
             },
         )
@@ -70,6 +70,7 @@ class TestDtypeAuto(CustomTestCase):
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
         self.assertGreater(metrics["score"], 0.74)
+
 
 class TestDtypeBf16(TestDtypeAuto):
     dtype = "bf16"
@@ -98,16 +99,13 @@ class TestDtypeBf16(TestDtypeAuto):
                 cls.dtype,
                 "--attention-backend",
                 "ascend",
-                "--disable-cuda-graph",
             ],
-            env={
-                "HCCL_BUFFSIZE": "1536",
-            },
         )
 
 
 class TestDtypeInt8(TestDtypeAuto):
     dtype = "int8"
+
 
 if __name__ == "__main__":
     unittest.main()
