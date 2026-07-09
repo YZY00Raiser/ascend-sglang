@@ -13,6 +13,6 @@ while true; do
     --random-input-len 3500 --random-output-len 1500 \
     --num-prompts 128 --random-range-ratio 1 \
     >> "$LOG_FILE" 2>&1
-    echo "=== Round finished, sleep 30s before next run ===" >> "$LOG_FILE"
+#    echo "=== Round finished, sleep 30s before next run ===" >> "$LOG_FILE"
 #    sleep 30  # 每轮跑完休息30秒再重启压测
 done
