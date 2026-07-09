@@ -18,7 +18,7 @@ register_npu_ci(est_time=200, suite="full-4-npu-a3", nightly=True)
 
 class TestEnableQuantCommunications(CustomTestCase):
     """Testcase: Verify set --enable-quant-communications the inference accuracy of the model on the
-    GSM8K dataset is no less than 0.74.
+    GSM8K dataset is no less than 0.74, relevant information is contained in the logs.
 
     [Test Category] Parameters
     [Test Target] --enable-quant-communications
