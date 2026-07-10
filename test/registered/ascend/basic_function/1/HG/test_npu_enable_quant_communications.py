@@ -1,3 +1,4 @@
+import tempfile
 import unittest
 from types import SimpleNamespace
 
@@ -19,8 +20,15 @@ register_npu_ci(est_time=200, suite="full-4-npu-a3", nightly=True)
 
 
 class TestDtypeAuto(CustomTestCase):
+
     @classmethod
     def setUpClass(cls):
+        cls.out_log_file = tempfile.NamedTemporaryFile(
+            mode="w+", delete=True, suffix="out.log"
+        )
+        cls.err_log_file = tempfile.NamedTemporaryFile(
+            mode="w+", delete=True, suffix="err.log"
+        )
         cls.model = model
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.process = popen_launch_server(
@@ -38,11 +46,14 @@ class TestDtypeAuto(CustomTestCase):
                 "--disable-cuda-graph",
                 "--enable-quant-communications"
             ],
+            return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
         )
 
     @classmethod
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
+        cls.out_log_file.close()
+        cls.err_log_file.close()
 
     def test_gsm8k(self):
         args = SimpleNamespace(
@@ -56,8 +67,11 @@ class TestDtypeAuto(CustomTestCase):
         )
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
-
         self.assertGreater(metrics["score"], 0.74)
+        self.err_log_file.seek(0)
+        content = self.err_log_file.read()
+        error_message = "enable_quant_communications=True"
+        self.assertIn(error_message, content)
 
 if __name__ == "__main__":
     unittest.main()
