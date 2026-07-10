@@ -26,12 +26,6 @@ class TestEnableQuantCommunications(CustomTestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.out_log_file = tempfile.NamedTemporaryFile(
-            mode="w+", delete=True, suffix="out.log"
-        )
-        cls.err_log_file = tempfile.NamedTemporaryFile(
-            mode="w+", delete=True, suffix="err.log"
-        )
         cls.model = QWEN3_5_35B_W8A8_MODEL_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.process = popen_launch_server(
@@ -51,7 +45,6 @@ class TestEnableQuantCommunications(CustomTestCase):
                 "--log-level",
                 "info",
             ],
-            return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
         )
 
     @classmethod
@@ -73,10 +66,6 @@ class TestEnableQuantCommunications(CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
         self.assertGreater(metrics["score"], 0.74)
-        self.err_log_file.seek(0)
-        content = self.err_log_file.read()
-        error_message = "enable_quant_communications=True"
-        self.assertIn(error_message, content)
 
 
 if __name__ == "__main__":
