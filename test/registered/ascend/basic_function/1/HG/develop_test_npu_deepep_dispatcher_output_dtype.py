@@ -103,7 +103,13 @@ class TestDtypeBf16(TestDtypeAuto):
                 cls.dtype,
                 "--attention-backend",
                 "ascend",
-                "--disable-cuda-graph",
+                "--max-total-tokens",
+                "66000",
+                "--cuda-graph-max-bs",
+                "128",
+                "--log-level",
+                "info",
+                "--disable-radix-cache",
             ],
         )
 
