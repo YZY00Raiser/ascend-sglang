@@ -44,7 +44,7 @@ class TestDtypeAuto(CustomTestCase):
                 "--attention-backend",
                 "ascend",
                 "--disable-cuda-graph",
-                "--enable-quant-communications"
+                "--enable-quant-communications",
                 "--log-level",
                 "info",
             ],
