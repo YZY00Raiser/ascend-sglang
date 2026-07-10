@@ -45,8 +45,8 @@ class TestDtypeAuto(CustomTestCase):
                 "ascend",
                 "--disable-cuda-graph",
                 "--enable-quant-communications",
-                "--log-level",
-                "info",
+                # "--log-level",
+                # "info",
             ],
             return_stdout_stderr=(cls.out_log_file, cls.err_log_file),
         )
