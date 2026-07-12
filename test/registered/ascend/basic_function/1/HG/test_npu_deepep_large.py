@@ -57,6 +57,8 @@ class TestDeepseek(CustomTestCase):
                 "--disable-radix-cache",
                 "--model-loader-extra-config",
                 '{"enable_multithread_load": true,"num_threads": 64}',
+                "--mem-fraction-static",
+                "0.9",
             ],
         )
 
@@ -126,6 +128,8 @@ class TestDeepseekMTP(CustomTestCase):
                 "--disable-radix-cache",
                 "--model-loader-extra-config",
                 '{"enable_multithread_load": true,"num_threads": 64}',
+                "--mem-fraction-static",
+                "0.9",
             ],
         )
 
