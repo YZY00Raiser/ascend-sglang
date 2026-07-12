@@ -23,7 +23,7 @@ DEEPSEEK_V32_MODEL_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
 class TestDeepseek(CustomTestCase):
     @classmethod
     def setUpClass(cls):
-        cls.model = DEFAULT_DEEPEP_MODEL_NAME_FOR_TEST
+        cls.model = DEEPSEEK_V32_MODEL_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.process = popen_launch_server(
             cls.model,
@@ -83,7 +83,7 @@ class TestDeepseek(CustomTestCase):
 class TestDeepseekMTP(CustomTestCase):
     @classmethod
     def setUpClass(cls):
-        cls.model = DEFAULT_DEEPEP_MODEL_NAME_FOR_TEST
+        cls.model = DEEPSEEK_V32_MODEL_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.process = popen_launch_server(
             cls.model,
