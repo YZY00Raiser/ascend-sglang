@@ -1,10 +1,11 @@
 import unittest
 from types import SimpleNamespace
 
-import requests
-
-# from sglang.test.ascend.test_ascend_utils import
 from sglang.srt.utils import kill_process_tree
+from sglang.test.ascend.test_ascend_utils import (
+    QWEN3_5_35B_A3B_WEIGHTS_PATH,
+    QWEN3_5_35B_W8A8_MODEL_PATH,
+)
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
@@ -13,16 +14,23 @@ from sglang.test.test_utils import (
     CustomTestCase,
     popen_launch_server,
 )
-# /root/.cache/modelscope/hub/models/Eco-Tech/Qwen3.5-35B-A3B-w8a8-mtp
-model = "/home/weights/Qwen3.5-35B-A3B-w8a8-mtp"
+
 register_npu_ci(est_time=200, suite="full-4-npu-a3", nightly=True)
 
 
 class TestDtypeAuto(CustomTestCase):
-    dtype="auto"
+    """Testcase: Verify set --deepep-dispatcher-output-dtype the inference accuracy of the model on the
+    GSM8K dataset is no less than 0.74.
+
+    [Test Category] Parameters
+    [Test Target] --deepep-dispatcher-output-dtype
+    """
+
+    dtype = "auto"
+
     @classmethod
     def setUpClass(cls):
-        cls.model = model
+        cls.model = QWEN3_5_35B_W8A8_MODEL_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.process = popen_launch_server(
             cls.model,
@@ -46,10 +54,10 @@ class TestDtypeAuto(CustomTestCase):
                 "66000",
                 # "--cuda-graph-max-bs",
                 # "128",
+                "--disable-cuda-graph",
                 "--log-level",
                 "info",
                 "--disable-radix-cache",
-                "--disable-cuda-graph",
             ],
             env={
                 "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",  # Quantize activations to INT8 before dispatch
@@ -75,12 +83,13 @@ class TestDtypeAuto(CustomTestCase):
 
         self.assertGreater(metrics["score"], 0.74)
 
+
 class TestDtypeBf16(TestDtypeAuto):
     dtype = "bf16"
 
     @classmethod
     def setUpClass(cls):
-        cls.model = "/home/weights/Qwen3.5-35B-A3B"
+        cls.model = QWEN3_5_35B_A3B_WEIGHTS_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.process = popen_launch_server(
             cls.model,
@@ -104,16 +113,17 @@ class TestDtypeBf16(TestDtypeAuto):
                 "66000",
                 # "--cuda-graph-max-bs",
                 # "128",
+                "--disable-cuda-graph",
                 "--log-level",
                 "info",
                 "--disable-radix-cache",
-                "--disable-cuda-graph",
             ],
         )
 
 
 class TestDtypeInt8(TestDtypeAuto):
     dtype = "int8"
+
 
 if __name__ == "__main__":
     unittest.main()
