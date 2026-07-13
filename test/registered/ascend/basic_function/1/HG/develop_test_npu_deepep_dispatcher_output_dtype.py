@@ -2,10 +2,10 @@ import unittest
 from types import SimpleNamespace
 
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ascend.test_ascend_utils import (
-    QWEN3_5_35B_A3B_WEIGHTS_PATH,
-    QWEN3_5_35B_W8A8_MODEL_PATH,
-)
+# from sglang.test.ascend.test_ascend_utils import (
+#     QWEN3_5_35B_A3B_WEIGHTS_PATH,
+#     QWEN3_5_35B_W8A8_MODEL_PATH,
+# )
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
@@ -17,6 +17,8 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=200, suite="full-4-npu-a3", nightly=True)
 
+QWEN3_5_35B_W8A8_MODEL_PATH = "/home/weights/Qwen3.5-35B-A3B-w8a8-mtp"
+QWEN3_5_35B_A3B_WEIGHTS_PATH = "/home/weights/Qwen3.5-35B-A3B"
 
 class TestDtypeAuto(CustomTestCase):
     """Testcase: Verify set --deepep-dispatcher-output-dtype the inference accuracy of the model on the
