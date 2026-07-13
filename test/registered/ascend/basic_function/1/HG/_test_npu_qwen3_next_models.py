@@ -10,7 +10,7 @@ from sglang.test.server_fixtures.default_fixture import DefaultServerBase
 # from sglang.test.ascend.test_ascend_utils import (
 #     QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH,
 # )
-QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-Next-80B-A3B-Instruct"
+QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH="/home/weights/Qwen3-Next-80B-A3B-Instruct"
 register_npu_ci(est_time=600, suite="full-4-npu-a3", nightly=True)
 
 
