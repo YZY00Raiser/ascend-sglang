@@ -65,6 +65,7 @@ class TestDtypeAuto(CustomTestCase):
             ],
             env={
                 "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",  # Quantize activations to INT8 before dispatch
+                "HCCL_BUFFSIZE": "1536",
             },
         )
 
@@ -124,6 +125,9 @@ class TestDtypeBf16(TestDtypeAuto):
                 "--base-gpu-id",
                 "12",
             ],
+            env={
+                "HCCL_BUFFSIZE": "1536",
+            },
         )
 
 
