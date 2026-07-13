@@ -8,11 +8,11 @@ from sglang.test.test_utils import popen_launch_server
 
 register_npu_ci(est_time=600, suite="full-8-npu-a3", nightly=True)
 
-from sglang.test.ascend.test_ascend_utils import (
-    QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH,
-)
+# from sglang.test.ascend.test_ascend_utils import (
+#     QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH,
+# )
 
-
+QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH="/home/weights/Qwen/Qwen3-Next-80B-A3B-Instruct"
 class TestQwen3NextMTPV2(GSM8KMixin, KLDivergenceMixin, DefaultServerBase):
     model =  QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH
     gsm8k_accuracy_thres = 0.93
