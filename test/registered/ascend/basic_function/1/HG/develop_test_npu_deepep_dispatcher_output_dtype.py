@@ -58,6 +58,8 @@ class TestDtypeAuto(CustomTestCase):
                 "--log-level",
                 "info",
                 "--disable-radix-cache",
+                "--base-gpu-id",
+                "12",
             ],
             env={
                 "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",  # Quantize activations to INT8 before dispatch
@@ -117,6 +119,8 @@ class TestDtypeBf16(TestDtypeAuto):
                 "--log-level",
                 "info",
                 "--disable-radix-cache",
+                "--base-gpu-id",
+                "12",
             ],
         )
 
