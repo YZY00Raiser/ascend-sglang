@@ -46,11 +46,12 @@ class TestDtypeAuto(CustomTestCase):
                 "ascend",
                 "--max-total-tokens",
                 "66000",
-                "--cuda-graph-max-bs",
-                "128",
+                # "--cuda-graph-max-bs",
+                # "128",
                 "--log-level",
                 "info",
                 "--disable-radix-cache",
+                "--disable-cuda-graph",
             ],
             env={
                 "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",  # Quantize activations to INT8 before dispatch
@@ -105,11 +106,12 @@ class TestDtypeBf16(TestDtypeAuto):
                 "ascend",
                 "--max-total-tokens",
                 "66000",
-                "--cuda-graph-max-bs",
-                "128",
+                # "--cuda-graph-max-bs",
+                # "128",
                 "--log-level",
                 "info",
                 "--disable-radix-cache",
+                "--disable-cuda-graph",
             ],
         )
 
