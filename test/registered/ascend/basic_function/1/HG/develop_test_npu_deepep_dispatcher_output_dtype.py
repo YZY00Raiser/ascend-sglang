@@ -65,7 +65,7 @@ class TestDtypeAuto(CustomTestCase):
             ],
             env={
                 "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",  # Quantize activations to INT8 before dispatch
-                "HCCL_BUFFSIZE": "1536",
+                "HCCL_BUFFSIZE": "1024",
             },
         )
 
@@ -126,7 +126,7 @@ class TestDtypeBf16(TestDtypeAuto):
                 "12",
             ],
             env={
-                "HCCL_BUFFSIZE": "1536",
+                "HCCL_BUFFSIZE": "1024",
             },
         )
 
