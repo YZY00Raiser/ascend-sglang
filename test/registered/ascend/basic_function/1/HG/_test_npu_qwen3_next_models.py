@@ -15,8 +15,8 @@ register_npu_ci(est_time=600, suite="full-4-npu-a3", nightly=True)
 
 
 class TestQwen3Next(
-    # GSM8KMixin,
-    KLDivergenceMixin, PrefixCacheBranchingMixin, DefaultServerBase
+    GSM8KMixin,
+    # KLDivergenceMixin, PrefixCacheBranchingMixin, DefaultServerBase
 ):
     model = QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH
     cache_chunk_size = 64
