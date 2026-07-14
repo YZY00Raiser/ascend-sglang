@@ -17,7 +17,7 @@ class TestQwen3NextMTPV2(GSM8KMixin, KLDivergenceMixin, DefaultServerBase):
     model =  QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH
     gsm8k_accuracy_thres = 0.93
     # kl_div_thres = 0.0035
-    kl_div_thres = 0.02
+    kl_div_thres = 0.008
     other_args = [
         "--trust-remote-code",
         "--speculative-algorithm",
