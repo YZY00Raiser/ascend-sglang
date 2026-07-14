@@ -113,11 +113,6 @@ class TestLoRAQwen3_8BLogprobDiff(CustomTestCase):
         self.assertEqual(detected, expected)
 
     def test_lora_qwen3_8b_logprob_accuracy(self):
-        # adapter_path = snapshot_download(
-        #     LORA_HF_REPO,
-        #     repo_type="dataset",
-        # )
-
         engine = sgl.Engine(
             model_path=BASE_MODEL,
             tp_size=TP_SIZE,
