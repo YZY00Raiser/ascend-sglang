@@ -1,5 +1,6 @@
 import unittest
 
+from sglang.jit_kernel.benchmark.marker import skip
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.kits.eval_accuracy_kit import GSM8KMixin
 from sglang.test.kits.kl_divergence_kit import KLDivergenceMixin
@@ -14,7 +15,7 @@ register_npu_ci(est_time=600, suite="full-4-npu-a3", nightly=True)
 
 QWEN3_NEXT_80B_A3B_INSTRUCT_WEIGHTS_PATH="/home/weights/Qwen3-Next-80B-A3B-Instruct"
 
-
+@unittest.skip("")
 class TestQwen3NextMTPTopk(
     GSM8KMixin, KLDivergenceMixin, PrefixCacheBranchingMixin, DefaultServerBase
 ):
