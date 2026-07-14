@@ -20,13 +20,13 @@ class TestLoRAOverlapLoading(CustomTestCase):
                 adaptors=[
                     LoRAAdaptor(
                         name="/home/weights/codelion/Llama-3.2-1B-Instruct-tool-calling-lora",
-                        prefill_tolerance=1e-1,
-                        rouge_l_tolerance=0.9,
+                        # prefill_tolerance=1e-1,
+                        # rouge_l_tolerance=0.9,
                     ),
                     LoRAAdaptor(
                         name="/home/weights/codelion/FastLlama-3.2-LoRA",
-                        prefill_tolerance=3e-1,
-                        rouge_l_tolerance=0.9,
+                        # prefill_tolerance=3e-1,
+                        # rouge_l_tolerance=0.9,
                     ),
                 ],
                 max_loras_per_batch=2,
