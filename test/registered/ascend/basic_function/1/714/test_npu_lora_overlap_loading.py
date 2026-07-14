@@ -33,7 +33,9 @@ class TestLoRAOverlapLoading(CustomTestCase):
     ]
     def test_ci_lora_models_batch_splitting(self):
         run_lora_batch_splitting_equivalence_test(
-            CI_MULTI_LORA_MODELS, enable_lora_overlap_loading=True
+            CI_MULTI_LORA_MODELS,
+            enable_lora_overlap_loading=True,
+            attention_backend="ascend",
         )
 
 
