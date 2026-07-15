@@ -33,7 +33,7 @@ class TestLoRARadixCache(CustomTestCase):
                 base="/home/weights/Qwen3.5-4B",
                 adaptors=[
                     LoRAAdaptor(
-                        name="/home/weights/qwen3.5-4b-mcat-lor",
+                        name="/home/weights/qwen3.5-4b-mcat-lora",
                         prefill_tolerance=1e-1,
                         rouge_l_tolerance=0.9,
                     ),
