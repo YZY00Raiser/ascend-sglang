@@ -18,11 +18,10 @@ import unittest
 import torch
 
 from sglang.test.ci.ci_register import register_npu_ci
-from sglang.test.lora_utils import CI_MULTI_LORA_MODELS, run_lora_test_one_by_one
+from sglang.test.lora_utils import run_lora_test_one_by_one, LoRAModelCase, LoRAAdaptor
 from sglang.test.test_utils import CustomTestCase
 
 register_npu_ci(est_time=600, suite="full-1-npu-a3", nightly=True)
-
 
 PROMPTS = [
     "AI is a field of computer science focused on",
@@ -62,7 +61,6 @@ class TestLoRARadixCache(CustomTestCase):
                 max_loaded_loras=4,
             ),
         ]
-
 
         model_case = CI_MULTI_LORA_MODELS[0]
 
