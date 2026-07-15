@@ -59,6 +59,8 @@ class TestDeepseek(CustomTestCase):
                 '{"enable_multithread_load": true,"num_threads": 64}',
                 "--mem-fraction-static",
                 "0.6",
+                "--attention-backend",
+                "ascend",
             ],
         )
 
@@ -130,6 +132,8 @@ class TestDeepseekMTP(CustomTestCase):
                 '{"enable_multithread_load": true,"num_threads": 64}',
                 "--mem-fraction-static",
                 "0.6",
+                "--attention-backend",
+                "ascend",
             ],
         )
 
