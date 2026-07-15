@@ -30,15 +30,15 @@ class TestLoRARadixCache(CustomTestCase):
         CI_MULTI_LORA_MODELS = [
             # multi-rank case
             LoRAModelCase(
-                base="/home/weights/Qwen3-4B",
+                base="/home/weights/Qwen3.5-4BB",
                 adaptors=[
                     LoRAAdaptor(
-                        name="/home/weights/Qwen3-4B-lora-v2",
+                        name="/home/weights/qwen3.5-4b-mcat-lor",
                         prefill_tolerance=1e-1,
                         rouge_l_tolerance=0.9,
                     ),
                     LoRAAdaptor(
-                        name="/home/weights/Qwen3-4B-LoRA-ZH-WebNovelty-v0.0",
+                        name="/home/weights/qwen3.5-4b-neo4j-text2cypher-lora",
                         prefill_tolerance=3e-1,
                         rouge_l_tolerance=0.9,
                     ),
