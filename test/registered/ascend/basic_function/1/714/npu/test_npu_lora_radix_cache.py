@@ -17,12 +17,12 @@ import unittest
 
 import torch
 
-from sglang.test.ci.ci_register import register_amd_ci, register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.lora_utils import CI_MULTI_LORA_MODELS, run_lora_test_one_by_one
 from sglang.test.test_utils import CustomTestCase
 
-register_cuda_ci(est_time=200, suite="nightly-1-gpu", nightly=True)
-register_amd_ci(est_time=200, suite="nightly-amd-1-gpu", nightly=True)
+register_npu_ci(est_time=600, suite="full-1-npu-a3", nightly=True)
+
 
 PROMPTS = [
     "AI is a field of computer science focused on",
@@ -42,6 +42,28 @@ class TestLoRARadixCache(CustomTestCase):
 
     def test_lora_radix_cache(self):
         # Here we need a model case with multiple adaptors for testing correctness of radix cache
+        CI_MULTI_LORA_MODELS = [
+            # multi-rank case
+            LoRAModelCase(
+                base="meta-llama/Llama-2-7b-hf",
+                adaptors=[
+                    LoRAAdaptor(
+                        name="winddude/wizardLM-LlaMA-LoRA-7B",
+                        prefill_tolerance=1e-1,
+                        rouge_l_tolerance=0.9,
+                    ),
+                    LoRAAdaptor(
+                        name="RuterNorway/Llama-2-7b-chat-norwegian-LoRa",
+                        prefill_tolerance=3e-1,
+                        rouge_l_tolerance=0.9,
+                    ),
+                ],
+                max_loras_per_batch=2,
+                max_loaded_loras=4,
+            ),
+        ]
+
+
         model_case = CI_MULTI_LORA_MODELS[0]
 
         torch_dtype = torch.float16
