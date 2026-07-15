@@ -50,6 +50,7 @@ class TestLoRARadixCache(CustomTestCase):
 
         model_case = CI_MULTI_LORA_MODELS[0]
 
+        print("model_case.skip_long_prompt")
         print(model_case.skip_long_prompt)
 
         torch_dtype = torch.float16
