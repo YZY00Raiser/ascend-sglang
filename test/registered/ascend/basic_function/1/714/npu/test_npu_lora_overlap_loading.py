@@ -16,7 +16,7 @@ class TestLoRAOverlapLoading(CustomTestCase):
         CI_MULTI_LORA_MODELS = [
             # multi-rank case
             LoRAModelCase(
-                base="/home/weights/Qwen3.5-4BB",
+                base="/home/weights/Qwen3.5-4B",
                 adaptors=[
                     LoRAAdaptor(
                         name="/home/weights/qwen3.5-4b-mcat-lor",
