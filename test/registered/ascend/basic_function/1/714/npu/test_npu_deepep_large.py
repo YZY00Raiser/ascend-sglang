@@ -62,6 +62,9 @@ class TestDeepseek(CustomTestCase):
                 "--attention-backend",
                 "ascend",
             ],
+            env={
+                "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
+            },
         )
 
     @classmethod
@@ -166,7 +169,6 @@ class TestDeepseekMTP(CustomTestCase):
             f"{avg_spec_accept_length=:.3f}\n"
         )
         self.assertGreater(avg_spec_accept_length, 1.85)
-
 
 
 if __name__ == "__main__":
