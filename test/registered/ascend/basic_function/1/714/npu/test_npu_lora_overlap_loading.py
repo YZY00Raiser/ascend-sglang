@@ -36,7 +36,6 @@ class TestLoRAOverlapLoading(CustomTestCase):
         run_lora_batch_splitting_equivalence_test(
             CI_MULTI_LORA_MODELS,
             enable_lora_overlap_loading=True,
-            attention_backend="ascend",
         )
 
 
