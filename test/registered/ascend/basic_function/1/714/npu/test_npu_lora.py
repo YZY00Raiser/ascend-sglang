@@ -57,8 +57,6 @@ class TestLora1(CustomTestCase):
             "2",
             "--max-loras-per-batch",
             "1",
-            "--lora-drain-wait-threshold",
-            "3.0",
             "--base-gpu-id",
             "2",
         ]
