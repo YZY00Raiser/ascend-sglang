@@ -15,7 +15,7 @@
 import multiprocessing as mp
 import unittest
 
-from sglang.test.lora_utils import (
+from sglang.test.ascend.lora_utils import (
     # LORA_MODELS_QWEN3,
     run_lora_multiple_batch_on_model_cases, LoRAModelCase, LoRAAdaptor,
 )
