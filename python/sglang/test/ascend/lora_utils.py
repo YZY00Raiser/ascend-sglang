@@ -821,7 +821,7 @@ def run_lora_multiple_batch_on_model_cases(
 
 def run_lora_batch_splitting_equivalence_test(
     model_cases: List[LoRAModelCase],
-    attention_backend: str = "torch_native",
+    attention_backend: str = "ascend",
     disable_cuda_graph: bool = True,
     disable_radix_cache: bool = True,
     enable_lora_overlap_loading: Optional[bool] = None,
@@ -849,7 +849,7 @@ def run_lora_batch_splitting_equivalence_test(
     """
     max_loras_per_batch = 2
 
-    def _run_test(model_case: LoRAModelCase, torch_dtype: torch.dtype):
+    def _run_test(model_case: LoRAModelCase, torch_dtype: torch.bfloat16):
         lora_adapter_paths = [a.name for a in model_case.adaptors]
         assert (
             len(lora_adapter_paths) >= max_loras_per_batch
@@ -899,7 +899,7 @@ def run_lora_batch_splitting_equivalence_test(
         ensure_reproducibility()
         with SRTRunner(
             base_path,
-            torch_dtype=torch.bfloat16,
+            torch_dtype=torch_dtype,
             model_type="generation",
             lora_paths=lora_adapter_paths,
             enable_lora_overlap_loading=enable_lora_overlap_loading,
