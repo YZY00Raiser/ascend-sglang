@@ -6,11 +6,7 @@ import torch
 
 from sglang.test.runners import HFRunner, SRTRunner
 from sglang.test.test_utils import calculate_rouge_l
-from sglang.test.ascend.test_ascend_utils import (
-    LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH,
-    LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
-    LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH
-)
+
 
 @dataclasses.dataclass
 class LoRAAdaptor:
@@ -84,7 +80,7 @@ MOE_LORA_PATH = "jonahbernard/sglang-lora-moe-test-qwen1.5-MoE-A2.7B"
 
 CI_LORA_MODELS = [
     LoRAModelCase(
-        base=LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
+        base="meta-llama/Llama-3.1-8B-Instruct",
         adaptors=[
             LoRAAdaptor(
                 name="algoprog/fact-generation-llama-3.1-8b-instruct-lora",
@@ -115,15 +111,15 @@ ALL_OTHER_LORA_MODELS = [
 CI_MULTI_LORA_MODELS = [
     # multi-rank case
     LoRAModelCase(
-        base=LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
+        base="meta-llama/Llama-2-7b-hf",
         adaptors=[
             LoRAAdaptor(
-                name=LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH,
+                name="winddude/wizardLM-LlaMA-LoRA-7B",
                 prefill_tolerance=1e-1,
                 rouge_l_tolerance=0.9,
             ),
             LoRAAdaptor(
-                name=LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH,
+                name="RuterNorway/Llama-2-7b-chat-norwegian-LoRa",
                 prefill_tolerance=3e-1,
                 rouge_l_tolerance=0.9,
             ),
@@ -382,7 +378,7 @@ def run_lora_test_one_by_one(
     model_case: LoRAModelCase,
     torch_dtype: torch.dtype,
     max_new_tokens: int,
-    backend: str = "ascend",
+    backend: str = "csgmv",
     enable_lora_overlap_loading: Optional[bool] = None,
     disable_cuda_graph: bool = False,
     disable_radix_cache: bool = False,
@@ -731,7 +727,7 @@ def create_multiple_batch_test_samples(
 def run_lora_multiple_batch_on_model_cases(
     model_cases: List[LoRAModelCase],
     use_spec_decoding: bool = False,
-    attention_backend: str = "ascend",
+    attention_backend: str = "torch_native",
     disable_cuda_graph: bool = True,
     enable_deterministic_inference: bool = False,
     disable_radix_cache: bool = True,
@@ -825,7 +821,7 @@ def run_lora_multiple_batch_on_model_cases(
 
 def run_lora_batch_splitting_equivalence_test(
     model_cases: List[LoRAModelCase],
-    attention_backend: str = "ascend",
+    attention_backend: str = "torch_native",
     disable_cuda_graph: bool = True,
     disable_radix_cache: bool = True,
     enable_lora_overlap_loading: Optional[bool] = None,
