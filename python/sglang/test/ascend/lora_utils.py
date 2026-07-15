@@ -899,7 +899,7 @@ def run_lora_batch_splitting_equivalence_test(
         ensure_reproducibility()
         with SRTRunner(
             base_path,
-            torch_dtype=torch_dtype,
+            torch_dtype=torch.bfloat16,
             model_type="generation",
             lora_paths=lora_adapter_paths,
             enable_lora_overlap_loading=enable_lora_overlap_loading,
