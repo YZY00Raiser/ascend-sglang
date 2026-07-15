@@ -44,15 +44,15 @@ class TestLoRARadixCache(CustomTestCase):
         CI_MULTI_LORA_MODELS = [
             # multi-rank case
             LoRAModelCase(
-                base="meta-llama/Llama-2-7b-hf",
+                base="Qwen/Qwen3-4B",
                 adaptors=[
                     LoRAAdaptor(
-                        name="winddude/wizardLM-LlaMA-LoRA-7B",
+                        name="nissenj/Qwen3-4B-lora-v2",
                         prefill_tolerance=1e-1,
                         rouge_l_tolerance=0.9,
                     ),
                     LoRAAdaptor(
-                        name="RuterNorway/Llama-2-7b-chat-norwegian-LoRa",
+                        name="TanXS/Qwen3-4B-LoRA-ZH-WebNovelty-v0.0",
                         prefill_tolerance=3e-1,
                         rouge_l_tolerance=0.9,
                     ),
