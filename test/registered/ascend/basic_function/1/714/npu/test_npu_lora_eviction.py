@@ -1,17 +1,3 @@
-# Copyright 2023-2024 SGLang Team
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-# ==============================================================================
-
 import contextlib
 import multiprocessing as mp
 import unittest
@@ -19,12 +5,11 @@ from typing import Dict, List, Tuple
 
 import torch
 
-from sglang.test.ci.ci_register import register_amd_ci, register_cuda_ci
+from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.runners import SRTRunner
 from sglang.test.test_utils import CustomTestCase
 
-register_cuda_ci(est_time=263, stage="extra-a", runner_config="1-gpu-small")
-register_amd_ci(est_time=224, suite="stage-b-test-1-gpu-small-amd")
+register_npu_ci(est_time=600, suite="full-1-npu-a3", nightly=True)
 
 PROMPTS = [
     "AI is a field of computer science focused on",
