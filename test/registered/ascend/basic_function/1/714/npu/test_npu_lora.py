@@ -57,8 +57,6 @@ class TestLora1(CustomTestCase):
             "2",
             "--max-loras-per-batch",
             "1",
-            "--base-gpu-id",
-            "2",
         ]
         cls.process = popen_launch_server(
             LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
