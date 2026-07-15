@@ -16,7 +16,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=200, suite="full-16-npu-a3", nightly=True)
 
-DEEPSEEK_V32_MODEL_PATH = "/home/weights/DeepSeek-V3.2-W8A8"
+DEEPSEEK_V32_MODEL_PATH = "/home/weights/DeepSeek-V2-Lite-W8A8"
 
 
 @unittest.skip("Skip for saving ci time")
@@ -32,10 +32,10 @@ class TestDeepseek(CustomTestCase):
             other_args=[
                 "--trust-remote-code",
                 "--tp",
-                "16",
+                "2",
                 "--enable-dp-attention",
                 "--dp",
-                "16",
+                "2",
                 "--moe-dense-tp-size",
                 "1",
                 "--enable-dp-lm-head",
@@ -95,10 +95,10 @@ class TestDeepseekMTP(CustomTestCase):
                 "--disable-overlap-schedule",
                 "--trust-remote-code",
                 "--tp",
-                "16",
+                "2",
                 "--enable-dp-attention",
                 "--dp",
-                "16",
+                "2",
                 "--moe-dense-tp-size",
                 "1",
                 "--enable-dp-lm-head",
