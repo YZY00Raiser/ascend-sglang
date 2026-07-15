@@ -66,6 +66,8 @@ class TestLoRARadixCache(CustomTestCase):
             max_new_tokens=max_new_tokens,
             disable_radix_cache=False,
             test_tag="lora-with-radix-cache",
+            backend="ascend",
+            attention_backend="ascend",
         )
 
         # Test lora without radix cache
@@ -76,6 +78,8 @@ class TestLoRARadixCache(CustomTestCase):
             max_new_tokens=max_new_tokens,
             disable_radix_cache=True,
             test_tag="lora-without-radix-cache",
+            backend="ascend",
+            attention_backend="ascend",
         )
 
 
