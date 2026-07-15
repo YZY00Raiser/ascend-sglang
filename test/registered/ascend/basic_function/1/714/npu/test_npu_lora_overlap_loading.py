@@ -16,15 +16,15 @@ class TestLoRAOverlapLoading(CustomTestCase):
         CI_MULTI_LORA_MODELS = [
             # multi-rank case
             LoRAModelCase(
-                base="/home/weights/Llama-3.2-1B-Instruct",
+                base="/home/weights/Qwen3-0.6B",
                 adaptors=[
                     LoRAAdaptor(
-                        name="/home/weights/codelion/Llama-3.2-1B-Instruct-tool-calling-lora",
+                        name="/home/weights/Qwen3-0.6B-accuracy-recovery-lora",
                         prefill_tolerance=1e-1,
                         rouge_l_tolerance=0.9,
                     ),
                     LoRAAdaptor(
-                        name="/home/weights/codelion/FastLlama-3.2-LoRA",
+                        name="/home/weights/committed-qwen3-0.6b-lora",
                         prefill_tolerance=3e-1,
                         rouge_l_tolerance=0.9,
                     ),
