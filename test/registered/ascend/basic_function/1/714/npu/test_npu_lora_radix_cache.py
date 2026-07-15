@@ -29,14 +29,14 @@ class TestLoRARadixCache(CustomTestCase):
         # Here we need a model case with multiple adaptors for testing correctness of radix cache
         LORA_MODELS_QWEN3 = [
             LoRAModelCase(
-                base=QWEN3_4B_WEIGHTS_PATH,
+                base="/home/weights/Qwen3-4B",
                 adaptors=[
                     LoRAAdaptor(
-                        name=QWEN3_4B_LORA_V2_WEIGHTS_PATH,
+                        name="/home/weights/Qwen3-4B-lora-v2",
                         prefill_tolerance=3e-1,
                     ),
                     LoRAAdaptor(
-                        name=QWEN3_4B_LORA_ZH_WEBNOVELTY_V0_0_WEIGHTS_PATH,
+                        name="/home/weights/Qwen3-4B-LoRA-ZH-WebNovelty-v0.0",
                         prefill_tolerance=3e-1,
                     ),
                 ],
