@@ -53,7 +53,7 @@ class TestLoRARadixCache(CustomTestCase):
         print("model_case.skip_long_prompt")
         print(model_case.skip_long_prompt)
 
-        torch_dtype = torch.float16
+        torch_dtype = torch.bfloat16
         max_new_tokens = 32
         batch_prompts = (
             PROMPTS
