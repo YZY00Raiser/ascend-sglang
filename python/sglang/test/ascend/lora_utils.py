@@ -517,7 +517,6 @@ def run_lora_test_one_by_one(
         print("rouge_tol")
         print(rouge_tol)
         if hf_prefill.shape[0] <= 100:
-
             assert torch.all(torch.abs(hf_prefill - srt_prefill) < prefill_tol), (
                 f"Prefill logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
                 f"backend '{backend}', prompt: '{prompts[0][:50]}...'"
