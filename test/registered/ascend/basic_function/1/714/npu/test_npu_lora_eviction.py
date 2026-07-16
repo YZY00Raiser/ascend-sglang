@@ -21,13 +21,19 @@ PROMPTS = [
     """,
 ]
 
+# ADAPTERS = [
+#     "faridlazuarda/valadapt-llama-3.1-8B-it-chinese",  # target_modules = q, v
+#     "philschmid/code-llama-3-1-8b-text-to-sql-lora",  # target_modules = q, k, v, o, gate, up, down
+# ]
+
+# BASE_MODEL = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+
 ADAPTERS = [
     "faridlazuarda/valadapt-llama-3.1-8B-it-chinese",  # target_modules = q, v
-    "/home/weights/qwen3.5-4b-mcat-lora",  # target_modules = q, k, v, o, gate, up, down
+    "philschmid/code-llama-3-1-8b-text-to-sql-lora",  # target_modules = q, k, v, o, gate, up, down
 ]
 
-BASE_MODEL = "/home/weights/Qwen3.5-4B"
-
+ BASE_MODEL = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 
 @contextlib.contextmanager
 def dynamically_loaded_adapter(runner, lora_path: str, lora_name: str):

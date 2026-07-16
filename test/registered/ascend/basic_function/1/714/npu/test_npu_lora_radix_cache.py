@@ -27,29 +27,28 @@ class TestLoRARadixCache(CustomTestCase):
 
     def test_lora_radix_cache(self):
         # Here we need a model case with multiple adaptors for testing correctness of radix cache
-        LORA_MODELS_QWEN3 = [
+        CI_MULTI_LORA_MODELS = [
+            # multi-rank case
             LoRAModelCase(
-                base="/home/weights/Qwen3-4B",
+                base="/home/weights/Qwen3.5-4B",
                 adaptors=[
                     LoRAAdaptor(
-                        name="/home/weights/Qwen3-4B-lora-v2",
-                        prefill_tolerance=1.4,
-                        decode_tolerance=5.8,
-                        rouge_l_tolerance=0.7,
+                        name="/home/weights/qwen3.5-4b-mcat-lora",
+                        prefill_tolerance=1e-1,
+                        rouge_l_tolerance=0.9,
                     ),
                     LoRAAdaptor(
-                        name="/home/weights/Qwen3-4B-LoRA-ZH-WebNovelty-v0.0",
-                        prefill_tolerance=1.4,
-                        decode_tolerance=5.8,
-                        rouge_l_tolerance=0.7,
+                        name="/home/weights/qwen3.5-4b-neo4j-text2cypher-lora",
+                        prefill_tolerance=3e-1,
+                        rouge_l_tolerance=0.9,
                     ),
                 ],
                 max_loras_per_batch=2,
-                max_loaded_loras=64,
+                max_loaded_loras=4,
             ),
         ]
 
-        model_case = LORA_MODELS_QWEN3[0]
+        model_case = CI_MULTI_LORA_MODELS[0]
 
         print("model_case.skip_long_prompt")
         print(model_case.skip_long_prompt)
