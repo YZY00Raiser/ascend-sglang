@@ -55,9 +55,6 @@ class TestLoRATP(CustomTestCase):
         )
 
     def test_all_lora_models(self):
-        if is_in_ci():
-            return
-
         # Retain ONLY_RUN check here
         filtered_models = []
         for model_case in ALL_OTHER_LORA_MODELS:
