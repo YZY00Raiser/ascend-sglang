@@ -62,9 +62,9 @@ class TestDeepseek(CustomTestCase):
                 "--attention-backend",
                 "ascend",
             ],
-            env={
-                "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
-            },
+            # env={
+            #     "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
+            # },
         )
 
     @classmethod
@@ -138,6 +138,9 @@ class TestDeepseekMTP(CustomTestCase):
                 "--attention-backend",
                 "ascend",
             ],
+            env={
+                "SGLANG_ENABLE_SPEC_V2": "1",
+            },
         )
 
     @classmethod
