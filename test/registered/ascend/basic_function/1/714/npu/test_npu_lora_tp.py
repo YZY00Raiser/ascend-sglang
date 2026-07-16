@@ -4,7 +4,7 @@ import unittest
 from typing import List, Optional
 
 from sglang.test.ci.ci_register import register_npu_ci
-from sglang.test.lora_utils import (
+from sglang.test.ascend.lora_utils import (
     ALL_OTHER_LORA_MODELS,
     CI_LORA_MODELS,
     CI_MULTI_LORA_MODELS,
