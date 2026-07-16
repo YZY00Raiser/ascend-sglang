@@ -378,13 +378,13 @@ def run_lora_test_one_by_one(
     model_case: LoRAModelCase,
     torch_dtype: torch.dtype,
     max_new_tokens: int,
-    backend: str = "csgmv",
+    backend: str = "ascend",
     enable_lora_overlap_loading: Optional[bool] = None,
     disable_cuda_graph: bool = False,
     disable_radix_cache: bool = False,
     mem_fraction_static: float = 0.88,
     test_tag: str = "",
-    attention_backend: Optional[str] = None,
+    attention_backend: Optional[str] = "ascend",
 ):
     """
     Input a batch of prompts, and run lora tests one by one with several generate requests
@@ -541,7 +541,7 @@ def run_lora_test_by_batch(
     model_case: LoRAModelCase,
     torch_dtype: torch.dtype,
     max_new_tokens: int,
-    backend: str = "csgmv",
+    backend: str = "ascend",
     disable_cuda_graph: bool = False,
     disable_radix_cache: bool = False,
     mem_fraction_static: float = 0.88,
@@ -736,7 +736,7 @@ def create_multiple_batch_test_samples(
 def run_lora_multiple_batch_on_model_cases(
     model_cases: List[LoRAModelCase],
     use_spec_decoding: bool = False,
-    attention_backend: str = "torch_native",
+    attention_backend: str = "ascend",
     disable_cuda_graph: bool = True,
     enable_deterministic_inference: bool = False,
     disable_radix_cache: bool = True,

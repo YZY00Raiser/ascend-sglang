@@ -33,11 +33,13 @@ class TestLoRARadixCache(CustomTestCase):
                 adaptors=[
                     LoRAAdaptor(
                         name="/home/weights/Qwen3-4B-lora-v2",
-                        prefill_tolerance=3e-1,
+                        prefill_tolerance=1e-1,
+                        rouge_l_tolerance=0.9,
                     ),
                     LoRAAdaptor(
                         name="/home/weights/Qwen3-4B-LoRA-ZH-WebNovelty-v0.0",
-                        prefill_tolerance=3e-1,
+                        prefill_tolerance=1e-1,
+                        rouge_l_tolerance=0.9,
                     ),
                 ],
                 max_loras_per_batch=2,
