@@ -507,16 +507,19 @@ def run_lora_test_one_by_one(
             "Max diff (HF base vs HF LoRA prefill):",
             torch.max(torch.abs(hf_no_lora_prefill - hf_prefill)),
         )
-
+        print("prefill_tol")
+        print(prefill_tol)
+        print("decode_tol")
+        print(decode_tol)
+        print("rouge_tol")
+        print(rouge_tol)
         if hf_prefill.shape[0] <= 100:
-            print("prefill_tol")
-            print(prefill_tol)
+
             assert torch.all(torch.abs(hf_prefill - srt_prefill) < prefill_tol), (
                 f"Prefill logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
                 f"backend '{backend}', prompt: '{prompts[0][:50]}...'"
             )
-            print("decode_tol")
-            print(decode_tol)
+
         if hf_decode.shape[0] <= 100:
             assert torch.all(torch.abs(hf_decode - srt_decode) < decode_tol), (
                 f"Decode logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
