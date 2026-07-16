@@ -918,6 +918,7 @@ def run_lora_batch_splitting_equivalence_test(
             disable_cuda_graph=disable_cuda_graph,
             disable_radix_cache=disable_radix_cache,
             lora_drain_wait_threshold=lora_drain_wait_threshold,
+            lora_backend="ascend",
         ) as srt_runner:
             for batch_idx, (batch_prompts, lora_paths) in enumerate(test_cases):
                 print(f"\n--- Batch {batch_idx + 1} ---")
