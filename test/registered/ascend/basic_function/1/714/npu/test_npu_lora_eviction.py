@@ -33,7 +33,7 @@ ADAPTERS = [
     "/home/weights/code-llama-3-1-8b-text-to-sql-lora",  # target_modules = q, k, v, o, gate, up, down
 ]
 
-BASE_MODEL = "/home/weights/Meta-Llama-3.1-8B-Instruct"
+BASE_MODEL = "/home/weights/Llama-3.1-8B-Instruct"
 
 @contextlib.contextmanager
 def dynamically_loaded_adapter(runner, lora_path: str, lora_name: str):
