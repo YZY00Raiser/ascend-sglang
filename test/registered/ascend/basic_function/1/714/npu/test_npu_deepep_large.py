@@ -62,9 +62,10 @@ class TestDeepseek(CustomTestCase):
                 "--attention-backend",
                 "ascend",
             ],
-            # env={
-            #     "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
-            # },
+            env={
+                "DEEP_NORMAL_LONG_SEQ_ROUND":"10",
+                "DEEP_NORMAL_LONG_SEQ_PER_ROUND_TOKENS":"512",
+            },
         )
 
     @classmethod
