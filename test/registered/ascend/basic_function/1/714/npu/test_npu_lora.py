@@ -19,9 +19,9 @@ from sglang.test.test_utils import (
 )
 
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
-LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH = "/home/weights/Llama-3.2-1B-Instruct"
-LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH = "/home/weights/codelion/Llama-3.2-1B-Instruct-tool-calling-lora"
-LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH = "/home/weights/codelion/FastLlama-3.2-LoRA"
+BASE = "/home/weights/Qwen3.5-4B"
+LORA_A = "/home/weights/Qwen3-4B-lora-v2"
+LORA_B = "/home/weights/qwen3.5-4b-neo4j-text2cypher-lora"
 
 
 class TestLora1(CustomTestCase):
@@ -32,8 +32,8 @@ class TestLora1(CustomTestCase):
     [Test Target] --max-load-rank, --lora-backend
     """
 
-    lora_a = LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH
-    lora_b = LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH
+    lora_a = LORA_A
+    lora_b = LORA_B
 
     @classmethod
     def setUpClass(cls):
@@ -59,7 +59,7 @@ class TestLora1(CustomTestCase):
             "1",
         ]
         cls.process = popen_launch_server(
-            LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
+            BASE,
             DEFAULT_URL_FOR_TEST,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=other_args,
