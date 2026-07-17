@@ -20,11 +20,11 @@ register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 ALL_OTHER_LORA_MODELS = [
     LoRAModelCase(
         # base="meta-llama/Llama-3.1-8B-Instruct",
-        base="/home/weights/Qwen3.5-4B",
+        base="/home/weights/Qwen3.5-9B",
         adaptors=[
             LoRAAdaptor(
                 # name="nvidia/llama-3.1-nemoguard-8b-topic-control",
-                name="/home/weights/qwen3.5-4b-mcat-lora",
+                name="/home/weights/Qwen3.5-9B-Coder-LoRA",
                 prefill_tolerance=1e-1,
             ),
         ],
@@ -32,8 +32,9 @@ ALL_OTHER_LORA_MODELS = [
     ),
     LoRAModelCase(
         # base="meta-llama/Llama-2-7b-hf",
-
-        adaptors=[LoRAAdaptor(name="winddude/wizardLM-LlaMA-LoRA-7B")],
+        base="/home/weights/Qwen3.5-4B",
+        # adaptors=[LoRAAdaptor(name="winddude/wizardLM-LlaMA-LoRA-7B")],
+        adaptors=[LoRAAdaptor(name="/home/weights/qwen3.5-4b-neo4j-text2cypher-lora")],
         max_loras_per_batch=2,
     ),
 ]
@@ -99,6 +100,7 @@ class TestLoRATP(CustomTestCase):
                         max_new_tokens=32,
                         enable_lora_overlap_loading=enable_lora_overlap_loading,
                         test_tag=f"tp={tp_size}, enable_lora_overlap_loading={enable_lora_overlap_loading}",
+                        backend="csgmv"
                     )
 
     def test_ci_lora_models(self):
