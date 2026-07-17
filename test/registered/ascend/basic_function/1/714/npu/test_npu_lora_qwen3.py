@@ -44,7 +44,9 @@ class TestLoRAQwen3(CustomTestCase):
     def test_ci_lora_models(self):
         run_lora_multiple_batch_on_model_cases(
             LORA_MODELS_QWEN3,
-            attention_backend="ascend",)
+            attention_backend="ascend",
+
+        )
 
 
 if __name__ == "__main__":
