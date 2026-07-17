@@ -64,7 +64,7 @@ class TestDeepseek(CustomTestCase):
             ],
             env={
                 "DEEPEP_NORMAL_LONG_SEQ_ROUND":"10",
-                "DEEPEP_NORMAL_LONG_SEQ_PER_ROUND_TOKENS":"512",
+                "DEEPEP_NORMAL_LONG_SEQ_PER_ROUND_TOKENS":"1024",
             },
         )
 
