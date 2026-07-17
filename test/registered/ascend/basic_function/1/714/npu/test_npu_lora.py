@@ -57,6 +57,8 @@ class TestLora1(CustomTestCase):
             "2",
             "--max-loras-per-batch",
             "1",
+            "--lora-backend",
+            "ascend",
         ]
         cls.process = popen_launch_server(
             BASE,
