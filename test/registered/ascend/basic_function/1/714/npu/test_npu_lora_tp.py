@@ -13,7 +13,7 @@ from sglang.test.ascend.lora_utils import (
     LoRAModelCase,
     run_lora_test_one_by_one, LoRAAdaptor,
 )
-from sglang.test.test_utils import CustomTestCase, is_in_ci
+from sglang.test.test_utils import CustomTestCase
 
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
