@@ -80,7 +80,7 @@ class TestLora1(CustomTestCase):
                     "temperature": 0,
                     "max_new_tokens": 128,
                 },
-                "lora_path": "lora_a",
+                "lora_path": "lora_b",
             },
         )
         self.assertEqual(response.status_code, 200)
