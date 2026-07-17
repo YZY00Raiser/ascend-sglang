@@ -40,8 +40,8 @@ class TestLora1(CustomTestCase):
         other_args = [
             "--enable-lora",
             "--lora-path",
-            f"lora_a={cls.lora_a}",
-            # f"lora_b={cls.lora_b}",
+            # f"lora_a={cls.lora_a}",
+            f"lora_b={cls.lora_b}",
             "--max-loaded-loras",
             "2",
             "--lora-target-modules",
