@@ -36,7 +36,7 @@ class LoRAModelCase:
             )
 
 
-TORCH_DTYPES = [torch.bfloat16]
+TORCH_DTYPES = [torch.float16]
 BACKENDS = ["triton", "csgmv"]
 DEFAULT_PROMPTS = [
     "AI is a field of computer science focused on",
@@ -378,7 +378,7 @@ def run_lora_test_one_by_one(
     model_case: LoRAModelCase,
     torch_dtype: torch.dtype,
     max_new_tokens: int,
-    backend: str = "ascend",
+    backend: str = "csgmv",
     enable_lora_overlap_loading: Optional[bool] = None,
     disable_cuda_graph: bool = False,
     disable_radix_cache: bool = False,
@@ -447,7 +447,6 @@ def run_lora_test_one_by_one(
         tp_size=model_case.tp_size,
         mem_fraction_static=mem_fraction_static,
         attention_backend=attention_backend,
-        lora_backend="ascend",
     ) as srt_runner:
         srt_no_lora_outputs = srt_runner.forward(prompts, max_new_tokens=max_new_tokens)
 
@@ -541,7 +540,7 @@ def run_lora_test_by_batch(
     model_case: LoRAModelCase,
     torch_dtype: torch.dtype,
     max_new_tokens: int,
-    backend: str = "ascend",
+    backend: str = "csgmv",
     disable_cuda_graph: bool = False,
     disable_radix_cache: bool = False,
     mem_fraction_static: float = 0.88,
@@ -604,7 +603,6 @@ def run_lora_test_by_batch(
         model_type="generation",
         tp_size=model_case.tp_size,
         mem_fraction_static=mem_fraction_static,
-        lora_backend="ascend",
     ) as srt_runner:
         srt_no_lora_outputs = srt_runner.batch_forward(
             prompts, max_new_tokens=max_new_tokens
@@ -781,7 +779,6 @@ def run_lora_multiple_batch_on_model_cases(
                 enable_deterministic_inference=enable_deterministic_inference,
                 disable_cuda_graph=disable_cuda_graph,
                 disable_radix_cache=disable_radix_cache,
-                lora_backend="ascend",
                 **spec_args,
             )
 
@@ -921,7 +918,6 @@ def run_lora_batch_splitting_equivalence_test(
             disable_cuda_graph=disable_cuda_graph,
             disable_radix_cache=disable_radix_cache,
             lora_drain_wait_threshold=lora_drain_wait_threshold,
-            lora_backend="ascend",
         ) as srt_runner:
             for batch_idx, (batch_prompts, lora_paths) in enumerate(test_cases):
                 print(f"\n--- Batch {batch_idx + 1} ---")
