@@ -3,18 +3,20 @@ import os
 import unittest
 from typing import List, Optional
 
+import torch
+
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.ascend.lora_utils import (
     # ALL_OTHER_LORA_MODELS,
     # CI_LORA_MODELS,
     # CI_MULTI_LORA_MODELS,
     DEFAULT_PROMPTS,
-    TORCH_DTYPES,
+    # TORCH_DTYPES,
     LoRAModelCase,
     run_lora_test_one_by_one, LoRAAdaptor,
 )
 from sglang.test.test_utils import CustomTestCase
-
+TORCH_DTYPES=[torch.bfloat16]
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
 ALL_OTHER_LORA_MODELS = [
