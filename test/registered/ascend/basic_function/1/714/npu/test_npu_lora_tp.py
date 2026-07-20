@@ -24,7 +24,7 @@ ALL_OTHER_LORA_MODELS = [
         adaptors=[
             LoRAAdaptor(
                 # name="nvidia/llama-3.1-nemoguard-8b-topic-control",
-                name="/home/weights/Qwen3.5-9B-Coder-LoRA",
+                name="/home/weights/Qwen3.5-9B-LoRA-new",
                 prefill_tolerance=1e-1,
             ),
         ],
