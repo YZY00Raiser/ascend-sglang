@@ -86,7 +86,7 @@ class TestLoRAEviction(CustomTestCase):
     ):
         REUSED_LORA_NAME = "lora"
         max_new_tokens = 256
-        torch_dtype = torch.float16
+        torch_dtype = torch.bfloat16
         base_path = BASE_MODEL
         assert len(lora_paths) >= 2
 
