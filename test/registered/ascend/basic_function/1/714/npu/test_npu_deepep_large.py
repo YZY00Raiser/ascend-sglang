@@ -53,7 +53,7 @@ class TestDeepseek(CustomTestCase):
                 "--cuda-graph-bs",
                 "256",
                 "--max-running-requests",
-                "2048",
+                "512",
                 "--disable-radix-cache",
                 "--model-loader-extra-config",
                 '{"enable_multithread_load": true,"num_threads": 64}',
@@ -66,6 +66,7 @@ class TestDeepseek(CustomTestCase):
                 "DEEPEP_NORMAL_LONG_SEQ_ROUND":"10",
                 "DEEPEP_NORMAL_LONG_SEQ_PER_ROUND_TOKENS":"2048",
                 "DEEPEP_HCCL_BUFFSIZE":"1800",
+                "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK":"512",
             },
         )
 
