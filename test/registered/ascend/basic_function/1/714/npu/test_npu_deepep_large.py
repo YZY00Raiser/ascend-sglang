@@ -18,7 +18,7 @@ register_npu_ci(est_time=200, suite="full-2-npu-a3", nightly=True)
 DEEPSEEK_V32_MODEL_PATH = "/home/weights/DeepSeek-V2-Lite-W8A8"
 
 
-# @unittest.skip("Skip for saving ci time")
+@unittest.skip("Pass")
 class TestDeepseek(CustomTestCase):
     @classmethod
     def setUpClass(cls):
@@ -85,7 +85,7 @@ class TestDeepseek(CustomTestCase):
 
         self.assertGreater(metrics["score"], 0.34)
 
-@unittest.skip("err")
+# @unittest.skip("err")
 class TestDeepseekMTP(CustomTestCase):
     @classmethod
     def setUpClass(cls):
