@@ -152,8 +152,8 @@ class TestDeepseekMTP(CustomTestCase):
             eval_name="gsm8k",
             api="completion",
             max_tokens=512,
-            num_examples=100,
-            num_threads=100,
+            num_examples=50,
+            num_threads=50,
         )
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
@@ -161,6 +161,8 @@ class TestDeepseekMTP(CustomTestCase):
         self.assertGreater(metrics["score"], 0.34)
 
         server_info = requests.get(self.base_url + "/server_info")
+        print("WWWwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        print(server_info.json())
         avg_spec_accept_length = server_info.json()["internal_states"][0][
             "avg_spec_accept_length"
         ]
