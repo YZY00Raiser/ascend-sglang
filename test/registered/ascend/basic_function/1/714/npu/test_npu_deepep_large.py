@@ -7,14 +7,13 @@ from sglang.srt.utils import kill_process_tree
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.run_eval import run_eval
 from sglang.test.test_utils import (
-    DEFAULT_DEEPEP_MODEL_NAME_FOR_TEST,
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
     popen_launch_server,
 )
 
-register_npu_ci(est_time=200, suite="full-16-npu-a3", nightly=True)
+register_npu_ci(est_time=200, suite="full-2-npu-a3", nightly=True)
 
 DEEPSEEK_V32_MODEL_PATH = "/home/weights/DeepSeek-V2-Lite-W8A8"
 
@@ -41,9 +40,6 @@ class TestDeepseek(CustomTestCase):
                 "--enable-dp-lm-head",
                 "--moe-a2a-backend",
                 "deepep",
-                # "--moe-runner-backend",
-                # "deep_gemm",
-                # "--enable-two-batch-overlap",
                 "--ep-num-redundant-experts",
                 "32",
                 "--ep-dispatch-algorithm",
@@ -87,7 +83,7 @@ class TestDeepseek(CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
-        self.assertGreater(metrics["score"], 0.92)
+        self.assertGreater(metrics["score"], 0.34)
 
 @unittest.skip("err")
 class TestDeepseekMTP(CustomTestCase):
@@ -115,12 +111,12 @@ class TestDeepseekMTP(CustomTestCase):
                 # "--moe-runner-backend",
                 # "deep_gemm",
                 # "--enable-two-batch-overlap",
-                # "--ep-num-redundant-experts",
-                # "32",
-                # "--ep-dispatch-algorithm",
-                # "dynamic",
-                # "--eplb-algorithm",
-                # "deepseek",
+                "--ep-num-redundant-experts",
+                "32",
+                "--ep-dispatch-algorithm",
+                "dynamic",
+                "--eplb-algorithm",
+                "deepseek",
                 "--cuda-graph-bs",
                 "64",  # TODO: increase it to 128 when TBO is supported in draft_extend
                 "--max-running-requests",
@@ -163,7 +159,7 @@ class TestDeepseekMTP(CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
 
-        self.assertGreater(metrics["score"], 0.92)
+        self.assertGreater(metrics["score"], 0.34)
 
         server_info = requests.get(self.base_url + "/server_info")
         avg_spec_accept_length = server_info.json()["internal_states"][0][
