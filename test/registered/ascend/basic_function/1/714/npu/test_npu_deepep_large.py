@@ -108,9 +108,6 @@ class TestDeepseekMTP(CustomTestCase):
                 "--enable-dp-lm-head",
                 "--moe-a2a-backend",
                 "deepep",
-                # "--moe-runner-backend",
-                # "deep_gemm",
-                # "--enable-two-batch-overlap",
                 "--ep-num-redundant-experts",
                 "32",
                 "--ep-dispatch-algorithm",
@@ -118,7 +115,7 @@ class TestDeepseekMTP(CustomTestCase):
                 "--eplb-algorithm",
                 "deepseek",
                 "--cuda-graph-bs",
-                "64",  # TODO: increase it to 128 when TBO is supported in draft_extend
+                "64",
                 "--max-running-requests",
                 "512",
                 "--speculative-algorithm",
