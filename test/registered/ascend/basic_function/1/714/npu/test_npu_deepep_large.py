@@ -133,6 +133,8 @@ class TestDeepseekMTP(CustomTestCase):
                 "0.6",
                 "--attention-backend",
                 "ascend",
+                "--quantization",
+                "modelslim",
             ],
             env={
                 "SGLANG_ENABLE_SPEC_V2": "1",
