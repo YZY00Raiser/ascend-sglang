@@ -119,7 +119,7 @@ class TestDeepseekMTP(CustomTestCase):
                 "--max-running-requests",
                 "512",
                 "--speculative-algorithm",
-                "EAGLE3",
+                "NEXTN",
                 "--speculative-num-steps",
                 "1",
                 "--speculative-eagle-topk",
@@ -150,8 +150,8 @@ class TestDeepseekMTP(CustomTestCase):
             eval_name="gsm8k",
             api="completion",
             max_tokens=512,
-            num_examples=100,
-            num_threads=100,
+            num_examples=1200,
+            num_threads=1200,
         )
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
