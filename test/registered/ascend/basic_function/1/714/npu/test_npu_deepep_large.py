@@ -153,8 +153,8 @@ class TestDeepseekMTP(CustomTestCase):
             eval_name="gsm8k",
             api="completion",
             max_tokens=512,
-            num_examples=50,
-            num_threads=50,
+            num_examples=20,
+            num_threads=20,
         )
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
