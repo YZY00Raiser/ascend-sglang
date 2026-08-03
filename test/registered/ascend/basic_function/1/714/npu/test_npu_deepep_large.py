@@ -137,9 +137,9 @@ class TestDeepseekMTP(CustomTestCase):
                 "--attention-backend",
                 "ascend",
             ],
-            # env={
-            #     "SGLANG_ENABLE_SPEC_V2": "1",
-            # },
+            env={
+                "SGLANG_ENABLE_SPEC_V2": "1",
+            },
         )
 
     @classmethod
