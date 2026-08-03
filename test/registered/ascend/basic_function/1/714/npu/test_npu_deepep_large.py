@@ -138,7 +138,7 @@ class TestDeepseekMTP(CustomTestCase):
                 "modelslim",
             ],
             env={
-                "HCCL_BUFFSIZE": "500",
+                "HCCL_BUFFSIZE": "2048",
                 "SGLANG_ENABLE_SPEC_V2": "1",
 
             },
