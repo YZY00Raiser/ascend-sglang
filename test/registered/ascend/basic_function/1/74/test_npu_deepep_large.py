@@ -158,6 +158,8 @@ class TestDeepseekMTP(CustomTestCase):
                 "--disable-radix-cache",
                 "--model-loader-extra-config",
                 '{"enable_multithread_load": true,"num_threads": 64}',
+                "--quantization",
+                "modelslim",
             ],
         )
 
