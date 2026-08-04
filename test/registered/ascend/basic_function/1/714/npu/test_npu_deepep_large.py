@@ -18,7 +18,7 @@ register_npu_ci(est_time=1000, suite="full-2-npu-a3", nightly=True)
 DEEPSEEK_V32_MODEL_PATH = "/home/weights/DeepSeek-V2-Lite-W8A8"
 
 
-@unittest.skip("Pass")
+
 class TestDeepseek(CustomTestCase):
     @classmethod
     def setUpClass(cls):
@@ -139,7 +139,6 @@ class TestDeepseekMTP(CustomTestCase):
                 "modelslim",
             ],
             env={
-                # "HCCL_BUFFSIZE": "2048",
                 "DEEPEP_HCCL_BUFFSIZE": "1800",
                 "SGLANG_ENABLE_SPEC_V2": "1",
                 "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "512",
