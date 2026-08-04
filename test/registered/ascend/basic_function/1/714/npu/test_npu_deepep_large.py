@@ -62,7 +62,7 @@ class TestDeepseek(CustomTestCase):
                 # "DEEPEP_NORMAL_LONG_SEQ_ROUND":"10",
                 # "DEEPEP_NORMAL_LONG_SEQ_PER_ROUND_TOKENS":"2048",
                 "DEEPEP_HCCL_BUFFSIZE":"1800",
-                "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK":"512",
+                "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK":"2048",
             },
         )
 
