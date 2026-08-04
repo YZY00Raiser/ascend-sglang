@@ -496,6 +496,7 @@ def run_lora_test_one_by_one(
         srt_prefill = torch.tensor(srt_outputs.top_input_logprobs[i])
         max_prefill_diff = torch.max(torch.abs(hf_prefill - srt_prefill))
         print("Max prefill diff (HF vs SRT):", max_prefill_diff)
+        print(f"[{test_tag}] prefill_tol={prefill_tol}, decode_tol={decode_tol}, rouge_tol={rouge_tol}", )
 
         # Compare decode stage logprobs
         hf_decode = torch.tensor(hf_outputs.top_output_logprobs[i])
