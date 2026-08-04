@@ -85,7 +85,7 @@ class TestDeepseek(CustomTestCase):
 
         self.assertGreater(metrics["score"], 0.34)
 
-@unittest.skip("err")
+# @unittest.skip("err")
 class TestDeepseekMTP(CustomTestCase):
     @classmethod
     def setUpClass(cls):
