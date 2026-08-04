@@ -4,14 +4,14 @@ from typing import List, Optional
 
 import torch
 
-from sglang.test.ascend.test_ascend_utils import (
-    QWEN3_4B_LORA_V2_WEIGHTS_PATH,
-    QWEN3_4B_LORA_ZH_WEBNOVELTY_V0_0_WEIGHTS_PATH,
-    QWEN3_4B_WEIGHTS_PATH,
-    QWEN3_5_4B_MCAT_LORA_PATH,
-    QWEN3_5_4B_NEO4J_TEXT2CYPHER_LORA_PATH,
-    QWEN3_5_4B_WEIGHTS_PATH,
-)
+# from sglang.test.ascend.test_ascend_utils import (
+#     QWEN3_4B_LORA_V2_WEIGHTS_PATH,
+#     QWEN3_4B_LORA_ZH_WEBNOVELTY_V0_0_WEIGHTS_PATH,
+#     QWEN3_4B_WEIGHTS_PATH,
+#     QWEN3_5_4B_MCAT_LORA_PATH,
+#     QWEN3_5_4B_NEO4J_TEXT2CYPHER_LORA_PATH,
+#     QWEN3_5_4B_WEIGHTS_PATH,
+# )
 from sglang.test.runners import HFRunner, SRTRunner
 from sglang.test.test_utils import calculate_rouge_l
 
