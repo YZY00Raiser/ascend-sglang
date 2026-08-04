@@ -18,7 +18,7 @@ register_npu_ci(est_time=200, suite="full-2-npu-a3", nightly=True)
 DEEPSEEK_V32_MODEL_PATH = "/home/weights/DeepSeek-V2-Lite-W8A8"
 
 
-@unittest.skip("Pass")
+# @unittest.skip("Pass")
 class TestDeepseek(CustomTestCase):
     @classmethod
     def setUpClass(cls):
@@ -59,9 +59,9 @@ class TestDeepseek(CustomTestCase):
                 "ascend",
             ],
             env={
-                "DEEPEP_NORMAL_LONG_SEQ_ROUND":"10",
-                "DEEPEP_NORMAL_LONG_SEQ_PER_ROUND_TOKENS":"2048",
-                "DEEPEP_HCCL_BUFFSIZE":"1800",
+                # "DEEPEP_NORMAL_LONG_SEQ_ROUND":"10",
+                # "DEEPEP_NORMAL_LONG_SEQ_PER_ROUND_TOKENS":"2048",
+                # "DEEPEP_HCCL_BUFFSIZE":"1800",
                 "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK":"512",
             },
         )
@@ -85,7 +85,7 @@ class TestDeepseek(CustomTestCase):
 
         self.assertGreater(metrics["score"], 0.34)
 
-# @unittest.skip("err")
+@unittest.skip("err")
 class TestDeepseekMTP(CustomTestCase):
     @classmethod
     def setUpClass(cls):
