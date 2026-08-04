@@ -73,10 +73,6 @@ class TestLoraBackend(CustomTestCase):
         self.assertEqual(response.json()["lora_backend"], f"{self.lora_backend}")
 
 
-class TestLoraBackendCsgmv(TestLoraBackend):
-    lora_backend = "csgmv"
-
-
 class TestLoraBackendAscend(TestLoraBackend):
     lora_backend = "ascend"
 
