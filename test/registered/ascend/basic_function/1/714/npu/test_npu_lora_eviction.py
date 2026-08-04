@@ -9,7 +9,7 @@ from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.runners import SRTRunner
 from sglang.test.test_utils import CustomTestCase
 
-register_npu_ci(est_time=600, suite="full-1-npu-a3", nightly=True)
+register_npu_ci(est_time=1200, suite="full-1-npu-a3", nightly=True)
 
 PROMPTS = [
     "AI is a field of computer science focused on",
