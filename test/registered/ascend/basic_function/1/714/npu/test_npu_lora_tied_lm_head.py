@@ -53,7 +53,7 @@ from sglang.test.test_utils import DEFAULT_PORT_FOR_SRT_TEST_RUNNER, CustomTestC
 register_cuda_ci(est_time=120, suite="nightly-1-gpu", nightly=True)
 
 # Use a small model with tie_word_embeddings=True
-BASE_MODEL = "Qwen/Qwen2.5-0.5B"
+BASE_MODEL = "/home/weights/Qwen3.5-4B"
 
 TEST_PROMPTS = [
     "AI is a field of computer science focused on",
@@ -167,6 +167,7 @@ class TestLoRATiedLMHead(CustomTestCase):
             disable_radix_cache=True,
             mem_fraction_static=0.80,
             port=DEFAULT_PORT_FOR_SRT_TEST_RUNNER,
+            attention_backend="ascend",
         ) as srt_runner:
             srt_outputs = srt_runner.forward(
                 prompts,
