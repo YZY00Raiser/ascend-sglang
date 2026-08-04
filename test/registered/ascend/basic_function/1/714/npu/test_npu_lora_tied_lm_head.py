@@ -157,7 +157,7 @@ class TestLoRATiedLMHead(CustomTestCase):
         # Run SGLang with LoRA
         with SRTRunner(
             BASE_MODEL,
-            torch_dtype=torch.float16,
+            torch_dtype=torch.bfloat16,
             model_type="generation",
             lora_paths=[self._adapter_dir],
             max_loras_per_batch=1,
