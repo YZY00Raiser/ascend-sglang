@@ -49,7 +49,7 @@ class TestDeepseek(CustomTestCase):
                 "--cuda-graph-bs",
                 "256",
                 "--max-running-requests",
-                "512",
+                "2048",
                 "--disable-radix-cache",
                 "--model-loader-extra-config",
                 '{"enable_multithread_load": true,"num_threads": 64}',
