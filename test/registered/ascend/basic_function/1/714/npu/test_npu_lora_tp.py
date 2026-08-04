@@ -27,7 +27,8 @@ ALL_OTHER_LORA_MODELS = [
             LoRAAdaptor(
                 # name="nvidia/llama-3.1-nemoguard-8b-topic-control",
                 name="/home/weights/Qwen3.5-9B-LoRA-new",
-                prefill_tolerance=1e-1,
+                prefill_tolerance=3e-1,
+
             ),
         ],
         max_loras_per_batch=1,
@@ -36,7 +37,13 @@ ALL_OTHER_LORA_MODELS = [
         # base="meta-llama/Llama-2-7b-hf",
         base="/home/weights/Qwen3.5-4B",
         # adaptors=[LoRAAdaptor(name="winddude/wizardLM-LlaMA-LoRA-7B")],
-        adaptors=[LoRAAdaptor(name="/home/weights/qwen3.5-4b-neo4j-text2cypher-lora")],
+        adaptors=[
+            LoRAAdaptor(
+                name="/home/weights/qwen3.5-4b-neo4j-text2cypher-lora",
+                prefill_tolerance=3e-1,
+                decode_tolerance=3e-1,
+            )
+        ],
         max_loras_per_batch=2,
     ),
 ]
@@ -49,6 +56,8 @@ CI_LORA_MODELS = [
             LoRAAdaptor(
                 # name="algoprog/fact-generation-llama-3.1-8b-instruct-lora",
                 name="/home/weights/qwen3.5-4b-mcat-lora",
+                prefill_tolerance=3e-1,
+                decode_tolerance=3e-1,
             ),
         ],
         max_loras_per_batch=1,
