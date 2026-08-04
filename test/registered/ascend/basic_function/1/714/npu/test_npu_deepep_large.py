@@ -142,7 +142,7 @@ class TestDeepseekMTP(CustomTestCase):
                 # "HCCL_BUFFSIZE": "2048",
                 "DEEPEP_HCCL_BUFFSIZE": "1800",
                 "SGLANG_ENABLE_SPEC_V2": "1",
-                "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "1024",
+                "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "512",
             },
         )
 
