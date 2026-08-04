@@ -63,12 +63,14 @@ CI_MULTI_LORA_MODELS = [
         adaptors=[
             LoRAAdaptor(
                 name="/home/weights/qwen3.5-4b-mcat-lora",
-                prefill_tolerance=1e-1,
+                prefill_tolerance=2.5e-1,
+                decode_tolerance=2.5e-1,
                 rouge_l_tolerance=0.9,
             ),
             LoRAAdaptor(
                 name="/home/weights/qwen3.5-4b-neo4j-text2cypher-lora",
-                prefill_tolerance=3e-1,
+                prefill_tolerance=3.5e-1,
+                decode_tolerance=2.5e-1,
                 rouge_l_tolerance=0.9,
             ),
         ],

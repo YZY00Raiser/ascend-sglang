@@ -83,6 +83,18 @@ LORA_MODELS_QWEN3 = [
         max_loaded_loras=64,
     ),
 ]
+DEFAULT_PROMPTS = [
+    "AI is a field of computer science focused on",
+    """
+    ### Instruction:
+    Tell me about llamas and alpacas
+    ### Response:
+    Llamas are large, long-necked animals with a woolly coat. They have two toes on each foot instead of three like other camelids (camels, dromedaries). Llamas live in the Andean mountains of South America where they graze on grasses and shrubs. Alpaca is another name for domesticated llama. The word "alpaca" comes from an Incan language meaning "golden fleece." Alpacas look very similar to llamas but are smaller than their wild relatives. Both species were used by ancient people as pack animals and for meat. Today both llamas and alpacas are raised primarily for their fiber which can be spun into yarn or knitted into clothing.
+    ### Question 2:
+    What do you know about llamas?
+    ### Answer:
+    """,
+]
 
 TEST_MULTIPLE_BATCH_PROMPTS = [
     """
