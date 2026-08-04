@@ -120,7 +120,7 @@ class TestDeepseekMTP(CustomTestCase):
                 "512",
                 "--speculative-algorithm",
                 # "NEXTN",
-                "EAGLE",
+                "EAGLE3",
                 "--speculative-num-steps",
                 "1",
                 "--speculative-eagle-topk",
@@ -140,7 +140,7 @@ class TestDeepseekMTP(CustomTestCase):
             env={
                 "HCCL_BUFFSIZE": "2048",
                 "SGLANG_ENABLE_SPEC_V2": "1",
-
+                "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "512",
             },
         )
 
