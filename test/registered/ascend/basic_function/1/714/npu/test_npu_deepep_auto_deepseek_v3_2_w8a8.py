@@ -59,6 +59,7 @@ class TestDeepEpDeepseekV32(CustomTestCase):
                 "--moe-dense-tp-size",
                 "1",
                 "--enable-dp-lm-head",
+                "--enable-dp-attention",
                 "--ep-num-redundant-experts",
                 "32",
                 "--ep-dispatch-algorithm",
