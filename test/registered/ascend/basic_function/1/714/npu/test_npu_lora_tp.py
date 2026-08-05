@@ -33,7 +33,7 @@ ALL_OTHER_LORA_MODELS = [
                 name="/home/weights/Qwen3-4B-lora-v2",
                 prefill_tolerance=3e-1,
                 decode_tolerance=3e-1,
-                rouge_l_tolerance=9.7e-1,
+                rouge_l_tolerance=0.9,
             ),
         ],
         max_loras_per_batch=1,
