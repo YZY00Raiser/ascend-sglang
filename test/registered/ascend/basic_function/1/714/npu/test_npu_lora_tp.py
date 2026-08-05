@@ -28,7 +28,7 @@ ALL_OTHER_LORA_MODELS = [
             LoRAAdaptor(
                 # name="nvidia/llama-3.1-nemoguard-8b-topic-control",
                 # name="/home/weights/Qwen3.5-9B-LoRA-new",
-                name="qwen3.6-27b-cybersecurity-lora",
+                name="/home/weights/qwen3.6-27b-cybersecurity-lora",
                 prefill_tolerance=7e-1,
                 decode_tolerance=7,
             ),
