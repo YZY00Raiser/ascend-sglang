@@ -129,9 +129,9 @@ class TestLoRATiedLMHead(CustomTestCase):
     @classmethod
     def tearDownClass(cls):
         """Clean up the temporary adapter directory."""
-        if cls._adapter_dir and os.path.exists(cls._adapter_dir):
-            shutil.rmtree(cls._adapter_dir)
-        super().tearDownClass()
+        # if cls._adapter_dir and os.path.exists(cls._adapter_dir):
+        #     shutil.rmtree(cls._adapter_dir)
+        # super().tearDownClass()
 
     def test_tied_lm_head_lora_hf_sgl_logprob_match(self):
         """
