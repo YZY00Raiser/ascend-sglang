@@ -39,8 +39,8 @@ from sglang.test.test_utils import DEFAULT_PORT_FOR_SRT_TEST_RUNNER, CustomTestC
 register_cuda_ci(est_time=120, suite="nightly-1-gpu", nightly=True)
 
 # Use a small model with tie_word_embeddings=True
-# BASE_MODEL = "/home/weights/Qwen3.5-4B"
-BASE_MODEL = "/home/weights/Qwen2.5-0.5B"
+BASE_MODEL = "/home/weights/Qwen3.5-4B"
+# BASE_MODEL = "/home/weights/Qwen2.5-0.5B"
 TEST_PROMPTS = [
     "AI is a field of computer science focused on",
     "The capital of France is",
@@ -143,7 +143,7 @@ class TestLoRATiedLMHead(CustomTestCase):
         # Run SGLang with LoRA
         with SRTRunner(
             BASE_MODEL,
-            torch_dtype=torch.float16,
+            torch_dtype=torch.bfloat16,
             model_type="generation",
             lora_paths=[self._adapter_dir],
             max_loras_per_batch=1,
@@ -166,7 +166,7 @@ class TestLoRATiedLMHead(CustomTestCase):
         # Run HuggingFace with LoRA (via PEFT)
         with HFRunner(
             BASE_MODEL,
-            torch_dtype=torch.float16,
+            torch_dtype=torch.bfloat16,
             model_type="generation",
         ) as hf_runner:
             hf_outputs = hf_runner.forward(
