@@ -38,6 +38,8 @@ class TestDeepEpDeepseekV32(CustomTestCase):
                 "--trust-remote-code",
                 "--tp-size",
                 "16",
+                "--dp",
+                "16",
                 "--quantization",
                 "modelslim",
                 "--moe-a2a-backend",
