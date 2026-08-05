@@ -23,7 +23,7 @@ ALL_OTHER_LORA_MODELS = [
     LoRAModelCase(
         # base="meta-llama/Llama-3.1-8B-Instruct",
         # base="/home/weights/Qwen3.5-9B",
-        base="/home/weights/Qwen/Qwen3.6-27B-W8A8",
+        base="/home/weights/Qwen3.6-27B-W8A8",
         adaptors=[
             LoRAAdaptor(
                 # name="nvidia/llama-3.1-nemoguard-8b-topic-control",
