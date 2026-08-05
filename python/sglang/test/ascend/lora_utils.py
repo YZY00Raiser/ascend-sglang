@@ -524,6 +524,7 @@ def run_lora_test_one_by_one(
         )
 
         if hf_prefill.shape[0] <= 100:
+            print(f"[{test_tag}] pre_tol={torch.abs(hf_prefill - srt_prefill)}")
             assert torch.all(torch.abs(hf_prefill - srt_prefill) < prefill_tol), (
                 f"Prefill logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
                 f"backend '{backend}', prompt: '{prompts[0][:50]}...'"
@@ -532,6 +533,7 @@ def run_lora_test_one_by_one(
             )
 
         if hf_decode.shape[0] <= 100:
+            print(f"[{test_tag}] dec_tol={torch.abs(hf_decode - srt_decode)}")
             assert torch.all(torch.abs(hf_decode - srt_decode) < decode_tol), (
                 f"Decode logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
                 f"backend '{backend}', prompt: '{prompts[0][:50]}...'"
@@ -540,6 +542,7 @@ def run_lora_test_one_by_one(
             )
 
         if rouge_score < rouge_tol:
+            print(f"[{test_tag}] rouge_tol={rouge_tol}, rouge_score={rouge_score}")
             raise AssertionError(
                 f"ROUGE-L score {rouge_score} below tolerance {rouge_tol} "
                 f"for base '{base_path}', adaptor '{adaptor_names}', backend '{backend}', prompt: '{prompts[0][:50]}...'"
