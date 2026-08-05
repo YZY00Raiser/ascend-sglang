@@ -17,7 +17,7 @@ from sglang.test.ascend.lora_utils import (
 )
 from sglang.test.test_utils import CustomTestCase
 TORCH_DTYPES=[torch.bfloat16]
-register_npu_ci(est_time=500, suite="full-1-npu-a3", nightly=True)
+register_npu_ci(est_time=500, suite="full-2-npu-a3", nightly=True)
 
 ALL_OTHER_LORA_MODELS = [
     LoRAModelCase(
