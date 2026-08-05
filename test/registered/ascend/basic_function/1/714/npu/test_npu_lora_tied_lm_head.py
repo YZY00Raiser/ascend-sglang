@@ -166,7 +166,7 @@ class TestLoRATiedLMHead(CustomTestCase):
         # Run HuggingFace with LoRA (via PEFT)
         with HFRunner(
             BASE_MODEL,
-            torch_dtype=torch.bfloat16,
+            torch_dtype=torch.float16,
             model_type="generation",
         ) as hf_runner:
             hf_outputs = hf_runner.forward(
