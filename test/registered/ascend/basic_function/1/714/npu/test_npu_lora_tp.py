@@ -24,13 +24,14 @@ ALL_OTHER_LORA_MODELS = [
         # base="meta-llama/Llama-3.1-8B-Instruct",
         # base="/home/weights/Qwen3.5-9B",
         # base="/home/weights/Qwen3.6-27B-W8A8",
-        base="/home/weights/Qwen3-4B",
+        # base="/home/weights/Qwen3-4B",
+        base="/home/weights/Qwen3.5-4B",
         adaptors=[
             LoRAAdaptor(
                 # name="nvidia/llama-3.1-nemoguard-8b-topic-control",
                 # name="/home/weights/Qwen3.5-9B-LoRA-new",
                 # name="/home/weights/qwen3.6-27b-cybersecurity-lora",
-                name="/home/weights/Qwen3-4B-lora-v2",
+                name="/home/weights/qwen3.5-4b-neo4j-text2cypher-lora",
                 # name="/home/weights/Qwen3-4B-LoRA-ZH-WebNovelty-v0.0",
                 prefill_tolerance=3e-1,
                 decode_tolerance=3e-1,
