@@ -39,16 +39,16 @@ from sglang.test.test_utils import DEFAULT_PORT_FOR_SRT_TEST_RUNNER, CustomTestC
 register_cuda_ci(est_time=120, suite="nightly-1-gpu", nightly=True)
 
 # Use a small model with tie_word_embeddings=True
-BASE_MODEL = "/home/weights/Qwen3.5-4B"
-
+# BASE_MODEL = "/home/weights/Qwen3.5-4B"
+BASE_MODEL = "/home/weights/Qwen2.5-0.5B"
 TEST_PROMPTS = [
     "AI is a field of computer science focused on",
     "The capital of France is",
 ]
 
 MAX_NEW_TOKENS = 16
-LOGPROB_THRESHOLD = 2.6e-1
-
+# LOGPROB_THRESHOLD = 2.6e-1
+LOGPROB_THRESHOLD = 2e-1
 
 def create_lora_adapter_with_lm_head(base_model_name: str, output_dir: str):
     """
