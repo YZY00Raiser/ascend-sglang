@@ -46,7 +46,7 @@ class TestDeepEpDeepseekV32(CustomTestCase):
                 "--deepep-mode",
                 "auto",
                 "--mem-fraction-static",
-                0.85,
+                0.83,
                 "--disable-cuda-graph",
                 "--disable-radix-cache",
                 "--context-length",
