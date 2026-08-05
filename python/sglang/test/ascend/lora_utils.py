@@ -527,6 +527,7 @@ def run_lora_test_one_by_one(
             assert torch.all(torch.abs(hf_prefill - srt_prefill) < prefill_tol), (
                 f"Prefill logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
                 f"backend '{backend}', prompt: '{prompts[0][:50]}...'"
+                f"[{test_tag}] pre_tol={torch.abs(hf_prefill - srt_prefill)}"
                 f"[{test_tag}] prefill_tol={prefill_tol}"
             )
 
@@ -534,6 +535,7 @@ def run_lora_test_one_by_one(
             assert torch.all(torch.abs(hf_decode - srt_decode) < decode_tol), (
                 f"Decode logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
                 f"backend '{backend}', prompt: '{prompts[0][:50]}...'"
+                f"[{test_tag}] dec_tol={torch.abs(hf_decode - srt_decode)}"
                 f"[{test_tag}] decode_tol={decode_tol}"
             )
 
