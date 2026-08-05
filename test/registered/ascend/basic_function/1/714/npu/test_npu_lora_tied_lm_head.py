@@ -47,7 +47,7 @@ TEST_PROMPTS = [
 ]
 
 MAX_NEW_TOKENS = 16
-# LOGPROB_THRESHOLD = 2.5e-1
+LOGPROB_THRESHOLD = 2.5e-1
 # LOGPROB_THRESHOLD = 2e-1
 
 def create_lora_adapter_with_lm_head(base_model_name: str, output_dir: str):
