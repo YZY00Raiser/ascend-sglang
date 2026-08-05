@@ -22,11 +22,11 @@ register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 ALL_OTHER_LORA_MODELS = [
     LoRAModelCase(
         # base="meta-llama/Llama-3.1-8B-Instruct",
-        base="/home/weights/Qwen3.5-9B",
+        base="/home/weights/Qwen3.5-4B",
         adaptors=[
             LoRAAdaptor(
                 # name="nvidia/llama-3.1-nemoguard-8b-topic-control",
-                name="/home/weights/Qwen3.5-9B-LoRA-new",
+                name="/home/weights/qwen3.5-4b-netatui-lora",
                 prefill_tolerance=3e-1,
             ),
         ],
