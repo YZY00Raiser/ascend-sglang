@@ -496,7 +496,7 @@ def run_lora_test_one_by_one(
         srt_prefill = torch.tensor(srt_outputs.top_input_logprobs[i])
         max_prefill_diff = torch.max(torch.abs(hf_prefill - srt_prefill))
         print("Max prefill diff (HF vs SRT):", max_prefill_diff)
-        print(f"[{test_tag}] prefill_tol={prefill_tol}, decode_tol={decode_tol}, rouge_tol={rouge_tol}", )
+
 
         # Compare decode stage logprobs
         hf_decode = torch.tensor(hf_outputs.top_output_logprobs[i])
@@ -527,16 +527,19 @@ def run_lora_test_one_by_one(
             assert torch.all(torch.abs(hf_prefill - srt_prefill) < prefill_tol), (
                 f"Prefill logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
                 f"backend '{backend}', prompt: '{prompts[0][:50]}...'"
+                f"[{test_tag}] prefill_tol={prefill_tol}"
             )
 
         if hf_decode.shape[0] <= 100:
             assert torch.all(torch.abs(hf_decode - srt_decode) < decode_tol), (
                 f"Decode logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
                 f"backend '{backend}', prompt: '{prompts[0][:50]}...'"
+                f"[{test_tag}] decode_tol={decode_tol}"
             )
 
         if rouge_score < rouge_tol:
             raise AssertionError(
                 f"ROUGE-L score {rouge_score} below tolerance {rouge_tol} "
                 f"for base '{base_path}', adaptor '{adaptor_names}', backend '{backend}', prompt: '{prompts[0][:50]}...'"
+                f"[{test_tag}] rouge_tol={rouge_tol}, rouge_score={rouge_score}"
             )
