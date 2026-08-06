@@ -110,16 +110,16 @@ BASIC_TESTS = [
         op_sequence=[
             Operation(
                 type=OperationType.LOAD,
-                data="philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
                 expected_error="already loaded",
             ),
             Operation(
                 type=OperationType.UNLOAD,
-                data="philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.LOAD,
-                data="philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
