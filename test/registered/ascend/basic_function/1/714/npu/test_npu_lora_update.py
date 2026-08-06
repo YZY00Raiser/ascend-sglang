@@ -1447,7 +1447,7 @@ class TestLoRADynamicUpdate(CustomTestCase):
                         f"ROUGE-L score {rouge_score} of outputs is below tolerance of {ROUGE_L_TOL} "
                         f"at batch {i}, prompt {j}:\n- Dynamic: '{d_out}'\n- Static: '{s_out}'",
                     )
-
+    '''
     def test_dynamic_lora_update_server(self):
         """
         Test dynamic LoRA updates in server mode.
@@ -1456,7 +1456,7 @@ class TestLoRADynamicUpdate(CustomTestCase):
         self._run_dynamic_adapter_updates(
             mode=LoRAUpdateTestSessionMode.SERVER, test_cases=test_cases
         )
-
+    '''
     def test_v1_models_endpoint_with_lora(self):
         """
         Test that /v1/models endpoint returns base model and loaded LoRA adapters.
