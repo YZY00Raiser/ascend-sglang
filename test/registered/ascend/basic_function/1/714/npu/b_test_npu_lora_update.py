@@ -1105,6 +1105,8 @@ class LoRAUpdateServerTestSession(LoRAUpdateTestSessionBase):
             "--mem-fraction-static",
             str(MEM_FRACTION_STATIC),
             "--disable-radix-cache",
+            "--attention-backend",
+            "ascend",
         ]
         if self.enable_lora:
             other_args.append("--enable-lora")
