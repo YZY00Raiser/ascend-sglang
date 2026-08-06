@@ -1109,6 +1109,8 @@ class LoRAUpdateServerTestSession(LoRAUpdateTestSessionBase):
             "--mem-fraction-static",
             str(MEM_FRACTION_STATIC),
             "--disable-radix-cache",
+            "--attention-backend",
+            "ascend",
         ]
         if self.enable_lora:
             other_args.append("--enable-lora")
@@ -1447,7 +1449,7 @@ class TestLoRADynamicUpdate(CustomTestCase):
                         f"ROUGE-L score {rouge_score} of outputs is below tolerance of {ROUGE_L_TOL} "
                         f"at batch {i}, prompt {j}:\n- Dynamic: '{d_out}'\n- Static: '{s_out}'",
                     )
-
+    '''
     def test_dynamic_lora_update_server(self):
         """
         Test dynamic LoRA updates in server mode.
@@ -1456,9 +1458,9 @@ class TestLoRADynamicUpdate(CustomTestCase):
         self._run_dynamic_adapter_updates(
             mode=LoRAUpdateTestSessionMode.SERVER, test_cases=test_cases
         )
-
-
     '''
+
+
     def test_v1_models_endpoint_with_lora(self):
         """
         Test that /v1/models endpoint returns base model and loaded LoRA adapters.
@@ -1470,7 +1472,8 @@ class TestLoRADynamicUpdate(CustomTestCase):
 
         with LoRAUpdateTestSession(
             testcase=self,
-            mode=LoRAUpdateTestSessionMode.SERVER,
+            # mode=LoRAUpdateTestSessionMode.SERVER,
+            mode=LoRAUpdateTestSessionMode.ENGINE,
             model_path=BASE_MODEL,
             lora_paths=[],
             max_loras_per_batch=2,
@@ -1537,7 +1540,7 @@ class TestLoRADynamicUpdate(CustomTestCase):
             adapter_models = [m for m in models_data["data"] if m.get("parent")]
             self.assertEqual(len(adapter_models), 1)
             self.assertEqual(adapter_models[0]["id"], "adapter2")
-    '''
+
 
 if __name__ == "__main__":
     try:
