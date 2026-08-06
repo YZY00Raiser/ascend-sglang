@@ -369,32 +369,40 @@ TARGET_MODULE_TESTS = [
         lora_target_modules=["all"],
         max_lora_rank=64,
         all_adapters=[
-            "nvidia/llama-3.1-nemoguard-8b-topic-control",  # target_modules = q, k, v, o, gate, up, down
-            "algoprog/fact-generation-llama-3.1-8b-instruct-lora",  # target_modules = q, k, v, o, gate
+            # "nvidia/llama-3.1-nemoguard-8b-topic-control",  # target_modules = q, k, v, o, gate, up, down
+            # "algoprog/fact-generation-llama-3.1-8b-instruct-lora",  # target_modules = q, k, v, o, gate
+            LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
+            LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
         ],
-        initial_adapters=["algoprog/fact-generation-llama-3.1-8b-instruct-lora"],
+        # initial_adapters=["algoprog/fact-generation-llama-3.1-8b-instruct-lora"],
+        initial_adapters=[LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH],
         op_sequence=[
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
-                    "algoprog/fact-generation-llama-3.1-8b-instruct-lora"
+                    # "algoprog/fact-generation-llama-3.1-8b-instruct-lora"
+                    LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH
                 ),
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data("nvidia/llama-3.1-nemoguard-8b-topic-control"),
+                # data=create_batch_data("nvidia/llama-3.1-nemoguard-8b-topic-control"),
+                data=create_batch_data(LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH),
                 expected_error="never been loaded",
             ),
             Operation(
                 type=OperationType.LOAD,
-                data="nvidia/llama-3.1-nemoguard-8b-topic-control",
+                # data="nvidia/llama-3.1-nemoguard-8b-topic-control",
+                data=LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        "algoprog/fact-generation-llama-3.1-8b-instruct-lora",
-                        "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                        # "algoprog/fact-generation-llama-3.1-8b-instruct-lora",
+                        # "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                        LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
+                        LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                         None,
                     ]
                 ),
@@ -407,32 +415,40 @@ TARGET_MODULE_TESTS = [
         max_loras_per_batch=3,
         max_lora_rank=64,
         all_adapters=[
-            "nvidia/llama-3.1-nemoguard-8b-topic-control",  # target_modules = q, k, v, o, gate, up, down
-            "algoprog/fact-generation-llama-3.1-8b-instruct-lora",  # target_modules = q, k, v, o, gate
+            # "nvidia/llama-3.1-nemoguard-8b-topic-control",  # target_modules = q, k, v, o, gate, up, down
+            # "algoprog/fact-generation-llama-3.1-8b-instruct-lora",  # target_modules = q, k, v, o, gate
+            LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
+            LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
         ],
-        initial_adapters=["nvidia/llama-3.1-nemoguard-8b-topic-control"],
+        # initial_adapters=["nvidia/llama-3.1-nemoguard-8b-topic-control"],
+        initial_adapters=[LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH],
         op_sequence=[
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data("nvidia/llama-3.1-nemoguard-8b-topic-control"),
+                # data=create_batch_data("nvidia/llama-3.1-nemoguard-8b-topic-control"),
+                data=create_batch_data(LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH),
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
-                    "algoprog/fact-generation-llama-3.1-8b-instruct-lora"
+                    # "algoprog/fact-generation-llama-3.1-8b-instruct-lora"
+                    LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
                 ),
                 expected_error="never been loaded",
             ),
             Operation(
                 type=OperationType.LOAD,
-                data="algoprog/fact-generation-llama-3.1-8b-instruct-lora",
+                # data="algoprog/fact-generation-llama-3.1-8b-instruct-lora",
+                data=LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        "algoprog/fact-generation-llama-3.1-8b-instruct-lora",
-                        "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                        # "algoprog/fact-generation-llama-3.1-8b-instruct-lora",
+                        # "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                        LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
+                        LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                         None,
                     ]
                 ),
@@ -445,32 +461,39 @@ TARGET_MODULE_TESTS = [
         max_loras_per_batch=3,
         max_lora_rank=64,
         all_adapters=[
-            "nvidia/llama-3.1-nemoguard-8b-topic-control",  # target_modules = q, k, v, o, gate, up, down
-            "algoprog/fact-generation-llama-3.1-8b-instruct-lora",  # target_modules = q, k, v, o, gate
+            # "nvidia/llama-3.1-nemoguard-8b-topic-control",  # target_modules = q, k, v, o, gate, up, down
+            # "algoprog/fact-generation-llama-3.1-8b-instruct-lora",  # target_modules = q, k, v, o, gate
+            LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
+            LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
         ],
-        initial_adapters=["algoprog/fact-generation-llama-3.1-8b-instruct-lora"],
+        # initial_adapters=["algoprog/fact-generation-llama-3.1-8b-instruct-lora"],
+        initial_adapters=[LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH],
         op_sequence=[
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
-                    "algoprog/fact-generation-llama-3.1-8b-instruct-lora"
+                    # "algoprog/fact-generation-llama-3.1-8b-instruct-lora"
+                    LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
                 ),
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data("nvidia/llama-3.1-nemoguard-8b-topic-control"),
+                # data=create_batch_data("nvidia/llama-3.1-nemoguard-8b-topic-control"),
+                data=create_batch_data(LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH),
                 expected_error="never been loaded",
             ),
             Operation(
                 type=OperationType.LOAD,
-                data="nvidia/llama-3.1-nemoguard-8b-topic-control",
+                # data="nvidia/llama-3.1-nemoguard-8b-topic-control",
+                data=LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                 expected_error="incompatible",
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        "algoprog/fact-generation-llama-3.1-8b-instruct-lora",
+                        # "algoprog/fact-generation-llama-3.1-8b-instruct-lora",
+                        LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
                         None,
                     ]
                 ),
