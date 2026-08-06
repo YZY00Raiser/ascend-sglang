@@ -1483,7 +1483,7 @@ class TestLoRADynamicUpdate(CustomTestCase):
             self.assertEqual(models_data["object"], "list")
             self.assertEqual(len(models_data["data"]), 1)  # Only base model
             base_model = models_data["data"][0]
-            self.assertIn("Llama-3.1-8B-Instruct", base_model["id"].lower())
+            self.assertIn("llama-3.1-8B-instruct", base_model["id"].lower())
             self.assertIsNone(base_model.get("parent"))
 
             # Load first adapter
