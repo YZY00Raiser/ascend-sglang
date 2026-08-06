@@ -502,6 +502,7 @@ TARGET_MODULE_TESTS = [
         ],
     ),
 ]
+"""784s"""
 MAX_LORA_RANK_TESTS = [
     TestCase(
         description="Test explicitly specified max-lora-rank.",
