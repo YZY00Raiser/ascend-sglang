@@ -1589,7 +1589,8 @@ class TestLoRADynamicUpdate(CustomTestCase):
         Test dynamic LoRA updates in server mode.
         """
         # test_cases = BASIC_TESTS #if is_in_ci() else ALL_TESTS
-        test_cases = TARGET_MODULE_TESTS
+        # test_cases = TARGET_MODULE_TESTS
+        test_cases = MAX_LOADED_LORAS_TESTS
         self._run_dynamic_adapter_updates(
             mode=LoRAUpdateTestSessionMode.SERVER, test_cases=test_cases
         )
