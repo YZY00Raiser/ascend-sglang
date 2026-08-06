@@ -1507,6 +1507,7 @@ class TestLoRADynamicUpdate(CustomTestCase):
             self.assertEqual(adapter_models[0]["id"], "adapter1")
             self.assertEqual(adapter_models[0]["root"], adapters[0])
             self.assertIsNotNone(adapter_models[0]["parent"])
+            print(f"response.json():{response.json()}")
 
             # Load second adapter
             session.load_lora_adapter(lora_name="adapter2", lora_path=adapters[1])
@@ -1516,7 +1517,7 @@ class TestLoRADynamicUpdate(CustomTestCase):
             self.assertTrue(response.ok, response.text)
             models_data = response.json()
             self.assertEqual(len(models_data["data"]), 3)  # Base model + 2 adapters
-
+            print(f"response.json():{response.json()}")
             # Verify both adapters are listed
             adapter_models = [m for m in models_data["data"] if m.get("parent")]
             self.assertEqual(len(adapter_models), 2)
