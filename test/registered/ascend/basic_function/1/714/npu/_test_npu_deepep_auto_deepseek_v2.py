@@ -60,7 +60,7 @@ class TestDeepseekMTP(CustomTestCase):
                 "--model-loader-extra-config",
                 '{"enable_multithread_load": true,"num_threads": 64}',
                 "--mem-fraction-static",
-                "0.6",
+                "0.7",
                 "--quantization",
                 "modelslim",
                 "--trust-remote-code",
