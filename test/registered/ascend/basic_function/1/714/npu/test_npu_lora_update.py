@@ -141,7 +141,7 @@ BASIC_TESTS = [
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data("philschmid/code-llama-3-1-8b-text-to-sql-lora"),
+                data=create_batch_data(CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH),
             ),
             Operation(
                 type=OperationType.FORWARD,
@@ -165,7 +165,7 @@ BASIC_TESTS = [
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        "philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                        CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
                         "nvidia/llama-3.1-nemoguard-8b-topic-control",
                         "pbevan11/llama-3.1-8b-ocr-correction",
                     ]
@@ -173,11 +173,11 @@ BASIC_TESTS = [
             ),
             Operation(
                 type=OperationType.UNLOAD,
-                data="philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data("philschmid/code-llama-3-1-8b-text-to-sql-lora"),
+                data=create_batch_data(CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH),
             ),
             Operation(
                 type=OperationType.FORWARD,
