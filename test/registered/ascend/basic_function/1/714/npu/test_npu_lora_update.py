@@ -7,7 +7,11 @@ from typing import Any, Iterable, List, Optional, Union
 
 import requests
 import torch
-
+# from sglang.test.ascend.test_ascend_utils import (
+#     LLAMA_3_2_1B_INSTRUCT_TOOL_CALLING_LORA_WEIGHTS_PATH,
+#     LLAMA_3_2_1B_INSTRUCT_TOOL_FAST_LORA_WEIGHTS_PATH,
+#     LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
+# )
 from sglang.srt.utils import kill_process_tree
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.runners import SRTRunner
@@ -32,7 +36,11 @@ PROMPTS = [
 ]
 
 MEM_FRACTION_STATIC = 0.8
-
+BASE_MODEL = "/home/weights/Llama-3.1-8B-Instruct"
+CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH="/home/weights/code-llama-3-1-8b-text-to-sql-lora"
+LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH="/home/weights/llama-3.1-nemoguard-8b-topic-control"
+LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH="/home/weights/llama-3.1-8b-ocr-correction"
+LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH="/home/weights/fact-generation-llama-3.1-8b-instruct-lora"
 
 class OperationType(Enum):
     LOAD = "load"
@@ -77,7 +85,7 @@ def create_batch_data(adapters: Union[str, list]) -> List[tuple[str, str]]:
 BASIC_TESTS = [
     TestCase(
         description="dynamic lora update with initial lora_paths",
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=BASE_MODEL,
         max_loras_per_batch=3,
         all_adapters=[
             "philschmid/code-llama-3-1-8b-text-to-sql-lora",
@@ -201,7 +209,7 @@ BASIC_TESTS = [
     ),
     TestCase(
         description="dynamic lora update without initial lora_paths",
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=BASE_MODEL,
         enable_lora=True,
         max_lora_rank=256,
         lora_target_modules=["all"],
@@ -319,7 +327,7 @@ BASIC_TESTS = [
 TARGET_MODULE_TESTS = [
     TestCase(
         description="Test explicitly specified lora-target-modules.",
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=BASE_MODEL,
         max_loras_per_batch=3,
         lora_target_modules=["all"],
         max_lora_rank=64,
@@ -358,7 +366,7 @@ TARGET_MODULE_TESTS = [
     ),
     TestCase(
         description="Test inferred lora-target-modules - start with larger adapter",
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=BASE_MODEL,
         max_loras_per_batch=3,
         max_lora_rank=64,
         all_adapters=[
@@ -396,7 +404,7 @@ TARGET_MODULE_TESTS = [
     ),
     TestCase(
         description="Test inferred lora-target-modules - start with smaller adapter",
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=BASE_MODEL,
         max_loras_per_batch=3,
         max_lora_rank=64,
         all_adapters=[
@@ -436,7 +444,7 @@ TARGET_MODULE_TESTS = [
 MAX_LORA_RANK_TESTS = [
     TestCase(
         description="Test explicitly specified max-lora-rank.",
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=BASE_MODEL,
         max_loras_per_batch=3,
         max_lora_rank=32,
         all_adapters=[
@@ -500,7 +508,7 @@ MAX_LORA_RANK_TESTS = [
     ),
     TestCase(
         description="test implicitly inferred max-lora-rank",
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=BASE_MODEL,
         max_loras_per_batch=3,
         all_adapters=[
             "nvidia/llama-3.1-nemoguard-8b-topic-control",  # r = 4
@@ -549,7 +557,7 @@ MAX_LORA_RANK_TESTS = [
 MAX_LOADED_LORAS_TESTS = [
     TestCase(
         description="Test max_loaded_loras limit as well as implicit eviction and reloading",
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=BASE_MODEL,
         max_loras_per_batch=2,
         max_loaded_loras=2,
         all_adapters=[
@@ -636,7 +644,7 @@ MAX_LOADED_LORAS_TESTS = [
     ),
     TestCase(
         description="Test implicit eviction and reloading with pinned LoRA adapters",
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=BASE_MODEL,
         max_loras_per_batch=2,
         max_loaded_loras=2,
         all_adapters=[
@@ -710,7 +718,7 @@ MAX_LOADED_LORAS_TESTS = [
 EVICTION_TESTS = [
     TestCase(
         description="dynamic lora update with evictions",
-        base="meta-llama/Llama-3.1-8B-Instruct",
+        base=BASE_MODEL,
         max_loras_per_batch=2,
         all_adapters=[
             "lora1=philschmid/code-llama-3-1-8b-text-to-sql-lora",
@@ -1457,7 +1465,7 @@ class TestLoRADynamicUpdate(CustomTestCase):
         with LoRAUpdateTestSession(
             testcase=self,
             mode=LoRAUpdateTestSessionMode.SERVER,
-            model_path="meta-llama/Llama-3.1-8B-Instruct",
+            model_path=BASE_MODEL,
             lora_paths=[],
             max_loras_per_batch=2,
             max_lora_rank=256,
