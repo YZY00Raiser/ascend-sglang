@@ -361,6 +361,7 @@ BASIC_TESTS = [
         ],
     ),
 ]
+"""670s"""
 TARGET_MODULE_TESTS = [
     TestCase(
         description="Test explicitly specified lora-target-modules.",
