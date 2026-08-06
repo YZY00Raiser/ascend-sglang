@@ -84,10 +84,10 @@ class TestDeepseekMTP(CustomTestCase):
             ],
             env={
                 "SGLANG_ENABLE_JIT_DEEPGEMM": "0",
-                "HCCL_BUFFSIZE": "2048",
+                # "HCCL_BUFFSIZE": "2048",
                 "MOE_ENABLE_TOPK_NEG_ONE": "1",
                 "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",
-                # "DEEPEP_HCCL_BUFFSIZE": "1800",
+                "DEEPEP_HCCL_BUFFSIZE": "1800",
                 "SGLANG_ENABLE_SPEC_V2": "1",
                 "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "512",
             },
