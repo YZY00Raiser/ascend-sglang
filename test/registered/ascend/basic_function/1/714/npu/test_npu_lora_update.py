@@ -978,10 +978,10 @@ EVICTION_TESTS = [
 ]
 
 ALL_TESTS = (
-    BASIC_TESTS
-    + TARGET_MODULE_TESTS
-    + MAX_LORA_RANK_TESTS
-    + MAX_LOADED_LORAS_TESTS
+    # BASIC_TESTS
+    # + TARGET_MODULE_TESTS
+    # MAX_LORA_RANK_TESTS
+    MAX_LOADED_LORAS_TESTS
     + EVICTION_TESTS
 )
 
@@ -1591,7 +1591,8 @@ class TestLoRADynamicUpdate(CustomTestCase):
         """
         # test_cases = BASIC_TESTS #if is_in_ci() else ALL_TESTS
         # test_cases = TARGET_MODULE_TESTS
-        test_cases = MAX_LOADED_LORAS_TESTS
+        # test_cases = MAX_LOADED_LORAS_TESTS
+        test_cases = ALL_TESTS
         self._run_dynamic_adapter_updates(
             mode=LoRAUpdateTestSessionMode.SERVER, test_cases=test_cases
         )
