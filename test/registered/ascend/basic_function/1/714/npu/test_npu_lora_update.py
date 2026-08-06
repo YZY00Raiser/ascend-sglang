@@ -508,49 +508,61 @@ MAX_LORA_RANK_TESTS = [
         max_loras_per_batch=3,
         max_lora_rank=32,
         all_adapters=[
-            "nvidia/llama-3.1-nemoguard-8b-topic-control",  # r = 4
-            "pbevan11/llama-3.1-8b-ocr-correction",  # r = 32
-            "philschmid/code-llama-3-1-8b-text-to-sql-lora",  # r = 256
+            # "nvidia/llama-3.1-nemoguard-8b-topic-control",  # r = 4
+            # "pbevan11/llama-3.1-8b-ocr-correction",  # r = 32
+            # "philschmid/code-llama-3-1-8b-text-to-sql-lora",  # r = 256
+            LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
+            LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
+            CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
         ],
-        initial_adapters=["nvidia/llama-3.1-nemoguard-8b-topic-control"],
+        # initial_adapters=["nvidia/llama-3.1-nemoguard-8b-topic-control"],
+        initial_adapters=[LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH],
         op_sequence=[
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data("nvidia/llama-3.1-nemoguard-8b-topic-control"),
+                # data=create_batch_data("nvidia/llama-3.1-nemoguard-8b-topic-control"),
+                data=create_batch_data(LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH),
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data("philschmid/code-llama-3-1-8b-text-to-sql-lora"),
+                # data=create_batch_data("philschmid/code-llama-3-1-8b-text-to-sql-lora"),
+                data=create_batch_data(CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH),
                 expected_error="never been loaded",
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data("pbevan11/llama-3.1-8b-ocr-correction"),
+                # data=create_batch_data("pbevan11/llama-3.1-8b-ocr-correction"),
+                data=create_batch_data(LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH),
                 expected_error="never been loaded",
             ),
             Operation(
                 type=OperationType.LOAD,
-                data="pbevan11/llama-3.1-8b-ocr-correction",
+                # data="pbevan11/llama-3.1-8b-ocr-correction",
+                data=LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        "pbevan11/llama-3.1-8b-ocr-correction",
-                        "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                        # "pbevan11/llama-3.1-8b-ocr-correction",
+                        # "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                        LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
+                        LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                         None,
                     ]
                 ),
             ),
             Operation(
                 type=OperationType.LOAD,
-                data="philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                # data="philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
                 expected_error="incompatible",
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
-                    "philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                    # "philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                    CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
                 ),
                 expected_error="never been loaded",
             ),
@@ -558,8 +570,10 @@ MAX_LORA_RANK_TESTS = [
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        "pbevan11/llama-3.1-8b-ocr-correction",
-                        "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                        # "pbevan11/llama-3.1-8b-ocr-correction",
+                        # "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                        LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
+                        LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                         None,
                     ]
                 ),
@@ -571,42 +585,53 @@ MAX_LORA_RANK_TESTS = [
         base=BASE_MODEL,
         max_loras_per_batch=3,
         all_adapters=[
-            "nvidia/llama-3.1-nemoguard-8b-topic-control",  # r = 4
-            "pbevan11/llama-3.1-8b-ocr-correction",  # r = 32
-            "philschmid/code-llama-3-1-8b-text-to-sql-lora",  # r = 256
+            # "nvidia/llama-3.1-nemoguard-8b-topic-control",  # r = 4
+            # "pbevan11/llama-3.1-8b-ocr-correction",  # r = 32
+            # "philschmid/code-llama-3-1-8b-text-to-sql-lora",  # r = 256
+            LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
+            LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
+            CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
         ],
-        initial_adapters=["pbevan11/llama-3.1-8b-ocr-correction"],
+        # initial_adapters=["pbevan11/llama-3.1-8b-ocr-correction"],
+        initial_adapters=[LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH],
         op_sequence=[
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data("pbevan11/llama-3.1-8b-ocr-correction"),
+                # data=create_batch_data("pbevan11/llama-3.1-8b-ocr-correction"),
+                data=create_batch_data(LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH),
             ),
             Operation(
                 type=OperationType.LOAD,
-                data="philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                # data="philschmid/code-llama-3-1-8b-text-to-sql-lora",
+                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
                 expected_error="incompatible",
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data("philschmid/code-llama-3-1-8b-text-to-sql-lora"),
+                # data=create_batch_data("philschmid/code-llama-3-1-8b-text-to-sql-lora"),
+                data=create_batch_data(CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH),
                 expected_error="never been loaded",
             ),
             Operation(
                 type=OperationType.LOAD,
-                data="nvidia/llama-3.1-nemoguard-8b-topic-control",
+                # data="nvidia/llama-3.1-nemoguard-8b-topic-control",
+                data=LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
-                    "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                    # "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                    LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                 ),
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        "nvidia/llama-3.1-nemoguard-8b-topic-control",
-                        "pbevan11/llama-3.1-8b-ocr-correction",
+                        # "nvidia/llama-3.1-nemoguard-8b-topic-control",
+                        # "pbevan11/llama-3.1-8b-ocr-correction",
+                        LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
+                        LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
                         None,
                     ]
                 ),
