@@ -661,6 +661,7 @@ MAX_LORA_RANK_TESTS = [
         ],
     ),
 ]
+"""1447s"""
 MAX_LOADED_LORAS_TESTS = [
     TestCase(
         description="Test max_loaded_loras limit as well as implicit eviction and reloading",
