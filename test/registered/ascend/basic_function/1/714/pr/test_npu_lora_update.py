@@ -8,7 +8,7 @@ from typing import Any, Iterable, List, Optional, Union
 import requests
 import torch
 from sglang.test.ascend.test_ascend_utils import (
-    CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+    CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
     LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
     LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
     LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
@@ -38,7 +38,7 @@ PROMPTS = [
 
 MEM_FRACTION_STATIC = 0.8
 BASE_MODEL = LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
-CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH="/home/weights/code-llama-3-1-8b-text-to-sql-lora"
+CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH="/home/weights/code-llama-3-1-8b-text-to-sql-lora"
 LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH="/home/weights/llama-3.1-nemoguard-8b-topic-control"
 LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH="/home/weights/llama-3.1-8b-ocr-correction"
 LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH="/home/weights/fact-generation-llama-3.1-8b-instruct-lora"
@@ -88,13 +88,13 @@ BASIC_TESTS = [
         base=BASE_MODEL,
         max_loras_per_batch=3,
         all_adapters=[
-            CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+            CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
         ],
         initial_adapters=[
             # Testing 3 supported lora-path formats.
-            CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+            CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             f"{LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH}={LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH}",
             {
                 "lora_name": LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
@@ -105,22 +105,22 @@ BASIC_TESTS = [
         op_sequence=[
             Operation(
                 type=OperationType.LOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                 expected_error="already loaded",
             ),
             Operation(
                 type=OperationType.UNLOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.LOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                        CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                         LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                         LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
                     ]
@@ -136,7 +136,7 @@ BASIC_TESTS = [
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data(CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH),
+                data=create_batch_data(CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH),
             ),
             Operation(
                 type=OperationType.FORWARD,
@@ -160,7 +160,7 @@ BASIC_TESTS = [
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                        CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                         LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                         LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
                     ]
@@ -168,11 +168,11 @@ BASIC_TESTS = [
             ),
             Operation(
                 type=OperationType.UNLOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data(CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH),
+                data=create_batch_data(CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH),
             ),
             Operation(
                 type=OperationType.FORWARD,
@@ -215,14 +215,14 @@ BASIC_TESTS = [
         lora_target_modules=["all"],
         max_loras_per_batch=4,
         all_adapters=[
-            CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+            CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
         ],
         op_sequence=[
             Operation(
                 type=OperationType.LOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.LOAD,
@@ -234,22 +234,22 @@ BASIC_TESTS = [
             ),
             Operation(
                 type=OperationType.LOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                 expected_error="already loaded",
             ),
             Operation(
                 type=OperationType.UNLOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.LOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                        CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                         LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                         LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
                         None,
@@ -258,11 +258,11 @@ BASIC_TESTS = [
             ),
             Operation(
                 type=OperationType.UNLOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data(CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH),
+                data=create_batch_data(CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH),
             ),
             Operation(
                 type=OperationType.FORWARD,
@@ -297,7 +297,7 @@ BASIC_TESTS = [
             ),
             Operation(
                 type=OperationType.LOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                 expected_error="already loaded",
             ),
             Operation(
@@ -314,7 +314,7 @@ BASIC_TESTS = [
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                        CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                         LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                         LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
                         None,
@@ -452,7 +452,7 @@ MAX_LORA_RANK_TESTS = [
         all_adapters=[
             LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
-            CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+            CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
         ],
         initial_adapters=[LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH],
         op_sequence=[
@@ -462,7 +462,7 @@ MAX_LORA_RANK_TESTS = [
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data(CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH),
+                data=create_batch_data(CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH),
                 expected_error="never been loaded",
             ),
             Operation(
@@ -486,13 +486,13 @@ MAX_LORA_RANK_TESTS = [
             ),
             Operation(
                 type=OperationType.LOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                 expected_error="incompatible",
             ),
             Operation(
                 type=OperationType.FORWARD,
                 data=create_batch_data(
-                    CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                    CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                 ),
                 expected_error="never been loaded",
             ),
@@ -515,7 +515,7 @@ MAX_LORA_RANK_TESTS = [
         all_adapters=[
             LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
-            CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+            CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
         ],
         initial_adapters=[LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH],
         op_sequence=[
@@ -525,12 +525,12 @@ MAX_LORA_RANK_TESTS = [
             ),
             Operation(
                 type=OperationType.LOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                 expected_error="incompatible",
             ),
             Operation(
                 type=OperationType.FORWARD,
-                data=create_batch_data(CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH),
+                data=create_batch_data(CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH),
                 expected_error="never been loaded",
             ),
             Operation(
@@ -564,11 +564,11 @@ MAX_LOADED_LORAS_TESTS = [
         max_loras_per_batch=2,
         max_loaded_loras=2,
         all_adapters=[
-            CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+            CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
         ],
-        initial_adapters=[CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH],
+        initial_adapters=[CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH],
         op_sequence=[
             Operation(
                 type=OperationType.LOAD,
@@ -578,7 +578,7 @@ MAX_LOADED_LORAS_TESTS = [
                 type=OperationType.LOAD,
                 data=LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
                 expected_implicit_evictions={
-                    CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH
+                    CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH
                 },
             ),
             # Implicitly load "philschmid/code-llama-3-1-8b-text-to-sql-lora"
@@ -587,7 +587,7 @@ MAX_LOADED_LORAS_TESTS = [
                 data=create_batch_data(
                     [
                         LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
-                        CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                        CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                     ]
                 ),
                 expected_implicit_evictions={
@@ -596,7 +596,7 @@ MAX_LOADED_LORAS_TESTS = [
             ),
             Operation(
                 type=OperationType.UNLOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.FORWARD,
@@ -608,7 +608,7 @@ MAX_LOADED_LORAS_TESTS = [
             ),
             Operation(
                 type=OperationType.LOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             ),
             # Implicitly load "pbevan11/llama-3.1-8b-ocr-correction" and make sure that "nvidia/llama-3.1-nemoguard-8b-topic-control"
             # isn't implicitly unloaded even though it is LRU because it is needed for this forward pass
@@ -621,7 +621,7 @@ MAX_LOADED_LORAS_TESTS = [
                     ]
                 ),
                 expected_implicit_evictions={
-                    CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH
+                    CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH
                 },
             ),
             Operation(
@@ -637,7 +637,7 @@ MAX_LOADED_LORAS_TESTS = [
                 data=create_batch_data(
                     [
                         LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
-                        CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                        CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                     ]
                 ),
                 expected_implicit_evictions={
@@ -653,14 +653,14 @@ MAX_LOADED_LORAS_TESTS = [
         max_loras_per_batch=2,
         max_loaded_loras=2,
         all_adapters=[
-            CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+            CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
         ],
         initial_adapters=[
             {
-                "lora_name": CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
-                "lora_path": CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                "lora_name": CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
+                "lora_path": CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                 "pinned": True,
             }
         ],
@@ -681,7 +681,7 @@ MAX_LOADED_LORAS_TESTS = [
                 type=OperationType.FORWARD,
                 data=create_batch_data(
                     [
-                        CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                        CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                         LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
                     ]
                 ),
@@ -700,7 +700,7 @@ MAX_LOADED_LORAS_TESTS = [
             ),
             Operation(
                 type=OperationType.UNLOAD,
-                data=CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                data=CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             ),
             Operation(
                 type=OperationType.LOAD,
@@ -728,7 +728,7 @@ EVICTION_TESTS = [
         base=BASE_MODEL,
         max_loras_per_batch=2,
         all_adapters=[
-            f"lora1={CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH}",
+            f"lora1={CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH}",
             f"lora2={LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH}",
             f"lora3={LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH}",
         ],
@@ -740,7 +740,7 @@ EVICTION_TESTS = [
                 type=OperationType.LOAD,
                 data={
                     "lora_name": "lora1",
-                    "lora_path": CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                    "lora_path": CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                     "pinned": True,
                 },
             ),
@@ -789,7 +789,7 @@ EVICTION_TESTS = [
                 type=OperationType.LOAD,
                 data={
                     "lora_name": "lora1",
-                    "lora_path": CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                    "lora_path": CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                     "pinned": True,
                 },
                 expected_error="starvation",
@@ -798,7 +798,7 @@ EVICTION_TESTS = [
                 type=OperationType.LOAD,
                 data={
                     "lora_name": "lora1",
-                    "lora_path": CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+                    "lora_path": CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
                     "pinned": False,
                 },
             ),
@@ -1467,7 +1467,7 @@ class TestLoRADynamicUpdate(CustomTestCase):
         Test that /v1/models endpoint returns base model and loaded LoRA adapters.
         """
         adapters = [
-            CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
+            CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
         ]
 
