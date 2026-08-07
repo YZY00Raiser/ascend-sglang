@@ -335,7 +335,6 @@ TARGET_MODULE_TESTS = [
             LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
         ],
-        # initial_adapters=["algoprog/fact-generation-llama-3.1-8b-instruct-lora"],
         initial_adapters=[LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH],
         op_sequence=[
             Operation(
@@ -374,7 +373,6 @@ TARGET_MODULE_TESTS = [
             LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
         ],
-        # initial_adapters=["nvidia/llama-3.1-nemoguard-8b-topic-control"],
         initial_adapters=[LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH],
         op_sequence=[
             Operation(
@@ -413,7 +411,6 @@ TARGET_MODULE_TESTS = [
             LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
             LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
         ],
-        # initial_adapters=["algoprog/fact-generation-llama-3.1-8b-instruct-lora"],
         initial_adapters=[LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH],
         op_sequence=[
             Operation(
@@ -456,7 +453,6 @@ MAX_LORA_RANK_TESTS = [
             LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
             CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
         ],
-        # initial_adapters=["nvidia/llama-3.1-nemoguard-8b-topic-control"],
         initial_adapters=[LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH],
         op_sequence=[
             Operation(
@@ -520,7 +516,6 @@ MAX_LORA_RANK_TESTS = [
             LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
             CODE_LLAMA_3_1_8B_INSTRUCT_TEXT_TO_SQL_LORA_PATH,
         ],
-        # initial_adapters=["pbevan11/llama-3.1-8b-ocr-correction"],
         initial_adapters=[LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH],
         op_sequence=[
             Operation(
