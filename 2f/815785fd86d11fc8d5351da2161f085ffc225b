@@ -1,0 +1,19 @@
+test/registered/ascend/basic_function/1/714/pr/test_npu_lora_update.py
+  s_7423e76bbf204d::t_7ca3c48e1e52e4 10-11,14,82-83,143-145,198-200,292-294,349,353-355,387-389,433-435,471-473,592,633,1464
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "2f815785fd86d11fc8d5351da2161f085ffc225b",
+  "prompts": {},
+  "sessions": {
+    "s_7423e76bbf204d": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a754ded26c9fe7b879d40f9",
+        "model": "deepseek_v4_flash_official__dev"
+      },
+      "human_author": "YZY00Raiser <2452658175@qq.com>"
+    }
+  }
+}
