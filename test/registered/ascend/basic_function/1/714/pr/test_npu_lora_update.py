@@ -1473,7 +1473,6 @@ class TestLoRADynamicUpdate(CustomTestCase):
         with LoRAUpdateTestSession(
             testcase=self,
             mode=LoRAUpdateTestSessionMode.SERVER,
-            # mode=LoRAUpdateTestSessionMode.ENGINE,
             model_path=BASE_MODEL,
             lora_paths=[],
             max_loras_per_batch=2,
