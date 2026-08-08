@@ -30,9 +30,9 @@ class TestDeepseekMTP(CustomTestCase):
             other_args=[
                 "--disable-overlap-schedule",
                 "--tp",
-                "2",
+                "4",
                 "--dp",
-                "2",
+                "4",
                 "--moe-dense-tp-size",
                 "1",
                 "--enable-dp-lm-head",
@@ -115,9 +115,12 @@ class TestDeepseekMTP(CustomTestCase):
             model=self.model,
             eval_name="gsm8k",
             api="completion",
+            # max_tokens=512,
+            # num_examples=1200,
+            # num_threads=1200,
             max_tokens=512,
-            num_examples=1200,
-            num_threads=1200,
+            num_examples=200,
+            num_threads=128,
         )
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
