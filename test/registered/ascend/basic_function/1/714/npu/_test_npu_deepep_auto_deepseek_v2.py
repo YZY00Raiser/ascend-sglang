@@ -70,7 +70,7 @@ class TestDeepseekMTP(CustomTestCase):
                 "deepep",
                 "--deepep-mode",
                 "auto",
-                "--disable-cuda-graph",
+                # "--disable-cuda-graph",
                 # "--dp-size",
                 # "8",
                 "--enable-dp-attention",
