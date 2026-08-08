@@ -102,7 +102,7 @@ class TestDeepseekMTP(CustomTestCase):
             model=self.model,
             eval_name="mmlu",
             num_examples=128,
-            num_threads=32,
+            num_threads=20,
             api="completion",
             num_shots=5,
         )
@@ -120,7 +120,7 @@ class TestDeepseekMTP(CustomTestCase):
             # num_threads=1200,
             max_tokens=512,
             num_examples=200,
-            num_threads=128,
+            num_threads=100,
         )
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
