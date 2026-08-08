@@ -47,8 +47,6 @@ class TestDeepseekMTP(CustomTestCase):
                 "--max-running-requests",
                 "512",
                 "--speculative-algorithm",
-                # "NEXTN",
-                # "EAGLE3",
                 "EAGLE",
                 "--speculative-num-steps",
                 "1",
