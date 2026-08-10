@@ -74,8 +74,10 @@ class TestDeepseekMTP(CustomTestCase):
                 # "--dp-size",
                 # "8",
                 "--enable-dp-attention",
+                "--max-prefill-tpkens",
+                "8192",
                 "--chunked-prefill-size",
-                "1024",
+                "32768",
                 # "--mem-fraction-static",
                 # "0.7",
 
