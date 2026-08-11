@@ -51,7 +51,7 @@ class TestDeepEpDeepseek(GSM8KAscendMixin, CustomTestCase):
             model=self.model,
             eval_name="mmlu",
             num_examples=128,
-            num_threads=32,
+            num_threads=20,
             api="completion",
             num_shots=5,
         )
