@@ -3,14 +3,14 @@ import unittest
 from types import SimpleNamespace
 
 from sglang.test.ascend.gsm8k_ascend_mixin import GSM8KAscendMixin
-from sglang.test.ascend.run_eval import run_eval
+from sglang.test.ascend.run_eval import run_eval as run_ascend_eval
 # from sglang.test.ascend.test_ascend_utils import DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
 
 register_npu_ci(est_time=400, suite="full-8-npu-a3", nightly=True)
-DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V2-Lite-W8A8"
 
+DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V2-Lite-W8A8"
 class TestDeepEpDeepseek(GSM8KAscendMixin, CustomTestCase):
     model = DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH
     accuracy = 0.34
@@ -41,8 +41,6 @@ class TestDeepEpDeepseek(GSM8KAscendMixin, CustomTestCase):
         "MOE_ENABLE_TOPK_NEG_ONE": "1",
         "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",
     }
-    def test_gsm8k(self):
-        print("test_gsm8k")
 
     def test_mmlu(self):
         expect_score = 0.58
@@ -51,11 +49,11 @@ class TestDeepEpDeepseek(GSM8KAscendMixin, CustomTestCase):
             model=self.model,
             eval_name="mmlu",
             num_examples=128,
-            num_threads=20,
+            num_threads=32,
             api="completion",
             num_shots=5,
         )
-        metrics = run_eval(args)
+        metrics = run_ascend_eval(args)
         self.assertGreater(metrics["score"], expect_score)
 
 
