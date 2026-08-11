@@ -11,7 +11,7 @@ from sglang.test.test_utils import CustomTestCase
 register_npu_ci(est_time=400, suite="full-8-npu-a3", nightly=True)
 DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V2-Lite-W8A8"
 
-class TestDeepEpDeepseek(CustomTestCase):
+class TestDeepEpDeepseek(GSM8KAscendMixin, CustomTestCase):
     model = DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH
     accuracy = 0.34
     other_args = [
@@ -41,6 +41,8 @@ class TestDeepEpDeepseek(CustomTestCase):
         "MOE_ENABLE_TOPK_NEG_ONE": "1",
         "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",
     }
+    def test_gsm8k(self):
+        print("test_gsm8k")
 
     def test_mmlu(self):
         expect_score = 0.58
