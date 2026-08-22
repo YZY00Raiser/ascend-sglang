@@ -13,7 +13,7 @@ from sglang.srt.utils import kill_process_tree
     # LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
     # LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
     # LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
-    # LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
+    # LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH,
 # )
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
@@ -36,7 +36,7 @@ PROMPTS = [
 ]
 
 MEM_FRACTION_STATIC = 0.8
-# BASE_MODEL = LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
+# BASE_MODEL = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
 BASE_MODEL = "/home/weights/Llama-3.1-8B-Instruct"
 CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH="/home/weights/code-llama-3-1-8b-text-to-sql-lora"
 LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH="/home/weights/llama-3.1-nemoguard-8b-topic-control"
