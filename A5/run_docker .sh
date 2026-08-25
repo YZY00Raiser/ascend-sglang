@@ -1,0 +1,41 @@
+docker run --name=yzy_deepep_test \
+	--hostname=yzy_deepep_test \
+	--entrypoint bash \
+	--volume /etc/hccl_rootinfo.json:/etc/hccl_rootinfo.json \
+	--volume /etc/hixlep:/etc/hixlep \
+	--volume /home:/home \
+	--volume /home/CI_HOME:/home/CI_HOME \
+	--volume /root/host:/root/host \
+	--volume /opt:/opt \
+	--volume /usr/lib64:/usr/lib64 \
+	--volume /mnt:/mnt \
+	--volume /var/log/npu:/usr/slog \
+	--volume /usr/local/sbin/npu-smi:/usr/local/sbin/npu-smi \
+	--volume /usr/local/dcmi:/usr/local/dcmi \
+	--volume /usr/local/sbin:/usr/local/sbin \
+	--volume /usr/local/Ascend/driver:/usr/local/Ascend/driver \
+	--volume /lib/route.conf:/lib/route.conf \
+	--volume /etc/hccn.conf:/etc/hccn.conf \
+	--volume /usr/sbin:/usr/sbin \
+	--volume /etc/ascend_install.info:/etc/ascend_install.info \
+	--volume /usr/local/bin/npu-smi:/usr/local/bin/npu-smi \
+	--volume /usr/local/Ascend/firmware:/usr/local/Ascend/firmware \
+	--network=host \
+	--privileged \
+	--workdir=/ \
+	--device /dev/davinci3:/dev/davinci3 \
+	--device /dev/uburma:/dev/uburma \
+	--device /dev/davinci7:/dev/davinci7 \
+	--device /dev/hisi_hdc:/dev/hisi_hdc \
+	--device /dev/davinci4:/dev/davinci4 \
+	--device /dev/davinci5:/dev/davinci5 \
+	--device /dev/davinci_manager:/dev/davinci_manager \
+	--device /dev/davinci0:/dev/davinci0 \
+	--device /dev/davinci1:/dev/davinci1 \
+	--device /dev/davinci6:/dev/davinci6 \
+	--device /dev/davinci2:/dev/davinci2 \
+	--device /dev/ummu:/dev/ummu \
+	--runtime=runc \
+	--detach=true \
+	-t \
+	swr.cn‑south‑1.myhuaweicloud.com/mindie‑pymotor/mindie‑pymotor:3.1.0‑vllm_ascend0.23.0‑a5‑ubuntu22.04‑py3.12
