@@ -38,4 +38,4 @@ docker run --name=yzy_deepep_test \
 	--runtime=runc \
 	--detach=true \
 	-t \
-	swr.cn-south-1.myhuaweicloud.com/mindie-pymotor/mindie-pymotor:3.1.0-vllm_ascend0.23.0-a5-ubuntu22.04-py3.12
+	quay.io/ascend/cann:9.1.0-950-ubuntu22.04-py3.12
