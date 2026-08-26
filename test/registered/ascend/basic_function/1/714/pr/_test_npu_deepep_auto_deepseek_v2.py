@@ -10,10 +10,10 @@ from sglang.test.test_utils import CustomTestCase
 
 register_npu_ci(est_time=400, suite="full-8-npu-a3", nightly=True)
 
-DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V2-Lite-W8A8"
-class TestDeepEpDeepseek(CustomTestCase):
+
+class TestDeepEpDeepseek(GSM8KAscendMixin, CustomTestCase):
     model = DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH
-    # accuracy = 0.34
+    accuracy = 0.34
     other_args = [
         "--trust-remote-code",
         "--attention-backend",
@@ -51,6 +51,7 @@ class TestDeepEpDeepseek(CustomTestCase):
             num_examples=128,
             num_threads=32,
             api="completion",
+            num_shots=5,
         )
         metrics = run_ascend_eval(args)
         self.assertGreater(metrics["score"], expect_score)
