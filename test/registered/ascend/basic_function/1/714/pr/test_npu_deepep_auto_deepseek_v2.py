@@ -10,7 +10,7 @@ from sglang.test.test_utils import CustomTestCase
 register_npu_ci(est_time=400, suite="full-8-npu-a3", nightly=True)
 
 DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH="/home/weights/DeepSeek-V2-Lite-W8A8"
-class TestDeepEpDeepseek(#GSM8KAscendMixin,
+class TestDeepEpDeepseek(GSM8KAscendMixin,
                          CustomTestCase,
                          TestMMLU):
     model = DEEPSEEK_V2_LITE_W8A8_WEIGHTS_PATH
@@ -42,7 +42,7 @@ class TestDeepEpDeepseek(#GSM8KAscendMixin,
         "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",
     }
 
-    # accuracy = 0.34  # Test GSM8K accuracy ≥0.34
+    accuracy = 0.34  # Test GSM8K accuracy ≥0.34
     accuracy_mmlu = 0.38  # Test MMLU accuracy ≥0.38
 
 
