@@ -41,6 +41,20 @@ class TestDeepEpDeepseek(GSM8KAscendMixin, CustomTestCase):
         "MOE_ENABLE_TOPK_NEG_ONE": "1",
         "DEEP_NORMAL_MODE_USE_INT8_QUANT": "1",
     }
+    def test_gsm8k(self):
+        args = SimpleNamespace(
+            base_url=self.base_url,
+            model=self.model,
+            eval_name="gsm8k",
+            api="completion",
+            max_tokens=512,
+            num_examples=10,
+            num_threads=128,
+        )
+        metrics = run_ascend_eval(args)
+        print(f"Eval accuracy of GSM8K: {metrics=}")
+
+        self.assertGreater(metrics["score"], 0.72)
 
     def test_mmlu(self):
         expect_score = 0.38
