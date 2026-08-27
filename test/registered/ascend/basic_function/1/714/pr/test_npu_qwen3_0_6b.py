@@ -1,6 +1,7 @@
 import unittest
 
 from sglang.test.ascend.gsm8k_ascend_mixin import GSM8KAscendMixin
+from sglang.test.ascend.test_mmlu import TestMMLU
 from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import CustomTestCase
@@ -8,7 +9,7 @@ from sglang.test.test_utils import CustomTestCase
 register_npu_ci(est_time=400, suite="full-1-npu-a3", nightly=True)
 
 QWEN3_0_6B_WEIGHTS_PATH="/home/weights/Qwen3-0.6B"
-class TestQwen306B(GSM8KAscendMixin, CustomTestCase):
+class TestQwen306B(GSM8KAscendMixin, TestMMLU, CustomTestCase):
     """Testcase: Verify that the inference accuracy of the Qwen/Qwen3-0.6B model on the GSM8K dataset is no less than 0.38.
 
     [Test Category] Model
@@ -24,7 +25,7 @@ class TestQwen306B(GSM8KAscendMixin, CustomTestCase):
         "ascend",
         "--disable-cuda-graph",
     ]
-
+    accuracy_mmlu_threshold = 100
 
 if __name__ == "__main__":
     unittest.main()
