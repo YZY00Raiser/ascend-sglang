@@ -25,7 +25,7 @@ class TestQwen306B(GSM8KAscendMixin, TestMMLU, CustomTestCase):
         "ascend",
         "--disable-cuda-graph",
     ]
-    accuracy_mmlu_threshold = 0.9
+    accuracy_mmlu = 0.9
 
 if __name__ == "__main__":
     unittest.main()
