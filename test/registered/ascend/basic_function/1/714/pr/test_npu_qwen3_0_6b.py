@@ -17,7 +17,7 @@ class TestQwen306B(GSM8KAscendMixin, TestMMLU, CustomTestCase):
     """
 
     model = QWEN3_0_6B_WEIGHTS_PATH
-    accuracy = 100
+    accuracy = 0.9
     other_args = [
         "--chunked-prefill-size",
         256,
@@ -25,7 +25,7 @@ class TestQwen306B(GSM8KAscendMixin, TestMMLU, CustomTestCase):
         "ascend",
         "--disable-cuda-graph",
     ]
-    accuracy_mmlu_threshold = 100
+    accuracy_mmlu_threshold = 0.9
 
 if __name__ == "__main__":
     unittest.main()
