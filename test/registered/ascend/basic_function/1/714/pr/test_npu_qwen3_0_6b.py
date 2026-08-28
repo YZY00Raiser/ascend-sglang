@@ -17,7 +17,7 @@ class TestQwen306B(GSM8KAscendMixin, TestMMLU, CustomTestCase):
     """
 
     model = QWEN3_0_6B_WEIGHTS_PATH
-    accuracy = 0.38
+    accuracy = 100
     other_args = [
         "--chunked-prefill-size",
         256,
