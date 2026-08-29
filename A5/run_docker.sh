@@ -38,4 +38,4 @@ docker run --name=yzy_deepep_test \
 	--runtime=runc \
 	--detach=true \
 	-t \
-	quay.io/ascend/cann:9.1.0-950-ubuntu22.04-py3.12
+	swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-950-ubuntu22.04-py3.12
