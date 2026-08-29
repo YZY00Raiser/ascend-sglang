@@ -15,4 +15,5 @@ pip install torch_npu
 
 modelscope download --model Qwen/Qwen3-0.6B --local_dir /home/weights/Qwen/Qwen3-0.6B
 
+export PYTHONPATH=/sgl-workspace/sglang/python:$PYTHONPATH
 
