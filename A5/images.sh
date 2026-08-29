@@ -5,7 +5,7 @@ bash build.sh -a deepep Ascend930
 pip install output/deep*
 
 # 安装后导入验证
-python -c "import deepep; print(deepep.__version__)"
+python -c "import deep_ep; print(deep_ep.__file__)"
 
 cd "$(pip show deep-ep | grep -E '^Location:' | awk '{print $2}')" && ln -s deep_ep/deep_ep_cpp*.so && cd -
 
