@@ -10,3 +10,4 @@ python -c "import deepep; print(deepep.__version__)"
 cd "$(pip show deep-ep | grep -E '^Location:' | awk '{print $2}')" && ln -s deep_ep/deep_ep_cpp*.so && cd -
 
 swr.cn-south-1.myhuaweicloud.com/mindie-pymotor/mindie-pymotor:3.1.0-vllm_ascend0.23.0-a5-ubuntu22.04-py3.12
+docker pull swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-950-ubuntu22.04-py3.12
