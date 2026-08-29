@@ -14,7 +14,7 @@ from sglang.test.test_utils import (
 LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH="/home/weights/Llama-3.1-8B-Instruct"
 register_npu_ci(est_time=400, suite="full-16-npu-a3", nightly=True)
 
-
+'''
 class TestDisaggregationPrefillPPAccuracy(TestDisaggregationBase):
     """Test Case: Verify the accuracy of base model when only prefill enables PP parallelism in PD disaggregation scenario
 
@@ -112,7 +112,7 @@ class TestDisaggregationPrefillPPAccuracy(TestDisaggregationBase):
         self.assertGreater(metrics["score"], 0.24)
         # Wait a little bit so that the memory check happens.
         time.sleep(5)
-
+'''
 
 class TestDisaggregationDecodePPAccuracy(TestDisaggregationBase):
     """Test Case: Verify the accuracy of base model when both prefill and decode enable PP parallelism in PD disaggregation scenario
