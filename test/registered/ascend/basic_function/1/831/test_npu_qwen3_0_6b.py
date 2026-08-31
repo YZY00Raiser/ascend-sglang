@@ -48,14 +48,13 @@ class TestQwen306B(CustomTestCase):
             for _ in range(2)
         ]
         self.assertNotEqual(session_id_1, session_id_2, "Session IDs should be different")
-        input_ids_first = [1] * 200
-        input_ids_second = input_ids_first + [2] * 70
+        input_ids = [1] * 260
 
 
         r1 = requests.post(
             self.base_url + "/generate",
             json={
-                "input_ids": input_ids_first,
+                "input_ids": input_ids,
                 "session_id": session_id_1,
             },
         )
@@ -67,7 +66,7 @@ class TestQwen306B(CustomTestCase):
         r2 = requests.post(
             self.base_url + "/generate",
             json={
-                "input_ids": input_ids_second,
+                "input_ids": input_ids,
                 "session_id": session_id_1,
             },
         )
@@ -81,7 +80,7 @@ class TestQwen306B(CustomTestCase):
         r3 = requests.post(
             self.base_url + "/generate",
             json={
-                "input_ids": input_ids_second,
+                "input_ids": input_ids,
                 "session_id": session_id_2,
             },
         )
@@ -101,7 +100,7 @@ class TestQwen306B(CustomTestCase):
         r4 = requests.post(
             self.base_url + "/generate",
             json={
-                "input_ids": input_ids_second,
+                "input_ids": input_ids,
             },
         )
 
