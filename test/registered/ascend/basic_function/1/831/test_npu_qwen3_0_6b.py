@@ -85,6 +85,8 @@ class TestQwen306B(CustomTestCase):
                 "session_id": session_id_2,
             },
         )
+        print("r3.json")
+        print(r3.json())
 
         ret = requests.post(
             self.base_url + "/close_session",
@@ -96,8 +98,15 @@ class TestQwen306B(CustomTestCase):
             json={"session_id": session_id_2},
         )
 
-        print("r3.json")
-        print(r3.json())
+        r4 = requests.post(
+            self.base_url + "/generate",
+            json={
+                "input_ids": input_ids_second,
+            },
+        )
+
+        print("r4.json")
+        print(r4.json())
 
         # self.assertGreater(
         #     r3.json()["meta_info"]["cached_tokens"], 0
