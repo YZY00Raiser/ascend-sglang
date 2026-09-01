@@ -18,6 +18,7 @@ class TestQwen330Bw8a8FuseEP(GSM8KAscendMixin, CustomTestCase):
 
     model = QWEN3_30B_A3B_W8A8_WEIGHTS_PATH
     accuracy = 0.90
+    fuseep_mode = 2
     other_args = [
         "--trust-remote-code",
         "--mem-fraction-static",
@@ -31,7 +32,7 @@ class TestQwen330Bw8a8FuseEP(GSM8KAscendMixin, CustomTestCase):
         "--moe-a2a-backend",
         "ascend_fuseep",
         "--fuseep-mode",
-        2,
+        fuseep_mode,
     ]
 
     env = {
@@ -40,6 +41,8 @@ class TestQwen330Bw8a8FuseEP(GSM8KAscendMixin, CustomTestCase):
         "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "188416",
     }
 
+    class TestQwen330Bw8a8FuseEP(TestQwen330Bw8a8FuseEP):
+        fuseep_mode = 1
 
 if __name__ == "__main__":
     unittest.main()
