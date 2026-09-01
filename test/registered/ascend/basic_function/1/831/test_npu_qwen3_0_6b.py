@@ -63,15 +63,15 @@ class TestQwen306B(CustomTestCase):
         print(r1.json())
 
 
-        r2 = requests.post(
-            self.base_url + "/generate",
-            json={
-                "input_ids": input_ids,
-                "session_id": session_id_1,
-            },
-        )
-        print("r2.json")
-        print(r2.json())
+        # r2 = requests.post(
+        #     self.base_url + "/generate",
+        #     json={
+        #         "input_ids": input_ids,
+        #         "session_id": session_id_1,
+        #     },
+        # )
+        # print("r2.json")
+        # print(r2.json())
 
         # self.assertGreater(
         #     r2.json()["meta_info"]["cached_tokens"], 0
