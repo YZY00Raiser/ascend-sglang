@@ -101,7 +101,7 @@ class TestQwen306B(CustomTestCase):
             self.base_url + "/generate",
             json={
                 "input_ids": input_ids,
-                "session_id": session_id_2,
+                # "session_id": session_id_2,
             },
         )
 
