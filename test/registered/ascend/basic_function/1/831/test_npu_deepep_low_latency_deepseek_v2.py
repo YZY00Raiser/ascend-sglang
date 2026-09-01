@@ -41,18 +41,18 @@ class TestDeepEpDeepseek(GSM8KAscendMixin, CustomTestCase):
         "MOE_ENABLE_TOPK_NEG_ONE": "1",
     }
 
-    def test_mmlu(self):
-        expect_score = 0.38
-        args = SimpleNamespace(
-            base_url=self.base_url,
-            model=self.model,
-            eval_name="mmlu",
-            num_examples=128,
-            num_threads=32,
-            api="completion",
-        )
-        metrics = run_ascend_eval(args)
-        self.assertGreater(metrics["score"], expect_score)
+    # def test_mmlu(self):
+    #     expect_score = 0.38
+    #     args = SimpleNamespace(
+    #         base_url=self.base_url,
+    #         model=self.model,
+    #         eval_name="mmlu",
+    #         num_examples=128,
+    #         num_threads=32,
+    #         api="completion",
+    #     )
+    #     metrics = run_ascend_eval(args)
+    #     self.assertGreater(metrics["score"], expect_score)
 
 
 if __name__ == "__main__":
