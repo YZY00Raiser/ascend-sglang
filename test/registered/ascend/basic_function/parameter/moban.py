@@ -77,6 +77,35 @@ class TestEnableMultimodalNonMlm(CustomTestCase):
         metrics = run_eval(args)
         self.assertGreaterEqual(metrics["score"], self.accuracy)
 
+        @classmethod
+        def setUpClass(cls):
+            cls.out_file = tempfile.NamedTemporaryFile(
+                mode="w+", suffix=".txt", delete=False
+            )
+            cls.err_file = tempfile.NamedTemporaryFile(
+                mode="w+", suffix=".txt", delete=False
+            )
+            cls.process = popen_launch_server(
+                cls.model,
+                cls.base_url,
+                timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
+                other_args=[
+                    *_COMMON_ARGS,
+                    "--weight-loader-drop-cache-after-load",
+                    "--log-level",
+                    "info",
+                ],
+                return_stdout_stderr=(cls.out_file, cls.err_file),
+            )
+
+        @classmethod
+        def tearDownClass(cls):
+            kill_process_tree(cls.process.pid)
+            cls.out_file.close()
+            cls.err_file.close()
+            os.unlink(cls.out_file.name)
+            os.unlink(cls.err_file.name)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
