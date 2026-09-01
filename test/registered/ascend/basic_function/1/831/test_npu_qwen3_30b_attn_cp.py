@@ -29,7 +29,6 @@ class TestQwen330BAttnCP(GSM8KAscendMixin, CustomTestCase):
 
     @classmethod
     def setUpClass(cls):
-
         cls.model = QWEN3_30B_A3B_WEIGHTS_PATH
         cls.base_url = DEFAULT_URL_FOR_TEST
         cls.out_file = tempfile.NamedTemporaryFile(
@@ -86,6 +85,9 @@ class TestQwen330BAttnCP(GSM8KAscendMixin, CustomTestCase):
         metrics = run_eval(args)
         print(f"Eval accuracy of GSM8K: {metrics=}")
         self.assertGreater(metrics["score"], 0.92)
+        self.err_file.seek(0)
+        content = self.err_file.read()
+        self.assertIn("MOE_DP", content)
 
 
 if __name__ == "__main__":
