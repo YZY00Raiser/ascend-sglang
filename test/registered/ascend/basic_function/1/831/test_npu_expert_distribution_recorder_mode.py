@@ -157,7 +157,7 @@ class TestExpertDistributionRecorderPerPass(TestExpertDistributionRecorderModeSt
         self.assertIn("eplb_balancedness", response.text)
         self.out_file.seek(0)
         content = self.out_file.read()
-        self.assertNotIn("Expert Balancedness", content)
+        self.assertIn("Expert Balancedness", content)
 
 '''
 class TestExpertDistributionRecorderPerToken(TestExpertDistributionRecorderModeStatic):
@@ -167,8 +167,8 @@ class TestExpertDistributionRecorderPerToken(TestExpertDistributionRecorderModeS
     def test_expert_balancedness_report_mode(self):
         response = requests.get(f"{DEFAULT_URL_FOR_TEST}/metrics")
         self.assertNotIn("eplb_balancedness", response.text)
-        self.out_file.seek(0)
-        content = self.out_file.read()
+        self.err_file.seek(0)
+        content = self.err_file.read()
         self.assertIn("Expert Balancedness", content)
 
 
