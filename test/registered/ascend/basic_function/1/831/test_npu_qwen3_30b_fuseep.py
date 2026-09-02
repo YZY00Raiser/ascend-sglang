@@ -10,7 +10,8 @@ register_npu_ci(est_time=400, suite="per-commit-4-npu-a3")
 
 QWEN3_30B_A3B_W8A8_WEIGHTS_PATH="/home/weights/Qwen3-30B-A3B-W8A8"
 class TestQwen330Bw8a8FuseModeWithTwo(GSM8KAscendMixin, CustomTestCase):
-    """Testcase: Verify that the inference accuracy of the Qwen/Qwen3-30B-A3B-w8a8 model on the GSM8K dataset is no less than 0.90.
+    """Testcase: Verify that the inference accuracy of the Qwen/Qwen3-30B-A3B-w8a8 model on the GSM8K dataset is
+    no less than 0.90 with --fuseep-mode.
 
     [Test Category] Model
     [Test Target] Qwen/Qwen3-30B-A3B-w8a8
