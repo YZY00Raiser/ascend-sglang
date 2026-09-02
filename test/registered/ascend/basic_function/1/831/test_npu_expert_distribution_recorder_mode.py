@@ -127,6 +127,8 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
             msg=f"No distribution recorder",
         )
     def test_expert_balancedness_report_mode(self):
+        response = requests.post(f"{DEFAULT_URL_FOR_TEST}/metrics")
+        self.assertNotIn("eplb_balancedness", response.json())
         self.err_file.seek(0)
         content = self.err_file.read()
         self.assertNotIn("ExpertDistributionRecorder auto start record", content)
