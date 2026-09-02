@@ -86,7 +86,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             cls.base_url,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=other_args,
-            env=env,
+            # env=env,
         )
 
     @classmethod
