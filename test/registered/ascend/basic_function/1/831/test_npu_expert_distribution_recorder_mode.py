@@ -21,7 +21,7 @@ from sglang.test.test_utils import (
 register_npu_ci(est_time=400, suite="base-b-test-2-npu-a3")
 register_npu_ci(est_time=400, suite="full-2-npu-a3", nightly=True)
 
-QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH = "/home/weights/Qwen3-30B-A3B-Instruct-2507"
+QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH = "/home/weights/Qwen/Qwen3-30B-A3B-Instruct-2507"
 class TestExpertDistributionRecorderModeStatic(CustomTestCase):
     """Testcase: Verify set the parameter --expert-distribution-recorder-mode，
     will generate .pt file and the inference request successfully.
