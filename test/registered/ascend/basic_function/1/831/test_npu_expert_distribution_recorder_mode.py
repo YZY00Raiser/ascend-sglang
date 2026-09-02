@@ -128,7 +128,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
         )
     def test_expert_balancedness_report_mode(self):
         response = requests.get(f"{DEFAULT_URL_FOR_TEST}/metrics")
-        self.assertNotIn("eplb_balancedness", response.json())
+        self.assertNotIn("eplb_balancedness", response.text)
         self.err_file.seek(0)
         content = self.err_file.read()
         self.assertNotIn("ExpertDistributionRecorder auto start record", content)
@@ -143,7 +143,7 @@ class TestExpertDistributionRecorderModeStatApprox(
 
     def test_expert_balancedness_report_mode(self):
         response = requests.get(f"{DEFAULT_URL_FOR_TEST}/metrics")
-        self.assertIn("eplb_balancedness", response.json())
+        self.assertIn("eplb_balancedness", response.text)
         self.err_file.seek(0)
         content = self.err_file.read()
         self.assertNotIn("ExpertDistributionRecorder auto start record", content)
@@ -154,7 +154,7 @@ class TestExpertDistributionRecorderPerPass(TestExpertDistributionRecorderModeSt
 
     def test_expert_balancedness_report_mode(self):
         response = requests.get(f"{DEFAULT_URL_FOR_TEST}/metrics")
-        self.assertIn("eplb_balancedness", response.json())
+        self.assertIn("eplb_balancedness", response.text)
         self.err_file.seek(0)
         content = self.err_file.read()
         self.assertNotIn("ExpertDistributionRecorder auto start record", content)
@@ -166,7 +166,7 @@ class TestExpertDistributionRecorderPerToken(TestExpertDistributionRecorderModeS
 
     def test_expert_balancedness_report_mode(self):
         response = requests.get(f"{DEFAULT_URL_FOR_TEST}/metrics")
-        self.assertNotIn("eplb_balancedness", response.json())
+        self.assertNotIn("eplb_balancedness", response.text)
         self.err_file.seek(0)
         content = self.err_file.read()
         self.assertIn("ExpertDistributionRecorder auto start record", content)
