@@ -1,5 +1,6 @@
 import glob
 import os
+import tempfile
 import unittest
 
 import requests
@@ -30,11 +31,17 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
     """
 
     expert_distribution_recorder_mode = "stat"
-
+    expert_balancedness_report_mode = "off"
     path = "/tmp/pt"
 
     @classmethod
     def setUpClass(cls):
+        cls.out_file = tempfile.NamedTemporaryFile(
+            mode="w+", suffix=".txt", delete=False
+        )
+        cls.err_file = tempfile.NamedTemporaryFile(
+            mode="w+", suffix=".txt", delete=False
+        )
         cls.process = popen_launch_server(
             QWEN3_30B_A3B_INSTRUCT_2507_WEIGHTS_PATH,
             DEFAULT_URL_FOR_TEST,
@@ -55,8 +62,11 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
                 "deepep",
                 "--deepep-mode",
                 "normal",
+                "--enable-metrics",
                 "--expert-distribution-recorder-mode",
                 cls.expert_distribution_recorder_mode,
+                "--expert-balancedness-report-mode",
+                cls.expert_balancedness_report_mode,
             ],
             env={
                 "SGLANG_NPU_DISABLE_ACL_FORMAT_WEIGHT": "1",
@@ -64,12 +74,18 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
                 "SGLANG_EXPERT_DISTRIBUTION_RECORDER_DIR": f"{cls.path}",
                 "TRANSFORMERS_VERBOSITY": "error",
             },
+            return_stdout_stderr=(cls.out_file, cls.err_file),
         )
 
     @classmethod
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
         run_command(f"rm -rf {cls.path}")
+        cls.out_file.close()
+        cls.err_file.close()
+        os.unlink(cls.out_file.name)
+        os.unlink(cls.err_file.name)
+
 
     def test_recorder_mode(self):
         # Start recording
@@ -110,16 +126,82 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
             0,
             msg=f"No distribution recorder",
         )
+    def test_expert_balancedness_report_mode(self):
+        response = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+            },
+        )
+        self.assertEqual(
+            response.status_code, 200, "The request status code is not 200."
+        )
+        self.assertIn(
+            "Paris", response.text, "The inference result does not include Paris."
+        )
+        self.err_file.seek(0)
+        content = self.err_file.read()
+        self.assertNotIn("ExpertDistributionRecorder auto start record", content)
+
 
 
 class TestExpertDistributionRecorderModeStatApprox(
     TestExpertDistributionRecorderModeStatic
 ):
     expert_distribution_recorder_mode = "stat_approx"
+    expert_balancedness_report_mode = "prometheus"
 
+    def test_expert_balancedness_report_mode(self):
+        response = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+            },
+        )
+        self.assertEqual(
+            response.status_code, 200, "The request status code is not 200."
+        )
+        self.assertIn(
+            "Paris", response.text, "The inference result does not include Paris."
+        )
+        self.err_file.seek(0)
+        content = self.err_file.read()
+        self.assertIn("ExpertDistributionRecorder auto start record", content)
 
 class TestExpertDistributionRecorderPerPass(TestExpertDistributionRecorderModeStatic):
     expert_distribution_recorder_mode = "per_pass"
+    expert_balancedness_report_mode = "both"
+
+    def test_expert_balancedness_report_mode(self):
+        response = requests.post(
+            f"{DEFAULT_URL_FOR_TEST}/generate",
+            json={
+                "text": "The capital of France is",
+                "sampling_params": {
+                    "temperature": 0,
+                    "max_new_tokens": 32,
+                },
+            },
+        )
+        self.assertEqual(
+            response.status_code, 200, "The request status code is not 200."
+        )
+        self.assertIn(
+            "Paris", response.text, "The inference result does not include Paris."
+        )
+        response = requests.post(f"{DEFAULT_URL_FOR_TEST}/metrics")
+        self.assertIn("eplb_balancedness", response.json())
+        self.err_file.seek(0)
+        content = self.err_file.read()
+        self.assertNotIn("ExpertDistributionRecorder auto start record", content)
 
 
 class TestExpertDistributionRecorderPerToken(TestExpertDistributionRecorderModeStatic):
