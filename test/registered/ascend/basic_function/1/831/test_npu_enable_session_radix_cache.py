@@ -74,7 +74,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             )
             cls.model = LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
             if not os.path.isdir(cls.model):
-                local = "/home/weights/Llama-3.2-1B-Instruct"
+                local = "/home/weights/Qwen3-0.6B"
                 if os.path.isdir(local):
                     cls.model = local
                 else:
