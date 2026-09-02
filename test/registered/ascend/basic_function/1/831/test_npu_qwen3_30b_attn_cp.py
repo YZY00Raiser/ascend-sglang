@@ -13,7 +13,7 @@ from sglang.test.test_utils import CustomTestCase, popen_launch_server, DEFAULT_
 
 register_npu_ci(est_time=500, suite="full-4-npu-a3", nightly=True)
 
-QWEN3_30B_A3B_W8A8_WEIGHTS_PATH="/home/weights/Qwen3-30B-A3B"
+QWEN3_30B_A3B_WEIGHTS_PATH="/home/weights/Qwen3-30B-A3B"
 class TestQwen330BAttnCP(GSM8KAscendMixin, CustomTestCase):
     """GSM8K accuracy test for Qwen3-30B-A3B mixed deployment on 4 NPUs.
 
