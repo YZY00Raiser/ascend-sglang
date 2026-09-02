@@ -127,7 +127,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
             msg=f"No distribution recorder",
         )
     def test_expert_balancedness_report_mode(self):
-        response = requests.post(f"{DEFAULT_URL_FOR_TEST}/metrics")
+        response = requests.get(f"{DEFAULT_URL_FOR_TEST}/metrics")
         self.assertNotIn("eplb_balancedness", response.json())
         self.err_file.seek(0)
         content = self.err_file.read()
@@ -142,7 +142,7 @@ class TestExpertDistributionRecorderModeStatApprox(
     expert_balancedness_report_mode = "prometheus"
 
     def test_expert_balancedness_report_mode(self):
-        response = requests.post(f"{DEFAULT_URL_FOR_TEST}/metrics")
+        response = requests.get(f"{DEFAULT_URL_FOR_TEST}/metrics")
         self.assertIn("eplb_balancedness", response.json())
         self.err_file.seek(0)
         content = self.err_file.read()
@@ -153,7 +153,7 @@ class TestExpertDistributionRecorderPerPass(TestExpertDistributionRecorderModeSt
     expert_balancedness_report_mode = "both"
 
     def test_expert_balancedness_report_mode(self):
-        response = requests.post(f"{DEFAULT_URL_FOR_TEST}/metrics")
+        response = requests.get(f"{DEFAULT_URL_FOR_TEST}/metrics")
         self.assertIn("eplb_balancedness", response.json())
         self.err_file.seek(0)
         content = self.err_file.read()
@@ -165,7 +165,7 @@ class TestExpertDistributionRecorderPerToken(TestExpertDistributionRecorderModeS
     expert_balancedness_report_mode = "server_log"
 
     def test_expert_balancedness_report_mode(self):
-        response = requests.post(f"{DEFAULT_URL_FOR_TEST}/metrics")
+        response = requests.get(f"{DEFAULT_URL_FOR_TEST}/metrics")
         self.assertNotIn("eplb_balancedness", response.json())
         self.err_file.seek(0)
         content = self.err_file.read()
