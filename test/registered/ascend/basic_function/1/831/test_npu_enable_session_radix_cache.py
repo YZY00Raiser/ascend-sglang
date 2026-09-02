@@ -25,6 +25,7 @@ import requests
 
 from sglang.srt.utils import is_npu
 from sglang.test.ci.ci_register import register_cuda_ci, register_npu_ci
+from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.test_utils import (
     DEFAULT_SMALL_MODEL_NAME_FOR_TEST,
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
