@@ -75,6 +75,8 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             "--max-total-tokens",
             str(MAX_TOTAL_TOKENS),
             "--enable-session-radix-cache",
+            "--attention-backend",
+            "ascend",
         ]
 
         # env = {
