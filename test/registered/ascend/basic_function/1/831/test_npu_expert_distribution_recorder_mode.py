@@ -127,22 +127,6 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
             msg=f"No distribution recorder",
         )
     def test_expert_balancedness_report_mode(self):
-        response = requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": 32,
-                },
-            },
-        )
-        self.assertEqual(
-            response.status_code, 200, "The request status code is not 200."
-        )
-        self.assertIn(
-            "Paris", response.text, "The inference result does not include Paris."
-        )
         self.err_file.seek(0)
         content = self.err_file.read()
         self.assertNotIn("ExpertDistributionRecorder auto start record", content)
@@ -156,47 +140,17 @@ class TestExpertDistributionRecorderModeStatApprox(
     expert_balancedness_report_mode = "prometheus"
 
     def test_expert_balancedness_report_mode(self):
-        response = requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": 32,
-                },
-            },
-        )
-        self.assertEqual(
-            response.status_code, 200, "The request status code is not 200."
-        )
-        self.assertIn(
-            "Paris", response.text, "The inference result does not include Paris."
-        )
+        response = requests.post(f"{DEFAULT_URL_FOR_TEST}/metrics")
+        self.assertIn("eplb_balancedness", response.json())
         self.err_file.seek(0)
         content = self.err_file.read()
-        self.assertIn("ExpertDistributionRecorder auto start record", content)
+        self.assertNotIn("ExpertDistributionRecorder auto start record", content)
 
 class TestExpertDistributionRecorderPerPass(TestExpertDistributionRecorderModeStatic):
     expert_distribution_recorder_mode = "per_pass"
     expert_balancedness_report_mode = "both"
 
     def test_expert_balancedness_report_mode(self):
-        response = requests.post(
-            f"{DEFAULT_URL_FOR_TEST}/generate",
-            json={
-                "text": "The capital of France is",
-                "sampling_params": {
-                    "temperature": 0,
-                    "max_new_tokens": 32,
-                },
-            },
-        )
-        self.assertEqual(
-            response.status_code, 200, "The request status code is not 200."
-        )
-        self.assertIn(
-            "Paris", response.text, "The inference result does not include Paris."
-        )
         response = requests.post(f"{DEFAULT_URL_FOR_TEST}/metrics")
         self.assertIn("eplb_balancedness", response.json())
         self.err_file.seek(0)
@@ -206,6 +160,14 @@ class TestExpertDistributionRecorderPerPass(TestExpertDistributionRecorderModeSt
 
 class TestExpertDistributionRecorderPerToken(TestExpertDistributionRecorderModeStatic):
     expert_distribution_recorder_mode = "per_token"
+    expert_balancedness_report_mode = "server_log"
+
+    def test_expert_balancedness_report_mode(self):
+        response = requests.post(f"{DEFAULT_URL_FOR_TEST}/metrics")
+        self.assertNotIn("eplb_balancedness", response.json())
+        self.err_file.seek(0)
+        content = self.err_file.read()
+        self.assertIn("ExpertDistributionRecorder auto start record", content)
 
 
 if __name__ == "__main__":
