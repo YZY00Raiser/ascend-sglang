@@ -23,7 +23,7 @@ import uuid
 
 import requests
 
-from sglang.srt.utils import is_npu
+from sglang.srt.utils import is_npu, kill_process_tree
 from sglang.test.ci.ci_register import register_cuda_ci, register_npu_ci
 from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.test_utils import (
@@ -54,7 +54,7 @@ _WORDS = (
     "glacier volcano earthquake tornado hurricane monsoon blizzard"
 ).split()
 
-
+QWEN3_0_6B_WEIGHTS_PATH="/home/weights/Qwen3-0.6B"
 def _make_prompt(seed: int) -> str:
     rng = random.Random(seed)
     salt = uuid.uuid4().hex
@@ -65,22 +65,7 @@ def _make_prompt(seed: int) -> str:
 class TestSessionRadixCacheE2E(CustomTestCase):
     @classmethod
     def setUpClass(cls):
-        model_override = os.environ.get("SGLANG_TEST_MODEL_PATH")
-        if model_override:
-            cls.model = model_override
-        elif is_npu():
-            from sglang.test.ascend.test_ascend_utils import (
-                LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
-            )
-            cls.model = LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
-            if not os.path.isdir(cls.model):
-                local = "/home/weights/Qwen3-0.6B"
-                if os.path.isdir(local):
-                    cls.model = local
-                else:
-                    cls.model = DEFAULT_SMALL_MODEL_NAME_FOR_TEST
-        else:
-            cls.model = DEFAULT_SMALL_MODEL_NAME_FOR_TEST
+        cls.model = QWEN3_0_6B_WEIGHTS_PATH
 
         cls.base_url = DEFAULT_URL_FOR_TEST
 
@@ -92,19 +77,9 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             "--enable-session-radix-cache",
         ]
 
-        env = {
-            "SGLANG_ENABLE_UNIFIED_RADIX_TREE": "1",
-        }
-
-        if is_npu():
-            other_args += [
-                "--attention-backend",
-                "ascend",
-                "--disable-cuda-graph",
-                "--mem-fraction-static",
-                "0.6",
-            ]
-            env["PYTORCH_NPU_ALLOC_CONF"] = "expandable_segments:True"
+        # env = {
+        #     "SGLANG_ENABLE_UNIFIED_RADIX_TREE": "1",
+        # }
 
         cls.process = popen_launch_server(
             cls.model,
@@ -116,7 +91,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
 
     @classmethod
     def tearDownClass(cls):
-        terminate_and_kill_process_tree(cls.process, wait_timeout=60)
+        kill_process_tree(cls.process.pid)
 
     def _generate(self, text, session_id=None):
         payload = {
