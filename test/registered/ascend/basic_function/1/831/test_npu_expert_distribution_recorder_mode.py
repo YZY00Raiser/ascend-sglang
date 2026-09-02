@@ -131,7 +131,7 @@ class TestExpertDistributionRecorderModeStatic(CustomTestCase):
         self.assertNotIn("eplb_balancedness", response.text)
         self.err_file.seek(0)
         content = self.err_file.read()
-        self.assertNotIn("ExpertDistributionRecorder auto start record", content)
+        self.assertNotIn("Expert Balancedness", content)
 
 
 
@@ -146,7 +146,7 @@ class TestExpertDistributionRecorderModeStatApprox(
         self.assertIn("eplb_balancedness", response.text)
         self.err_file.seek(0)
         content = self.err_file.read()
-        self.assertNotIn("ExpertDistributionRecorder auto start record", content)
+        self.assertNotIn("Expert Balancedness", content)
 
 class TestExpertDistributionRecorderPerPass(TestExpertDistributionRecorderModeStatic):
     expert_distribution_recorder_mode = "per_pass"
@@ -157,7 +157,7 @@ class TestExpertDistributionRecorderPerPass(TestExpertDistributionRecorderModeSt
         self.assertIn("eplb_balancedness", response.text)
         self.err_file.seek(0)
         content = self.err_file.read()
-        self.assertNotIn("ExpertDistributionRecorder auto start record", content)
+        self.assertNotIn("Expert Balancedness", content)
 
 
 class TestExpertDistributionRecorderPerToken(TestExpertDistributionRecorderModeStatic):
@@ -169,7 +169,7 @@ class TestExpertDistributionRecorderPerToken(TestExpertDistributionRecorderModeS
         self.assertNotIn("eplb_balancedness", response.text)
         self.err_file.seek(0)
         content = self.err_file.read()
-        self.assertIn("ExpertDistributionRecorder auto start record", content)
+        self.assertIn("Expert Balancedness", content)
 
 
 if __name__ == "__main__":
