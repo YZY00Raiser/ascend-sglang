@@ -1,36 +1,7 @@
-test/registered/ascend/basic_function/1/831/test_npu_enable_session_radix_cache.py
-  s_4b8b53ee77d2c7::t_f409a56c5aefeb 83-84
-  s_4b8b53ee77d2c7::t_9746fb540b923b 117-118
-  s_4b8b53ee77d2c7::t_415448b262e481 35-37,41-43
-  s_4b8b53ee77d2c7::t_6853d12070b0f7 150-151,158,162,170,178,186
-  s_4b8b53ee77d2c7::t_5192f98a93cbae 58-62
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.6.2",
   "base_commit_sha": "e58264be8f4d7009b53baae7e4313163b9d9dda0",
-  "prompts": {},
-  "sessions": {
-    "s_4b8b53ee77d2c7": {
-      "agent_id": {
-        "tool": "trae",
-        "id": "6a98e25282e6e1facd0481bb",
-        "model": "DeepSeek-V4-Pro-Official__max"
-      },
-      "human_author": "YZY00Raiser <2452658175@qq.com>",
-      "custom_attributes": {
-        "external_session_id": "6a98e25282e6e1facd0481bb",
-        "tool_use_id": "6a98e28782e6e1facd0481d2",
-        "operation_id": "6a98e28782e6e1facd0481d2",
-        "runtime_client": "trae-tob-git-ai",
-        "dedupe_key": "6a98e25282e6e1facd0481bb:6a98e28782e6e1facd0481d2:afterEdit:3c566671",
-        "tool_type": "agent",
-        "source_scene": "unknown",
-        "session_id": "6a98e25282e6e1facd0481bb",
-        "tool_id": "Edit",
-        "client_type": "ide",
-        "edit_kind": "file_edit"
-      }
-    }
-  }
+  "prompts": {}
 }
