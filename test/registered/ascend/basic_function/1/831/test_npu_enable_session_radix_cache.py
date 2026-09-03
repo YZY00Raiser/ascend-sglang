@@ -39,7 +39,7 @@ MAX_TOTAL_TOKENS = 8192
 WORDS_PER_PROMPT = 1200
 NUM_FLOOD_PROMPTS = 10
 # A session-protected prompt must keep most of its cache hits.
-KEEP_THRESHOLD = 0.90
+KEEP_THRESHOLD = 0.95
 # An unprotected prompt must lose all of its cache hits after the flood.
 EVICT_THRESHOLD = 0.0
 
