@@ -88,8 +88,8 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             "ascend",
             "--mem-fraction-static",
             "0.6",
-            # "--model-checksum",
-            # "Qwen/Qwen3-0.6B"
+            "--model-checksum",
+            "Qwen/Qwen3-0.6B"
         ]
         cls.out_file = tempfile.NamedTemporaryFile(
             mode="w+", suffix=".txt", delete=False
@@ -191,13 +191,12 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             f"cached_ratio={a_ratio_after:.3f}",
         )
 
-    '''
     def test_model_checksum(self):
         # Model Weight File Verification
         self.err_file.seek(0)
         content = self.err_file.read()
         self.assertIn("ModelFileVerifier", content)
-    '''
+
 
 if __name__ == "__main__":
     unittest.main()
