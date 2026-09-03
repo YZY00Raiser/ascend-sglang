@@ -17,6 +17,7 @@ python3 -m unittest test_session_radix_cache_e2e -v
 """
 
 import random
+import tempfile
 import unittest
 import uuid
 
@@ -85,12 +86,18 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             "--model-checksum",
             "Qwen/Qwen3-0.6B"
         ]
-
+        cls.out_file = tempfile.NamedTemporaryFile(
+            mode="w+", suffix=".txt", delete=False
+        )
+        cls.err_file = tempfile.NamedTemporaryFile(
+            mode="w+", suffix=".txt", delete=False
+        )
         cls.process = popen_launch_server(
             cls.model,
             cls.base_url,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=other_args,
+            return_stdout_stderr=(cls.out_file, cls.err_file),
         )
 
     @classmethod
@@ -170,6 +177,10 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             f"cached_ratio={a_ratio_after:.3f}",
         )
 
+    def test_model_checksum(self):
+        self.err_file.seek(0)
+        content = self.err_file.read()
+        self.assertIn("ModelFileVerifier", content)
 
 if __name__ == "__main__":
     unittest.main()
