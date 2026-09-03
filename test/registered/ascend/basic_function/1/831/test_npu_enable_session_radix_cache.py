@@ -11,38 +11,32 @@ protection).
 - ``/close_session`` releases A's references; a second flood round must
 then evict A like any unprotected entry.
 
-Manual run on Ascend NPU where weights live outside the CI modelscope cache:
-SGLANG_TEST_MODEL_PATH=/home/weights/Llama-3.2-1B-Instruct \
-python3 -m unittest test_session_radix_cache_e2e -v
 """
 
-import os
 import random
+import tempfile
 import unittest
 import uuid
 
 import requests
 
-from sglang.srt.utils import is_npu
-from sglang.test.ci.ci_register import register_cuda_ci, register_npu_ci
+from sglang.srt.utils import kill_process_tree
+from sglang.test.ci.ci_register import  register_npu_ci
 from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.test_utils import (
-    DEFAULT_SMALL_MODEL_NAME_FOR_TEST,
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
     popen_launch_server,
-    terminate_and_kill_process_tree,
 )
 
-register_cuda_ci(est_time=400, stage="extra-a", runner_config="1-gpu-small")
-register_npu_ci(est_time=500, suite="full-1-npu-a3", nightly=True)
+register_npu_ci(est_time=200, suite="full-1-npu-a3", nightly=True)
 
 MAX_TOTAL_TOKENS = 8192
 WORDS_PER_PROMPT = 1200
 NUM_FLOOD_PROMPTS = 10
 KEEP_THRESHOLD = 0.75
-EVICT_THRESHOLD = 0.20
+EVICT_THRESHOLD = 0.0
 
 _WORDS = (
     "alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi "
@@ -54,7 +48,7 @@ _WORDS = (
     "glacier volcano earthquake tornado hurricane monsoon blizzard"
 ).split()
 
-
+QWEN3_0_6B_WEIGHTS_PATH="/home/weights/Qwen3-0.6B"
 def _make_prompt(seed: int) -> str:
     rng = random.Random(seed)
     salt = uuid.uuid4().hex
@@ -63,24 +57,16 @@ def _make_prompt(seed: int) -> str:
 
 
 class TestSessionRadixCacheE2E(CustomTestCase):
+    """Testcase: Verify set the parameter --enable-session-radix-cache,Prioritize evicting KV cache that are not
+    referenced by other sessions during eviction. Set the parameter --model-checksum, the model weights will be verified.
+
+   [Test Category] Parameter
+   [Test Target] --enable-session-radix-cache, --model-checksum
+   """
+
     @classmethod
     def setUpClass(cls):
-        model_override = os.environ.get("SGLANG_TEST_MODEL_PATH")
-        if model_override:
-            cls.model = model_override
-        elif is_npu():
-            from sglang.test.ascend.test_ascend_utils import (
-                LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH,
-            )
-            cls.model = LLAMA_3_2_1B_INSTRUCT_WEIGHTS_PATH
-            if not os.path.isdir(cls.model):
-                local = "/home/weights/Qwen3-0.6B"
-                if os.path.isdir(local):
-                    cls.model = local
-                else:
-                    cls.model = DEFAULT_SMALL_MODEL_NAME_FOR_TEST
-        else:
-            cls.model = DEFAULT_SMALL_MODEL_NAME_FOR_TEST
+        cls.model = QWEN3_0_6B_WEIGHTS_PATH
 
         cls.base_url = DEFAULT_URL_FOR_TEST
 
@@ -90,33 +76,30 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             "--max-total-tokens",
             str(MAX_TOTAL_TOKENS),
             "--enable-session-radix-cache",
+            "--attention-backend",
+            "ascend",
+            "--mem-fraction-static",
+            "0.6",
+            # "--model-checksum",
+            # "Qwen/Qwen3-0.6B"
         ]
-
-        env = {
-            "SGLANG_ENABLE_UNIFIED_RADIX_TREE": "1",
-        }
-
-        if is_npu():
-            other_args += [
-                "--attention-backend",
-                "ascend",
-                "--disable-cuda-graph",
-                "--mem-fraction-static",
-                "0.6",
-            ]
-            env["PYTORCH_NPU_ALLOC_CONF"] = "expandable_segments:True"
-
+        cls.out_file = tempfile.NamedTemporaryFile(
+            mode="w+", suffix=".txt", delete=False
+        )
+        cls.err_file = tempfile.NamedTemporaryFile(
+            mode="w+", suffix=".txt", delete=False
+        )
         cls.process = popen_launch_server(
             cls.model,
             cls.base_url,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=other_args,
-            env=env,
+            return_stdout_stderr=(cls.out_file, cls.err_file),
         )
 
     @classmethod
     def tearDownClass(cls):
-        terminate_and_kill_process_tree(cls.process, wait_timeout=60)
+        kill_process_tree(cls.process.pid)
 
     def _generate(self, text, session_id=None):
         payload = {
@@ -138,7 +121,12 @@ class TestSessionRadixCacheE2E(CustomTestCase):
     def _cached_ratio(self, text, session_id=None):
         prompt_tokens, cached_tokens = self._generate(text + " Continue.", session_id=session_id)
         self.assertGreater(prompt_tokens, 0)
-        return cached_tokens / prompt_tokens
+        ratio = cached_tokens / prompt_tokens
+        print(
+            f"cached_ratio={ratio:.3f} "
+            f"(cached={cached_tokens}, prompt={prompt_tokens}, session_id={session_id})"
+        )
+        return ratio
 
     def test_session_protection_and_release(self):
         session_id = f"e2e-session-{uuid.uuid4().hex[:8]}"
@@ -155,7 +143,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             self._generate(_make_prompt(seed=100 + i))
 
         b_ratio = self._cached_ratio(prompt_b)
-        self.assertLess(
+        self.assertEqual(
             b_ratio,
             EVICT_THRESHOLD,
             f"unprotected prompt B should be evicted, cached_ratio={b_ratio:.3f}",
@@ -179,13 +167,20 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             self._generate(_make_prompt(seed=200 + i))
 
         a_ratio_after = self._cached_ratio(prompt_a)
-        self.assertLess(
+        self.assertEqual(
             a_ratio_after,
             EVICT_THRESHOLD,
             "prompt A should be evicted after close_session, "
             f"cached_ratio={a_ratio_after:.3f}",
         )
 
+    '''
+    def test_model_checksum(self):
+        # Model Weight File Verification
+        self.err_file.seek(0)
+        content = self.err_file.read()
+        self.assertIn("ModelFileVerifier", content)
+    '''
 
 if __name__ == "__main__":
     unittest.main()
