@@ -16,26 +16,23 @@ SGLANG_TEST_MODEL_PATH=/home/weights/Llama-3.2-1B-Instruct \
 python3 -m unittest test_session_radix_cache_e2e -v
 """
 
-import os
 import random
 import unittest
 import uuid
 
 import requests
 
-from sglang.srt.utils import is_npu, kill_process_tree
-from sglang.test.ci.ci_register import register_cuda_ci, register_npu_ci
+from sglang.srt.utils import kill_process_tree
+from sglang.test.ci.ci_register import  register_npu_ci
 from sglang.test.ascend.test_ascend_utils import QWEN3_0_6B_WEIGHTS_PATH
 from sglang.test.test_utils import (
-    DEFAULT_SMALL_MODEL_NAME_FOR_TEST,
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
     popen_launch_server,
 )
 
-register_cuda_ci(est_time=400, stage="extra-a", runner_config="1-gpu-small")
-register_npu_ci(est_time=500, suite="full-1-npu-a3", nightly=True)
+register_npu_ci(est_time=200, suite="full-1-npu-a3", nightly=True)
 
 MAX_TOTAL_TOKENS = 8192
 WORDS_PER_PROMPT = 1200
@@ -111,7 +108,12 @@ class TestSessionRadixCacheE2E(CustomTestCase):
     def _cached_ratio(self, text, session_id=None):
         prompt_tokens, cached_tokens = self._generate(text + " Continue.", session_id=session_id)
         self.assertGreater(prompt_tokens, 0)
-        return cached_tokens / prompt_tokens
+        ratio = cached_tokens / prompt_tokens
+        print(
+            f"cached_ratio={ratio:.3f} "
+            f"(cached={cached_tokens}, prompt={prompt_tokens}, session_id={session_id})"
+        )
+        return ratio
 
     def test_session_protection_and_release(self):
         session_id = f"e2e-session-{uuid.uuid4().hex[:8]}"
