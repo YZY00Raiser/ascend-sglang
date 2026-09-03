@@ -146,7 +146,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             self._generate(_make_prompt(seed=100 + i))
 
         b_ratio = self._cached_ratio(prompt_b)
-        self.assertLess(
+        self.assertEqual(
             b_ratio,
             EVICT_THRESHOLD,
             f"unprotected prompt B should be evicted, cached_ratio={b_ratio:.3f}",
@@ -170,7 +170,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             self._generate(_make_prompt(seed=200 + i))
 
         a_ratio_after = self._cached_ratio(prompt_a)
-        self.assertLess(
+        self.assertEqual(
             a_ratio_after,
             EVICT_THRESHOLD,
             "prompt A should be evicted after close_session, "
