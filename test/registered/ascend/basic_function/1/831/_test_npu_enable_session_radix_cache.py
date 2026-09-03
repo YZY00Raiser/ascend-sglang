@@ -11,9 +11,6 @@ protection).
 - ``/close_session`` releases A's references; a second flood round must
 then evict A like any unprotected entry.
 
-Manual run on Ascend NPU where weights live outside the CI modelscope cache:
-SGLANG_TEST_MODEL_PATH=/home/weights/Llama-3.2-1B-Instruct \
-python3 -m unittest test_session_radix_cache_e2e -v
 """
 
 import random
@@ -179,6 +176,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
 
     '''
     def test_model_checksum(self):
+        # Model Weight File Verification
         self.err_file.seek(0)
         content = self.err_file.read()
         self.assertIn("ModelFileVerifier", content)
