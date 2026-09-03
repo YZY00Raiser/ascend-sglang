@@ -114,7 +114,7 @@ class TestQwen306B(CustomTestCase):
         #     r3.json()["meta_info"]["cached_tokens"], 0
         # )
 
-
+    longMessage = "[ModelFileVerifier] All 7 files verified successfully."
     @classmethod
     def tearDownClass(cls):
         kill_process_tree(cls.process.pid)
