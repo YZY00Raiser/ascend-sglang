@@ -39,7 +39,7 @@ MAX_TOTAL_TOKENS = 8192
 WORDS_PER_PROMPT = 1200
 NUM_FLOOD_PROMPTS = 10
 KEEP_THRESHOLD = 0.75
-EVICT_THRESHOLD = 0.20
+EVICT_THRESHOLD = 0.0
 
 _WORDS = (
     "alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi "
