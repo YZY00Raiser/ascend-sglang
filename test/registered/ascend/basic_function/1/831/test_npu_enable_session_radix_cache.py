@@ -4,7 +4,7 @@ Within-run A/B under a bounded KV pool (``--max-total-tokens``):
 finishes, its reusable cache leaves are registered under the session.
 - Prompt B is requested without a session. B doubles as the flag-off
 control: it is exactly what happens to every prompt without session
-protection, so no second server launch is needed.
+protection.
 - Unique flood prompts pressure the pool to ~2x capacity. The unprotected
 B must be evicted while the session-referenced A survives (soft
 protection).
