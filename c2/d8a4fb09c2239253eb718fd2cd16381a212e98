@@ -1,32 +1,7 @@
-test/registered/ascend/basic_function/1/831/_test_npu_enable_session_radix_cache.py
-  s_f846627a78f72e::t_708d2febb8dd05 111-116
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.6.2",
   "base_commit_sha": "c2d8a4fb09c2239253eb718fd2cd16381a212e98",
-  "prompts": {},
-  "sessions": {
-    "s_f846627a78f72e": {
-      "agent_id": {
-        "tool": "trae",
-        "id": "6a98d90082e6e1facd048196",
-        "model": "DeepSeek-V4-Pro-Official__max"
-      },
-      "human_author": "YZY00Raiser <2452658175@qq.com>",
-      "custom_attributes": {
-        "external_session_id": "6a98d90082e6e1facd048196",
-        "runtime_client": "trae-tob-git-ai",
-        "tool_use_id": "6a98d9c582e6e1facd0481ac",
-        "tool_type": "agent",
-        "source_scene": "unknown",
-        "client_type": "ide",
-        "operation_id": "6a98d9c582e6e1facd0481ac",
-        "dedupe_key": "6a98d90082e6e1facd048196:6a98d9c582e6e1facd0481ac:afterEdit:22d3135e",
-        "tool_id": "Edit",
-        "session_id": "6a98d90082e6e1facd048196",
-        "edit_kind": "file_edit"
-      }
-    }
-  }
+  "prompts": {}
 }
