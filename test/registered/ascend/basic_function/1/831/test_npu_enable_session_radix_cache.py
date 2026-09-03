@@ -32,10 +32,15 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=200, suite="full-1-npu-a3", nightly=True)
 
+# Total KV pool size used both as context length and max total tokens.
+# Flood prompts are sized so that ~2x capacity of unique tokens is pushed
+# through the pool, forcing eviction of unprotected entries.
 MAX_TOTAL_TOKENS = 8192
 WORDS_PER_PROMPT = 1200
 NUM_FLOOD_PROMPTS = 10
-KEEP_THRESHOLD = 0.75
+# A session-protected prompt must keep most of its cache hits.
+KEEP_THRESHOLD = 0.90
+# An unprotected prompt must lose all of its cache hits after the flood.
 EVICT_THRESHOLD = 0.0
 
 _WORDS = (
@@ -50,6 +55,11 @@ _WORDS = (
 
 QWEN3_0_6B_WEIGHTS_PATH="/home/weights/Qwen3-0.6B"
 def _make_prompt(seed: int) -> str:
+    """Build a deterministic but unique long prompt.
+
+    The random salt guarantees every prompt has a distinct prefix, so each
+    request inserts fresh cache entries instead of sharing the radix tree.
+    """
     rng = random.Random(seed)
     salt = uuid.uuid4().hex
     body = " ".join(rng.choice(_WORDS) for _ in range(WORDS_PER_PROMPT))
@@ -70,6 +80,8 @@ class TestSessionRadixCacheE2E(CustomTestCase):
 
         cls.base_url = DEFAULT_URL_FOR_TEST
 
+        # Session radix cache protection is the feature under test; the
+        # bounded token pool makes eviction observable within the test.
         other_args = [
             "--context-length",
             str(MAX_TOTAL_TOKENS),
@@ -102,6 +114,8 @@ class TestSessionRadixCacheE2E(CustomTestCase):
         kill_process_tree(cls.process.pid)
 
     def _generate(self, text, session_id=None):
+        # One generate request; the session id registers the request's cache
+        # leaves under that session so they become protected from eviction.
         payload = {
             "text": text,
             "sampling_params": {"max_new_tokens": 1, "temperature": 0},
@@ -133,15 +147,19 @@ class TestSessionRadixCacheE2E(CustomTestCase):
         prompt_a = _make_prompt(seed=1)
         prompt_b = _make_prompt(seed=2)
 
+        # Seed both prompts: A under the session (protected), B without one
+        # (unprotected control). Both must be cold on first request.
         a_seed = self._generate(prompt_a, session_id=session_id)
         b_seed = self._generate(prompt_b)
 
         self.assertEqual(a_seed[1], 0, "first request should have no cache hit")
         self.assertEqual(b_seed[1], 0, "first request should have no cache hit")
 
+        # Flood the pool with unique prompts to create eviction pressure.
         for i in range(NUM_FLOOD_PROMPTS):
             self._generate(_make_prompt(seed=100 + i))
 
+        # Unprotected B should have been evicted by the flood.
         b_ratio = self._cached_ratio(prompt_b)
         self.assertEqual(
             b_ratio,
@@ -149,6 +167,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             f"unprotected prompt B should be evicted, cached_ratio={b_ratio:.3f}",
         )
 
+        # Session-referenced A should survive the same flood.
         a_ratio = self._cached_ratio(prompt_a, session_id=session_id)
         self.assertGreaterEqual(
             a_ratio,
@@ -156,6 +175,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             f"session-protected prompt A should survive, cached_ratio={a_ratio:.3f}",
         )
 
+        # Closing the session drops the protection references on A's leaves.
         response = requests.post(
             f"{self.base_url}/close_session",
             json={"session_id": session_id},
@@ -163,6 +183,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
         )
         response.raise_for_status()
 
+        # A second flood should now evict A like any unprotected entry.
         for i in range(NUM_FLOOD_PROMPTS):
             self._generate(_make_prompt(seed=200 + i))
 
