@@ -80,16 +80,11 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             "0.6",
         ]
 
-        # env = {
-        #     "SGLANG_ENABLE_UNIFIED_RADIX_TREE": "1",
-        # }
-
         cls.process = popen_launch_server(
             cls.model,
             cls.base_url,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=other_args,
-            # env=env,
         )
 
     @classmethod
