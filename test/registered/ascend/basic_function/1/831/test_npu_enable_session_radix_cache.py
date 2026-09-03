@@ -77,11 +77,7 @@ class TestSessionRadixCacheE2E(CustomTestCase):
     @classmethod
     def setUpClass(cls):
         cls.model = QWEN3_0_6B_WEIGHTS_PATH
-
         cls.base_url = DEFAULT_URL_FOR_TEST
-
-        # Session radix cache protection is the feature under test; the
-        # bounded token pool makes eviction observable within the test.
         other_args = [
             "--context-length",
             str(MAX_TOTAL_TOKENS),
