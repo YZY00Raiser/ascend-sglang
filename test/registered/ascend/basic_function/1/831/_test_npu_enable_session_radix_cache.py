@@ -32,7 +32,6 @@ from sglang.test.test_utils import (
     DEFAULT_URL_FOR_TEST,
     CustomTestCase,
     popen_launch_server,
-    terminate_and_kill_process_tree,
 )
 
 register_cuda_ci(est_time=400, stage="extra-a", runner_config="1-gpu-small")
