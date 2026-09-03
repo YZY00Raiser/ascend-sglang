@@ -59,6 +59,13 @@ def _make_prompt(seed: int) -> str:
 
 
 class TestSessionRadixCacheE2E(CustomTestCase):
+    """Testcase: Verify set the parameter --enable-session-radix-cache,Prioritize evicting KV cache that are not
+    referenced by other sessions during eviction. Set the parameter --model-checksum, the model weights will be verified.
+
+   [Test Category] Parameter
+   [Test Target] --enable-session-radix-cache, --model-checksum
+   """
+
     @classmethod
     def setUpClass(cls):
         cls.model = QWEN3_0_6B_WEIGHTS_PATH
@@ -75,6 +82,8 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             "ascend",
             "--mem-fraction-static",
             "0.6",
+            "--model-checksum",
+            "Qwen/Qwen3-0.6B"
         ]
 
         cls.process = popen_launch_server(
