@@ -60,7 +60,11 @@ class TestQwen330BAttnCP(GSM8KAscendMixin, CustomTestCase):
                 "--enable-prefill-context-parallel",
             ],
             return_stdout_stderr=(cls.out_file, cls.err_file),
-            env = {"ASCEND_USE_FIA": "1"}
+            env={
+                **os.environ,
+                "ASCEND_USE_FIA": "1",
+                "SGLANG_ENABLE_CP_V2": "0",
+            }
 
         )
 
