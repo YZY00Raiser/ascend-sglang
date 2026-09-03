@@ -77,6 +77,8 @@ class TestSessionRadixCacheE2E(CustomTestCase):
             "--enable-session-radix-cache",
             "--attention-backend",
             "ascend",
+            "--mem-fraction-static",
+            "0.6",
         ]
 
         # env = {
