@@ -10,7 +10,7 @@ from sglang.test.ci.ci_register import register_npu_ci
 
 register_npu_ci(est_time=1200, suite="base-c-test-perf-16-npu-a3")
 register_npu_ci(est_time=1200, suite="nightly-perf-16-npu-a3", nightly=True)
-
+DEEPSEEK_V4_FLASH_W8A8_MTP_MODEL_PATH="/home/weights/DEEPSEEK_V4_FLASH_W8A8_MTP_MODEL_PATH"
 # Environment variables for DSV4-Flash single-node PD-mix deployment.
 DEEPSEEK_V4_FLASH_W8A8_8P_ENVS = {
     "PYTORCH_NPU_ALLOC_CONF": "expandable_segments:True",
