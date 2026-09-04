@@ -22,7 +22,7 @@ from sglang.test.test_utils import (
     run_bench_one_batch_server,
 )
 DEEPSEEK_CODER_V2_LITE_WEIGHTS_PATH="/home/weights/DeepSeek-Coder-V2-Lite-Instruct"
-LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH="/home/weights/LLM-Research/Llama-3.1-8B-Instruct"
+LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH="/home/weights/Llama-3.1-8B-Instruct"
 # Disable the fast input-logprobs path; use the reference log-softmax path.
 os.environ["SGLANG_ENABLE_FAST_INPUT_LOGPROBS"] = "false"
 register_npu_ci(est_time=10800, suite="full-16-npu-a3", nightly=True)
