@@ -25,11 +25,7 @@ from sglang.test.test_utils import (
 )
 
 register_npu_ci(est_time=4350, suite="full-1-npu-a3", nightly=True)
-BASE_MODEL = "/home/weights/Llama-3.1-8B-Instruct"
-CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH="/home/weights/code-llama-3-1-8b-text-to-sql-lora"
-LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH="/home/weights/llama-3.1-nemoguard-8b-topic-control"
-LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH="/home/weights/llama-3.1-8b-ocr-correction"
-LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH="/home/weights/fact-generation-llama-3.1-8b-instruct-lora"
+
 
 PROMPTS = [
     "SGL is a",
@@ -40,9 +36,14 @@ PROMPTS = [
 ]
 
 MEM_FRACTION_STATIC = 0.8
+
+LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH = "/home/weights/Llama-3.1-8B-Instruct"
+CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH="/home/weights/code-llama-3-1-8b-text-to-sql-lora"
+LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH="/home/weights/llama-3.1-nemoguard-8b-topic-control"
+LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH="/home/weights/llama-3.1-8b-ocr-correction"
+LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH="/home/weights/fact-generation-llama-3.1-8b-instruct-lora"
+
 BASE_MODEL = LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH
-
-
 class OperationType(Enum):
     LOAD = "load"
     UNLOAD = "unload"
