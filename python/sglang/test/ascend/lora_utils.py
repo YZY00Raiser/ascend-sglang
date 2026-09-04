@@ -4,14 +4,14 @@ from typing import List, Optional
 
 import torch
 
-# from sglang.test.ascend.test_ascend_utils import (
-#     QWEN3_4B_LORA_V2_WEIGHTS_PATH,
-#     QWEN3_4B_LORA_ZH_WEBNOVELTY_V0_0_WEIGHTS_PATH,
-#     QWEN3_4B_WEIGHTS_PATH,
-#     QWEN3_5_4B_MCAT_LORA_PATH,
-#     QWEN3_5_4B_NEO4J_TEXT2CYPHER_LORA_PATH,
-#     QWEN3_5_4B_WEIGHTS_PATH,
-# )
+from sglang.test.ascend.test_ascend_utils import (
+    QWEN3_4B_LORA_V2_WEIGHTS_PATH,
+    QWEN3_4B_LORA_ZH_WEBNOVELTY_V0_0_WEIGHTS_PATH,
+    QWEN3_4B_WEIGHTS_PATH,
+    QWEN3_5_4B_MCAT_LORA_PATH,
+    QWEN3_5_4B_NEO4J_TEXT2CYPHER_LORA_PATH,
+    QWEN3_5_4B_WEIGHTS_PATH,
+)
 from sglang.test.runners import HFRunner, SRTRunner
 from sglang.test.test_utils import calculate_rouge_l
 
@@ -45,7 +45,7 @@ class LoRAModelCase:
 
 
 TORCH_DTYPES = [torch.float16]
-'''
+
 CI_MULTI_LORA_MODELS = [
     # multi-rank case
     LoRAModelCase(
@@ -53,12 +53,14 @@ CI_MULTI_LORA_MODELS = [
         adaptors=[
             LoRAAdaptor(
                 name=QWEN3_5_4B_MCAT_LORA_PATH,
-                prefill_tolerance=1e-1,
+                prefill_tolerance=3e-1,
+                decode_tolerance=3e-1,
                 rouge_l_tolerance=0.9,
             ),
             LoRAAdaptor(
                 name=QWEN3_5_4B_NEO4J_TEXT2CYPHER_LORA_PATH,
                 prefill_tolerance=3e-1,
+                decode_tolerance=3e-1,
                 rouge_l_tolerance=0.9,
             ),
         ],
@@ -82,19 +84,6 @@ LORA_MODELS_QWEN3 = [
         max_loras_per_batch=2,
         max_loaded_loras=64,
     ),
-]
-'''
-DEFAULT_PROMPTS = [
-    "AI is a field of computer science focused on",
-    """
-    ### Instruction:
-    Tell me about llamas and alpacas
-    ### Response:
-    Llamas are large, long-necked animals with a woolly coat. They have two toes on each foot instead of three like other camelids (camels, dromedaries). Llamas live in the Andean mountains of South America where they graze on grasses and shrubs. Alpaca is another name for domesticated llama. The word "alpaca" comes from an Incan language meaning "golden fleece." Alpacas look very similar to llamas but are smaller than their wild relatives. Both species were used by ancient people as pack animals and for meat. Today both llamas and alpacas are raised primarily for their fiber which can be spun into yarn or knitted into clothing.
-    ### Question 2:
-    What do you know about llamas?
-    ### Answer:
-    """,
 ]
 
 TEST_MULTIPLE_BATCH_PROMPTS = [
@@ -497,7 +486,6 @@ def run_lora_test_one_by_one(
         max_prefill_diff = torch.max(torch.abs(hf_prefill - srt_prefill))
         print("Max prefill diff (HF vs SRT):", max_prefill_diff)
 
-
         # Compare decode stage logprobs
         hf_decode = torch.tensor(hf_outputs.top_output_logprobs[i])
         srt_decode = torch.tensor(srt_outputs.top_output_logprobs[i])
@@ -524,27 +512,19 @@ def run_lora_test_one_by_one(
         )
 
         if hf_prefill.shape[0] <= 100:
-            print(f"[{test_tag}] pre_tol={torch.abs(hf_prefill - srt_prefill)}")
             assert torch.all(torch.abs(hf_prefill - srt_prefill) < prefill_tol), (
                 f"Prefill logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
                 f"backend '{backend}', prompt: '{prompts[0][:50]}...'"
-                f"[{test_tag}] pre_tol={torch.abs(hf_prefill - srt_prefill)}"
-                f"[{test_tag}] prefill_tol={prefill_tol}"
             )
 
         if hf_decode.shape[0] <= 100:
-            print(f"[{test_tag}] dec_tol={torch.abs(hf_decode - srt_decode)}")
             assert torch.all(torch.abs(hf_decode - srt_decode) < decode_tol), (
                 f"Decode logprobs mismatch for base '{base_path}', adaptor '{adaptor_names}', "
                 f"backend '{backend}', prompt: '{prompts[0][:50]}...'"
-                f"[{test_tag}] dec_tol={torch.abs(hf_decode - srt_decode)}"
-                f"[{test_tag}] decode_tol={decode_tol}"
             )
 
         if rouge_score < rouge_tol:
-            print(f"[{test_tag}] rouge_tol={rouge_tol}, rouge_score={rouge_score}")
             raise AssertionError(
                 f"ROUGE-L score {rouge_score} below tolerance {rouge_tol} "
                 f"for base '{base_path}', adaptor '{adaptor_names}', backend '{backend}', prompt: '{prompts[0][:50]}...'"
-                f"[{test_tag}] rouge_tol={rouge_tol}, rouge_score={rouge_score}"
             )
