@@ -8,13 +8,13 @@ from typing import Any, Iterable, List, Optional, Union
 import requests
 
 from sglang.srt.utils import kill_process_tree
-from sglang.test.ascend.test_ascend_utils import (
-    CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
-    LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
-    LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
-    LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
-    LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH,
-)
+# from sglang.test.ascend.test_ascend_utils import (
+#     CODE_LLAMA_3_1_8B_TEXT_TO_SQL_LORA_PATH,
+#     LLAMA_3_1_8B_INSTRUCT_FACT_GENERATION_LORA_PATH,
+#     LLAMA_3_1_8B_INSTRUCT_NEMOGUARD_TOPIC_CONTROL_LORA_PATH,
+#     LLAMA_3_1_8B_INSTRUCT_OCR_CORRECTION_LORA_PATH,
+#     LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH,
+# )
 from sglang.test.ci.ci_register import register_npu_ci
 from sglang.test.test_utils import (
     DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
