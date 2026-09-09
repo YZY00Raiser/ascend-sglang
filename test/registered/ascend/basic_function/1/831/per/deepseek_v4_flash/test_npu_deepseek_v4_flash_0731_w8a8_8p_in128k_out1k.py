@@ -13,7 +13,7 @@ register_npu_ci(
     suite="nightly-perf-16-npu-a3",
     nightly=True,
 )
-
+DEEPSEEK_V4_FLASH_0731_W8A8_MODEL_PATH="/home/weights/DeepSeek-V4-Flash-0731-w8a8"
 # Environment variables for DSV4-Flash-0731 single-node PD-mix deployment,
 # ported from scripts_shell/dspark-with-radix-cache/dsv4_flash_single.sh.
 # FORCE_DRAFT_MODEL_NON_QUANT is intentionally NOT set: the bundled DSPARK
