@@ -53,6 +53,7 @@ class TestQwen330Bw8a8FuseModeWithOne(GSM8KAscendMixin, CustomTestCase):
     Use dispatch_gmm_combine_decode operator, when fuseep_mode = 1, Integrate dispatch, the entire FFN (including GMM),
     and combine into one large operator.
     """
+
     model = QWEN3_30B_A3B_W8A8_WEIGHTS_PATH
     accuracy = 0.90
     other_args = [
