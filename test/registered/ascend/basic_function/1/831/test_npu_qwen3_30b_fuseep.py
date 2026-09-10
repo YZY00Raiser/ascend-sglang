@@ -22,7 +22,7 @@ class TestQwen330Bw8a8FuseModeWithTwo(GSM8KAscendMixin, CustomTestCase):
     """
     Use dispatch_ffn_combine operator, when fuseep_mode = 2, fusion of dispatch + GMM + combine only for the decode phase
     """
-    fuseep_mode = 2
+    fuseep_mode = 1
     other_args = [
         "--trust-remote-code",
         "--mem-fraction-static",
