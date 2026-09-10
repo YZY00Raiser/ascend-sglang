@@ -22,7 +22,7 @@ class TestQwen330Bw8a8FuseModeWithTwo(GSM8KAscendMixin, CustomTestCase):
     """
     Use dispatch_ffn_combine operator, when fuseep_mode = 2, fusion of dispatch + GMM + combine only for the decode phase
     """
-    fuseep_mode = 1
+    fuseep_mode = 2
     other_args = [
         "--trust-remote-code",
         "--mem-fraction-static",
@@ -46,16 +46,22 @@ class TestQwen330Bw8a8FuseModeWithTwo(GSM8KAscendMixin, CustomTestCase):
     }
 
 
-# class TestQwen330Bw8a8FuseModeWithOne(TestQwen330Bw8a8FuseModeWithTwo):
-#     """
-#     Use dispatch_gmm_combine_decode operator, when fuseep_mode = 1, Integrate dispatch, the entire FFN (including GMM),
-#     and combine into one large operator.
-#     """
-#     fuseep_mode = 1
-#     other_args = [
-#         *TestQwen330Bw8a8FuseModeWithTwo.other_args[:-1],
-#         fuseep_mode,
-#     ]
+class TestQwen330Bw8a8FuseModeWithOne(TestQwen330Bw8a8FuseModeWithTwo):
+    """
+    Use dispatch_gmm_combine_decode operator, when fuseep_mode = 1, Integrate dispatch, the entire FFN (including GMM),
+    and combine into one large operator.
+    """
+    fuseep_mode = 1
+    other_args = [
+        *TestQwen330Bw8a8FuseModeWithTwo.other_args[:-1],
+        fuseep_mode,
+    ]
+
+    env = {
+        **os.environ,
+        "SGLANG_PREFILL_DELAYER_MAX_DELAY_PASSES": "100",
+        "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "128",
+    }
 
 
 if __name__ == "__main__":
