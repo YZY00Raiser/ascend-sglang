@@ -32,7 +32,7 @@ class TestQwen330Bw8a8FuseModeWithTwo(GSM8KAscendMixin, CustomTestCase):
         "--cuda-graph-max-bs-decode",
         128,
         "--tp-size",
-        4,
+        8,
         "--moe-a2a-backend",
         "ascend_fuseep",
         "--fuseep-mode",
@@ -61,6 +61,7 @@ class TestQwen330Bw8a8FuseModeWithOne(TestQwen330Bw8a8FuseModeWithTwo):
         **os.environ,
         "SGLANG_PREFILL_DELAYER_MAX_DELAY_PASSES": "100",
         "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "128",
+        "HCCL_BUFFSIZE": "1024",
     }
 
 
