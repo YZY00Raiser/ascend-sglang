@@ -1,0 +1,31 @@
+test/registered/npu/llm_models/test_npu_qwen3_30b_fuseep.py
+  s_f4efbc2cba3ab9::t_0d6a5b5ba201e3 50-52,54-72,75-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "cbb275d3cc70d49624637628ca2638f0469b7da4",
+  "prompts": {},
+  "sessions": {
+    "s_f4efbc2cba3ab9": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6aa356a931eabf125f29eb5e",
+        "model": "kimi-k3__max"
+      },
+      "human_author": "YZY00Raiser <2452658175@qq.com>",
+      "custom_attributes": {
+        "operation_id": "6aa3578831eabf125f29eb7b",
+        "session_id": "6aa356a931eabf125f29eb5e",
+        "tool_name": "RunCommand",
+        "client_type": "ide",
+        "external_session_id": "6aa356a931eabf125f29eb5e",
+        "source_scene": "agent",
+        "edit_kind": "bash",
+        "runtime_client": "trae-tob-git-ai",
+        "tool_use_id": "6aa3578831eabf125f29eb7b",
+        "display_model_name": "Kimi-K3"
+      }
+    }
+  }
+}
