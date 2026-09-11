@@ -1,0 +1,38 @@
+test/registered/npu/basic_function/rl/test_npu_weight_checker_e2e.py
+  s_a5ddb541097b96::t_fb4281adbd247c 8
+  s_a5ddb541097b96::t_a3e302ad257904 247
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "b99f050d101962a859c498776234fa4117d32783",
+  "prompts": {},
+  "humans": {
+    "h_65a461852483cc": {
+      "author": "YZY00Raiser <2452658175@qq.com>"
+    }
+  },
+  "sessions": {
+    "s_a5ddb541097b96": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6aa35dc031eabf125f29eb7f",
+        "model": "kimi-k3__max"
+      },
+      "human_author": "YZY00Raiser <2452658175@qq.com>",
+      "custom_attributes": {
+        "dedupe_key": "6aa35dc031eabf125f29eb7f:6aa360d031eabf125f29ebde:afterEdit:facfe2c9",
+        "operation_id": "6aa360d031eabf125f29ebde",
+        "session_id": "6aa35dc031eabf125f29eb7f",
+        "edit_kind": "file_edit",
+        "tool_use_id": "6aa360d031eabf125f29ebde",
+        "tool_id": "SearchReplace",
+        "runtime_client": "trae-tob-git-ai",
+        "client_type": "ide",
+        "external_session_id": "6aa35dc031eabf125f29eb7f",
+        "source_scene": "unknown",
+        "tool_type": "agent"
+      }
+    }
+  }
+}
