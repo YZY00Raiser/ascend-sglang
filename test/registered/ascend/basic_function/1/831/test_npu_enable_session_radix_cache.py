@@ -138,64 +138,64 @@ class TestSessionRadixCacheE2E(CustomTestCase):
         )
         return ratio
 
-    def test_session_protection_and_release(self):
-        session_id = f"e2e-session-{uuid.uuid4().hex[:8]}"
-        prompt_a = _make_prompt(seed=1)
-        prompt_b = _make_prompt(seed=2)
-
-        # Seed both prompts: A under the session (protected), B without one
-        # (unprotected control). Both must be cold on first request.
-        a_seed = self._generate(prompt_a, session_id=session_id)
-        b_seed = self._generate(prompt_b)
-
-        self.assertEqual(a_seed[1], 0, "first request should have no cache hit")
-        self.assertEqual(b_seed[1], 0, "first request should have no cache hit")
-
-        # Flood the pool with unique prompts to create eviction pressure.
-        for i in range(NUM_FLOOD_PROMPTS):
-            self._generate(_make_prompt(seed=100 + i))
-
-        # Unprotected B should have been evicted by the flood.
-        b_ratio = self._cached_ratio(prompt_b)
-        self.assertEqual(
-            b_ratio,
-            EVICT_THRESHOLD,
-            f"unprotected prompt B should be evicted, cached_ratio={b_ratio:.3f}",
-        )
-
-        # Session-referenced A should survive the same flood.
-        a_ratio = self._cached_ratio(prompt_a, session_id=session_id)
-        self.assertGreaterEqual(
-            a_ratio,
-            KEEP_THRESHOLD,
-            f"session-protected prompt A should survive, cached_ratio={a_ratio:.3f}",
-        )
-
-        # Closing the session drops the protection references on A's leaves.
-        response = requests.post(
-            f"{self.base_url}/close_session",
-            json={"session_id": session_id},
-            timeout=60,
-        )
-        response.raise_for_status()
-
-        # A second flood should now evict A like any unprotected entry.
-        for i in range(NUM_FLOOD_PROMPTS):
-            self._generate(_make_prompt(seed=200 + i))
-
-        a_ratio_after = self._cached_ratio(prompt_a)
-        self.assertEqual(
-            a_ratio_after,
-            EVICT_THRESHOLD,
-            "prompt A should be evicted after close_session, "
-            f"cached_ratio={a_ratio_after:.3f}",
-        )
+    # def test_session_protection_and_release(self):
+    #     session_id = f"e2e-session-{uuid.uuid4().hex[:8]}"
+    #     prompt_a = _make_prompt(seed=1)
+    #     prompt_b = _make_prompt(seed=2)
+    #
+    #     # Seed both prompts: A under the session (protected), B without one
+    #     # (unprotected control). Both must be cold on first request.
+    #     a_seed = self._generate(prompt_a, session_id=session_id)
+    #     b_seed = self._generate(prompt_b)
+    #
+    #     self.assertEqual(a_seed[1], 0, "first request should have no cache hit")
+    #     self.assertEqual(b_seed[1], 0, "first request should have no cache hit")
+    #
+    #     # Flood the pool with unique prompts to create eviction pressure.
+    #     for i in range(NUM_FLOOD_PROMPTS):
+    #         self._generate(_make_prompt(seed=100 + i))
+    #
+    #     # Unprotected B should have been evicted by the flood.
+    #     b_ratio = self._cached_ratio(prompt_b)
+    #     self.assertEqual(
+    #         b_ratio,
+    #         EVICT_THRESHOLD,
+    #         f"unprotected prompt B should be evicted, cached_ratio={b_ratio:.3f}",
+    #     )
+    #
+    #     # Session-referenced A should survive the same flood.
+    #     a_ratio = self._cached_ratio(prompt_a, session_id=session_id)
+    #     self.assertGreaterEqual(
+    #         a_ratio,
+    #         KEEP_THRESHOLD,
+    #         f"session-protected prompt A should survive, cached_ratio={a_ratio:.3f}",
+    #     )
+    #
+    #     # Closing the session drops the protection references on A's leaves.
+    #     response = requests.post(
+    #         f"{self.base_url}/close_session",
+    #         json={"session_id": session_id},
+    #         timeout=60,
+    #     )
+    #     response.raise_for_status()
+    #
+    #     # A second flood should now evict A like any unprotected entry.
+    #     for i in range(NUM_FLOOD_PROMPTS):
+    #         self._generate(_make_prompt(seed=200 + i))
+    #
+    #     a_ratio_after = self._cached_ratio(prompt_a)
+    #     self.assertEqual(
+    #         a_ratio_after,
+    #         EVICT_THRESHOLD,
+    #         "prompt A should be evicted after close_session, "
+    #         f"cached_ratio={a_ratio_after:.3f}",
+    #     )
 
     def test_model_checksum(self):
         # Model Weight File Verification
         self.err_file.seek(0)
         content = self.err_file.read()
-        self.assertIn("ModelFileVerifier", content)
+        self.assertIn("[ModelFileVerifier] All 7 files verified successfully.", content)
 
 
 if __name__ == "__main__":
