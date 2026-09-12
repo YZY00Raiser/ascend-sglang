@@ -31,6 +31,7 @@ class TestQwen306B(CustomTestCase):
             "--disable-cuda-graph",
             "--enable-session-radix-cache",
             "--model-checksum",
+            "Qwen/Qwen3-0.6B",
         ]
         cls.process = popen_launch_server(
             cls.model,
