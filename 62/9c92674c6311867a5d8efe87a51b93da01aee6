@@ -1,0 +1,40 @@
+test/registered/npu/llm_models/test_npu_qwen3_30b_attn_cp.py
+  s_aefad64f40f402::t_541b609dc6ad67 89-90
+  s_aefad64f40f402::t_e723bfc810e8a1 91
+test/registered/npu/basic_function/runtime_options/test_npu_disaggregation_pp.py
+  s_aefad64f40f402::t_0df2bb26f01952 132-133
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "629c92674c6311867a5d8efe87a51b93da01aee6",
+  "prompts": {},
+  "humans": {
+    "h_65a461852483cc": {
+      "author": "YZY00Raiser <2452658175@qq.com>"
+    }
+  },
+  "sessions": {
+    "s_aefad64f40f402": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6aa4bcea0bf13f3d37bf96bb",
+        "model": "kimi-k3__max"
+      },
+      "human_author": "YZY00Raiser <2452658175@qq.com>",
+      "custom_attributes": {
+        "operation_id": "6aa4bec20bf13f3d37bf96f6",
+        "tool_type": "agent",
+        "external_session_id": "6aa4bcea0bf13f3d37bf96bb",
+        "client_type": "ide",
+        "tool_use_id": "6aa4bec20bf13f3d37bf96f6",
+        "session_id": "6aa4bcea0bf13f3d37bf96bb",
+        "runtime_client": "trae-tob-git-ai",
+        "source_scene": "unknown",
+        "edit_kind": "file_edit",
+        "dedupe_key": "6aa4bcea0bf13f3d37bf96bb:6aa4bec20bf13f3d37bf96f6:afterEdit:76607673",
+        "tool_id": "SearchReplace"
+      }
+    }
+  }
+}
