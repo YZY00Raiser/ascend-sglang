@@ -1,0 +1,32 @@
+test/registered/ascend/basic_function/1/831/test_npu_qwen3_0_6b.py
+  s_e7bcef866b651f::t_4e092b0d7d8996 34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "ef94b208166c8c6e5a84ba850890b745ac07dba4",
+  "prompts": {},
+  "sessions": {
+    "s_e7bcef866b651f": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6aa4c3780bf13f3d37bf96fa",
+        "model": "kimi-k3__max"
+      },
+      "human_author": "YZY00Raiser <2452658175@qq.com>",
+      "custom_attributes": {
+        "session_id": "6aa4c3780bf13f3d37bf96fa",
+        "tool_type": "agent",
+        "source_scene": "unknown",
+        "operation_id": "6aa4c3980bf13f3d37bf970e",
+        "tool_id": "SearchReplace",
+        "dedupe_key": "6aa4c3780bf13f3d37bf96fa:6aa4c3980bf13f3d37bf970e:afterEdit:de2b3c61",
+        "tool_use_id": "6aa4c3980bf13f3d37bf970e",
+        "runtime_client": "trae-tob-git-ai",
+        "edit_kind": "file_edit",
+        "client_type": "ide",
+        "external_session_id": "6aa4c3780bf13f3d37bf96fa"
+      }
+    }
+  }
+}
