@@ -15,7 +15,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=500, suite="full-4-npu-a3", nightly=True)
 
-QWEN3_30B_A3B_WEIGHTS_PATH="/home/weights/Qwen3-30B-A3B"
+
 class TestQwen330BAttnCP(GSM8KAscendMixin, CustomTestCase):
     """GSM8K accuracy test for Qwen3-30B-A3B mixed deployment on 4 NPUs.
 
@@ -65,7 +65,6 @@ class TestQwen330BAttnCP(GSM8KAscendMixin, CustomTestCase):
             env={
                 **os.environ,
                 "ASCEND_USE_FIA": "1",
-                # "SGLANG_ENABLE_CP_V2": "0",
             },
         )
 
@@ -87,7 +86,9 @@ class TestQwen330BAttnCP(GSM8KAscendMixin, CustomTestCase):
     def test_moe_dp(self):
         self.err_file.seek(0)
         content = self.err_file.read()
-        self.assertIn("MOE_DP1", content)
+        for i in range(2):
+            self.assertIn(f"MOE_DP{i}", content)
+
 
 
 if __name__ == "__main__":
