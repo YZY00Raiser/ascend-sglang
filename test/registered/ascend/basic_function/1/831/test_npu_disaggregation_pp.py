@@ -1,4 +1,5 @@
 import os
+import tempfile
 import time
 import unittest
 from types import SimpleNamespace
@@ -14,6 +15,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=400, suite="full-16-npu-a3", nightly=True)
 
+LLAMA_3_1_8B_INSTRUCT_WEIGHTS_PATH="/home/weights/Llama-3.1-8B-Instruct"
 class TestDisaggregationPrefillPPAccuracy(TestDisaggregationBase):
     """Test Case: Verify the accuracy of base model when only prefill enables PP parallelism in PD disaggregation scenario
 
@@ -45,6 +47,10 @@ class TestDisaggregationPrefillPPAccuracy(TestDisaggregationBase):
         os.environ.pop("OPENAI_API_KEY", None)
         os.environ.pop("OPENAI_API_BASE", None)
         super().tearDownClass()
+        cls.out_file.close()
+        cls.err_file.close()
+        os.unlink(cls.out_file.name)
+        os.unlink(cls.err_file.name)
 
     @classmethod
     def start_prefill(cls):
@@ -62,12 +68,19 @@ class TestDisaggregationPrefillPPAccuracy(TestDisaggregationBase):
             "--disaggregation-transfer-backend",
             "ascend",
         ]
+        cls.out_file = tempfile.NamedTemporaryFile(
+            mode="w+", suffix=".txt", delete=False
+        )
+        cls.err_file = tempfile.NamedTemporaryFile(
+            mode="w+", suffix=".txt", delete=False
+        )
         prefill_args += cls.rdma_devices
         cls.process_prefill = popen_launch_pd_server(
             cls.model,
             cls.prefill_url,
             timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
             other_args=prefill_args,
+            return_stdout_stderr=(cls.out_file, cls.err_file),
         )
 
     @classmethod
@@ -111,6 +124,14 @@ class TestDisaggregationPrefillPPAccuracy(TestDisaggregationBase):
         self.assertGreater(metrics["score"], 0.24)
         # Wait a little bit so that the memory check happens.
         time.sleep(5)
+
+    # Setting the --pipeline-parallel-sizee parameter enables PP log output
+    def test_pp(self):
+        self.err_file.seek(0)
+        content = self.err_file.read()
+        for i in range(4):
+            self.assertIn(f"PP{i}", content)
+
 
 class TestDisaggregationDecodePPAccuracy(TestDisaggregationBase):
     """Test Case: Verify the accuracy of base model when both prefill and decode enable PP parallelism in PD disaggregation scenario
