@@ -15,7 +15,7 @@ from sglang.test.test_utils import (
 
 register_npu_ci(est_time=500, suite="full-4-npu-a3", nightly=True)
 
-
+QWEN3_30B_A3B_WEIGHTS_PATH = "/home/weights/Qwen3-30B-A3B-w8a8"
 class TestQwen330BAttnCP(GSM8KAscendMixin, CustomTestCase):
     """GSM8K accuracy test for Qwen3-30B-A3B mixed deployment on 4 NPUs.
 
