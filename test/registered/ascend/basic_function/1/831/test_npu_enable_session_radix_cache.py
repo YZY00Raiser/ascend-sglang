@@ -192,9 +192,10 @@ class TestSessionRadixCacheE2E(CustomTestCase):
     #     )
 
     def test_model_checksum(self):
-        # Model Weight File Verification
-        self.err_file.seek(0)
-        content = self.err_file.read()
+        # Model Weight File Verification. The verifier message is emitted via
+        # print(), so it lands in the server stdout (out_file), not stderr.
+        self.out_file.seek(0)
+        content = self.out_file.read()
         self.assertIn("[ModelFileVerifier] All 7 files verified successfully.", content)
 
 
