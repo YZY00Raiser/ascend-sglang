@@ -1,38 +1,7 @@
-test/registered/ascend/basic_function/1/831/test_npu_qwen3_30b_fuseep.py
-  h_65a461852483cc 25,50-53,59-64
-  s_0a330b98830ddc::t_c583afba5ab3a8 49,54-58
 ---
 {
   "schema_version": "authorship/3.0.0",
   "git_ai_version": "1.6.2",
   "base_commit_sha": "b809ff869eaf6c5550830f348270080709e93ab6",
-  "prompts": {},
-  "humans": {
-    "h_65a461852483cc": {
-      "author": "YZY00Raiser <2452658175@qq.com>"
-    }
-  },
-  "sessions": {
-    "s_0a330b98830ddc": {
-      "agent_id": {
-        "tool": "trae",
-        "id": "6a98ebef82e6e1facd04823c",
-        "model": "kimi-k3__max"
-      },
-      "human_author": "YZY00Raiser <2452658175@qq.com>",
-      "custom_attributes": {
-        "runtime_client": "trae-tob-git-ai",
-        "tool_id": "SearchReplace",
-        "client_type": "ide",
-        "edit_kind": "file_edit",
-        "tool_use_id": "6aa289f931eabf125f29ea56",
-        "session_id": "6a98ebef82e6e1facd04823c",
-        "operation_id": "6aa289f931eabf125f29ea56",
-        "external_session_id": "6a98ebef82e6e1facd04823c",
-        "tool_type": "agent",
-        "source_scene": "unknown",
-        "dedupe_key": "6a98ebef82e6e1facd04823c:6aa289f931eabf125f29ea56:afterEdit:b84ee07e"
-      }
-    }
-  }
+  "prompts": {}
 }
