@@ -55,6 +55,17 @@ AISBENCHMARK_DATASET_SHAREGPT = "sharegpt"
 AISBENCHMARK_DATASET_MM_CUSTOM_GEN = "mm-custom-gen"
 AISBENCHMARK_DATASET_DEFAULT = AISBENCHMARK_DATASET_GSM8K
 
+
+# DeepSeek-V4-Pro-0813 W4A8 weights (already available in the A3 environment).
+DEEPSEEK_V4_PRO_0813_W4A8_MODEL_PATH = (
+    "/root/.cache/modelscope/hub/models/Eco-Tech/DeepSeek-V4-Pro-0813-w4a8"
+)
+# DeepSeek-V4-Flash-0731 W8A8 weights. Not preinstalled in the environment:
+# download them to this path (or adjust the constant) before running the
+# 0731 testcases.
+DEEPSEEK_V4_FLASH_0731_W8A8_MODEL_PATH = (
+    "/root/.cache/modelscope/hub/models/Eco-Tech/DeepSeek-V4-Flash-0731-w8a8"
+)
 SHAREGPT_DATASET_TEST_FILE = "/tmp/ShareGPT_V3_unfiltered_cleaned_split.json"
 GSM8K_DATASET_TEST_FILE = (
     "/root/.cache/modelscope/hub/datasets/grade_school_math/test.jsonl"
