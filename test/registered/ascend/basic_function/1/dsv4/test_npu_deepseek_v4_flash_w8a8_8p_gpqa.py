@@ -7,9 +7,9 @@ from sglang.test.ascend.e2e.test_npu_accuracy_utils import (
 from sglang.test.ascend.e2e.test_npu_multi_node_utils import (
     popen_launch_server_npu,
 )
-from sglang.test.ascend.e2e.test_npu_performance_utils import (
-    DEEPSEEK_V4_FLASH_0731_W8A8_MODEL_PATH,
-)
+# from sglang.test.ascend.e2e.test_npu_performance_utils import (
+#     DEEPSEEK_V4_FLASH_0731_W8A8_MODEL_PATH,
+# )
 from sglang.test.ci.ci_register import register_npu_ci
 
 register_npu_ci(
