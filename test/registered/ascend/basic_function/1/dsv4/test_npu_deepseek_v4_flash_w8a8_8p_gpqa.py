@@ -17,7 +17,7 @@ register_npu_ci(
     suite="dsv4-flash-acc-16-npu-a3",
     nightly=True,
 )
-
+DEEPSEEK_V4_FLASH_0731_W8A8_MODEL_PATH="/home/weights/DeepSeek-V4-Flash-0731-w8a8"
 # register_npu_ci(
 #     est_time=7200,
 #     suite="nightly-acc-16-npu-a3-cann910",
