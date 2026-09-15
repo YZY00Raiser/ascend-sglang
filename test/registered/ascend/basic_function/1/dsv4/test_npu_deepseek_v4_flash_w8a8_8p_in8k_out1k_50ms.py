@@ -10,7 +10,7 @@ from sglang.test.ascend.e2e.test_npu_performance_utils import (
     TestNpuPerformanceTestCaseBase,
 )
 from sglang.test.ci.ci_register import register_npu_ci
-
+DEEPSEEK_V4_FLASH_0731_W8A8_MODEL_PATH="/home/weights/DeepSeek-V4-Flash-0731-w8a8"
 register_npu_ci(est_time=1800, suite="nightly-perf-16-npu-a3", nightly=True)
 register_npu_ci(est_time=1800, suite="nightly-perf-16-npu-a3-cann910", nightly=True)
 
