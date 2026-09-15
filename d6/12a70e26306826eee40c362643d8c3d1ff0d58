@@ -1,0 +1,62 @@
+test/registered/npu/performance/deepseek_v4_flash/test_npu_deepseek_v4_flash_w8a8_8p_in8k_out1k_50ms.py
+  s_a761be0ee3b7e9::t_f44bfabbbda134 50
+test/registered/npu/performance/deepseek_v4_flash/test_npu_deepseek_v4_flash_w8a8_1p1d_16p_in8k_out1k_50ms.py
+  s_61664fddabf697::t_b9f5c536444f6d 49-50
+  s_61664fddabf697::t_d11dff16d69afe 208,210-216,218
+  s_61664fddabf697::t_9e6beb2f4c4512 94-95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.2",
+  "base_commit_sha": "d612a70e26306826eee40c362643d8c3d1ff0d58",
+  "prompts": {},
+  "humans": {
+    "h_65a461852483cc": {
+      "author": "YZY00Raiser <2452658175@qq.com>"
+    }
+  },
+  "sessions": {
+    "s_61664fddabf697": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6aa90da80bf13f3d37bf9a76",
+        "model": "kimi-k3__max"
+      },
+      "human_author": "YZY00Raiser <2452658175@qq.com>",
+      "custom_attributes": {
+        "session_id": "6aa90da80bf13f3d37bf9a76",
+        "tool_use_id": "6aa90e620bf13f3d37bf9ab2",
+        "tool_type": "agent",
+        "runtime_client": "trae-tob-git-ai",
+        "source_scene": "unknown",
+        "operation_id": "6aa90e620bf13f3d37bf9ab2",
+        "client_type": "ide",
+        "edit_kind": "file_edit",
+        "tool_id": "SearchReplace",
+        "external_session_id": "6aa90da80bf13f3d37bf9a76",
+        "dedupe_key": "6aa90da80bf13f3d37bf9a76:6aa90e620bf13f3d37bf9ab2:afterEdit:c3e056a2"
+      }
+    },
+    "s_a761be0ee3b7e9": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6aa8ed4e0bf13f3d37bf9a69",
+        "model": "kimi-k3__max"
+      },
+      "human_author": "YZY00Raiser <2452658175@qq.com>",
+      "custom_attributes": {
+        "tool_use_id": "6aa90e0d0bf13f3d37bf9a9e",
+        "tool_type": "agent",
+        "external_session_id": "6aa8ed4e0bf13f3d37bf9a69",
+        "operation_id": "6aa90e0d0bf13f3d37bf9a9e",
+        "runtime_client": "trae-tob-git-ai",
+        "tool_id": "SearchReplace",
+        "dedupe_key": "6aa8ed4e0bf13f3d37bf9a69:6aa90e0d0bf13f3d37bf9a9e:afterEdit:94c6c640",
+        "client_type": "ide",
+        "edit_kind": "file_edit",
+        "session_id": "6aa8ed4e0bf13f3d37bf9a69",
+        "source_scene": "unknown"
+      }
+    }
+  }
+}
