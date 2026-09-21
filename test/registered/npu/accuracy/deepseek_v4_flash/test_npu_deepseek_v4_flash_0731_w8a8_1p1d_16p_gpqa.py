@@ -180,8 +180,6 @@ DEEPSEEK_V4_FLASH_0731_W8A8_PD_SEP_DECODE_ARGS = [
     "ascend",
     "--speculative-num-draft-tokens",
     6,
-    # Radix cache enabled on decode for the cache-hit scenario.
-    "--disaggregation-decode-enable-radix-cache",
 ]
 
 # Model config for DSV4-Flash-0731 W8A8 1P+1D PD-Sep deployment.
