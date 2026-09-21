@@ -94,8 +94,6 @@ DEEPSEEK_V4_FLASH_0731_W8A8_PD_SEP_PREFILL_ARGS = [
     "prefill",
     "--disaggregation-transfer-backend",
     "ascend",
-    "--disaggregation-bootstrap-port",
-    8998,
     "--mem-fraction-static",
     0.68,
     "--prefill-max-requests",
