@@ -91,7 +91,7 @@ DEEPSEEK_V4_PRO_W4A8_8P_OTHER_ARGS = [
     "--deepep-mode",
     "auto",
     "--enable-metrics",
-    "--disable-radix-cache",
+    # "--disable-radix-cache",
     # DSPARK speculative decoding with the bundled draft weights.
     "--speculative-algorithm",
     "DSPARK",

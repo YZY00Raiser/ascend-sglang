@@ -1,16 +1,17 @@
 import unittest
 
-from sglang.test.ascend.e2e.test_npu_performance_utils import (
-    AISBENCHMARK_DATASET_DEFAULT,
+from sglang.test.ascend.e2e.test_npu_accuracy_utils import (
     BENCHMARK_TOOL_DEFAULT,
-    DEEPSEEK_V4_PRO_0813_W4A8_MODEL_PATH,
-    TestNpuPerformanceTestCaseBase,
+    TestNpuAccuracyTestCaseBase,
+)
+from sglang.test.ascend.e2e.test_npu_performance_utils import (
+    DEEPSEEK_V4_PRO_0813_W4A8_MODEL_PATH, TestNpuPerformanceTestCaseBase, AISBENCHMARK_DATASET_DEFAULT,
 )
 from sglang.test.ci.ci_register import register_npu_ci
 
 register_npu_ci(
-    est_time=3600,
-    suite="nightly-perf-16-npu-a3",
+    est_time=4800,
+    suite="nightly-acc-16-npu-a3",
     nightly=True,
 )
 
@@ -25,6 +26,7 @@ DEEPSEEK_V4_PRO_W4A8_8P_ENVS = {
     "HCCL_OP_EXPANSION_MODE": "AIV",
     "HCCL_CONNECT_TIMEOUT": "300",
     "HCCL_EXEC_TIMEOUT": "68",
+    "ACL_DEVICE_SYNC_TIMEOUT": "60",
     "DEEPEP_HCCL_BUFFSIZE": "1536",
     "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "30",
     # skip gpu branch
@@ -52,7 +54,7 @@ DEEPSEEK_V4_PRO_W4A8_8P_ENVS = {
 }
 
 # Server launch arguments for DSV4-Pro W4A8 single-node 16p PD-mix.
-# Radix cache is intentionally ENABLED (no --disable-radix-cache).
+# Aligned with dsv4_pro_2mix-without-dspark.sh (radix cache disabled).
 DEEPSEEK_V4_PRO_W4A8_8P_OTHER_ARGS = [
     "--tp-size",
     16,
@@ -68,22 +70,18 @@ DEEPSEEK_V4_PRO_W4A8_8P_OTHER_ARGS = [
     "--watchdog-timeout",
     9000,
     "--max-running-requests",
-    160,
+    64,
     "--mem-fraction-static",
-    0.86,
+    0.8,
     "--quantization",
     "modelslim",
-    "--max-prefill-tokens",
-    2048000,
     "--chunked-prefill-size",
     65536,
     "--kv-cache-dtype",
-    "fp8_e4m3",
+    "auto",
     "--moe-dense-tp-size",
     1,
-    "--context-length",
-    133120,
-    "--cuda-graph-bs",
+    "--cuda-graph-bs-decode",
     1,
     4,
     "--load-balance-method",
@@ -92,6 +90,8 @@ DEEPSEEK_V4_PRO_W4A8_8P_OTHER_ARGS = [
     "deepep",
     "--deepep-mode",
     "auto",
+    "--enable-metrics",
+    "--disable-radix-cache",
     # DSPARK speculative decoding with the bundled draft weights.
     "--speculative-algorithm",
     "DSPARK",
@@ -105,6 +105,43 @@ DEEPSEEK_V4_PRO_W4A8_8P_OTHER_ARGS = [
     6,
 ]
 
+# Generation config for Think High mode (thinking=true, reasoning_effort=high).
+DEEPSEEK_V4_PRO_W4A8_GENERATION_CONFIG_HIGH = {
+    "max_tokens": 125000,
+    "top_p": 1,
+    "temperature": 1,
+    "n": 1,
+    "extra_body": {
+        "chat_template_kwargs": {"thinking": True, "reasoning_effort": "high"}
+    },
+}
+
+
+class TestNPUDeepSeekV4ProW4A88PGPQAHigh(TestNpuAccuracyTestCaseBase):
+    """Test NPU accuracy for DeepSeek-V4-Pro-0813 W4A8 16p GPQA High mode.
+
+    Requirement: aligned with dsv4_pro_2mix-without-dspark.sh
+    (single-node, radix cache off).
+    """
+
+    benchmark_tool = BENCHMARK_TOOL_DEFAULT
+    model = DEEPSEEK_V4_PRO_0813_W4A8_MODEL_PATH
+    other_args = DEEPSEEK_V4_PRO_W4A8_8P_OTHER_ARGS
+    envs = DEEPSEEK_V4_PRO_W4A8_8P_ENVS
+    # TODO: calibrate the baseline on the first successful run
+    # (reference: Flash W8A8 GPQA Diamond baseline is 0.874).
+    accuracy = 0.85
+    datasets = ["gpqa_diamond"]
+    few_shot_num = 0
+    generation_config = DEEPSEEK_V4_PRO_W4A8_GENERATION_CONFIG_HIGH
+    eval_batch_size = 64
+    stream = True
+    timeout = 7200
+    seed = 1
+
+    def test_npu_deepseek_v4_pro_w4a8_8p_gpqa_high(self):
+        """Run NPU accuracy test for DeepSeek-V4-Pro W4A8 16p GPQA High mode."""
+        self.run_accuracy()
 
 class TestNPUDeepSeekV4ProW4A88PIn128kOut1kPrefix90(
     TestNpuPerformanceTestCaseBase
@@ -142,7 +179,6 @@ class TestNPUDeepSeekV4ProW4A88PIn128kOut1kPrefix90(
     def test_npu_deepseek_v4_pro_w4a8_8p_in128k_out1k_prefix90(self):
         """Run NPU perf test for DeepSeek-V4-Pro W4A8 16p in128k prefix90."""
         self.run_throughput()
-
 
 if __name__ == "__main__":
     unittest.main()
