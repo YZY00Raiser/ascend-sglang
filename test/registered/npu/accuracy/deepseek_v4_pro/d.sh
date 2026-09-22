@@ -49,7 +49,7 @@ export DEEPEP_NORMAL_COMBINE_ENABLE_LONG_SEQ=1
 export SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK=64
 export SGLANG_RAGGED_VERIFY_MODE=static
 export SGLANG_DSPARK_FAST_KERNEL=0
-export SGLANG_DISAGGREGATION_WAITING_TIMEOUT=600
+export SGLANG_DISAGGREGATION_WAITING_TIMEOUT=1800
 
 # [Prefill Delay]
 #export SGLANG_SCHEDULER_DECREASE_PREFILL_IDLE=1
@@ -79,27 +79,27 @@ export SGLANG_DSPARK_QUANT_AUDIT=1
 export SGLANG_DSPARK_QUANT_AUDIT_STRICT=0
 
 # path
-#export PYTHONPATH=/home/sbw/sglang/python:$PYTHONPATH
+# export PYTHONPATH=/home/sbw/sglang/python:$PYTHONPATH
 MODEL_PATH=/home/weights/DeepSeek-V4-Pro-0813-w4a8
 SERVED_MODEL_NAME=dsv4
 SERVER_PORT=6677
 
 
-export ASCEND_MF_STORE_URL="tcp://192.168.25.209:24669"
+export ASCEND_MF_STORE_URL="tcp://80.5.17.39:24669"
 # ===== Cluster Config ===========================================
 # 每台机器: IP + HCCL 网卡名 (一一对应)
 NODE_IPS=(
-  "192.168.25.216"
-  "192.168.25.217"
+  "80.5.17.37"
+  "80.5.17.34"
 )
 HCCL_IFS=(
-  "enp196s0f0"
-  "enp196s0f0"
+  "enx9c69d302197d"
+  "enp194s0f0"
 )
 
 NUM_NPUS_PER_NODE=16          # 每机 NPU 数
 
-export GLOO_SOCKET_IFNAME=enp196s0f0
+export GLOO_SOCKET_IFNAME=enx9c69d302197d
 export HCCL_HOST_SOCKET_PORT_RANGE=auto
 # ================================================================
 
@@ -159,8 +159,8 @@ python3 -m sglang.launch_server --model-path ${MODEL_PATH} \
   --disaggregation-transfer-backend ascend \
   --device npu \
   --watchdog-timeout 9000 \
-  --max-running-requests 32 \
-  --mem-fraction-static 0.85 \
+  --max-running-requests 64 \
+  --mem-fraction-static 0.83 \
   --quantization modelslim \
   --max-prefill-tokens 9000 \
   --chunked-prefill-size 8192 \
@@ -169,9 +169,13 @@ python3 -m sglang.launch_server --model-path ${MODEL_PATH} \
   --moe-dense-tp-size 1 \
   --enable-dp-attention \
   --enable-dp-lm-head \
-  --cuda-graph-bs-decode 1 2 3 4 5 6 7 8 9 10\
+  --cuda-graph-bs-decode 1 2 \
   --moe-a2a-backend deepep \
   --deepep-mode auto \
-2>&1 | tee sglang_server_$(date +%Y%m%d_%H%M%S).log
-
-
+  --disable-radix-cache \
+  --speculative-algorithm DSPARK \
+  --speculative-draft-model-path "${MODEL_PATH}" \
+  --speculative-draft-model-quantization modelslim \
+  --speculative-draft-attention-backend ascend \
+  --speculative-num-draft-tokens 6 \
+  --speculative-dspark-block-size 5 \
