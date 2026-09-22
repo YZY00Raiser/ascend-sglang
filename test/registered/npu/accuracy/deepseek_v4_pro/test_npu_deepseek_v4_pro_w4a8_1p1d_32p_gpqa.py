@@ -61,7 +61,7 @@ DEEPSEEK_V4_PRO_W4A8_PD_SEP_PREFILL_ENVS = {
     # cp
     "SGLANG_DISAGGREGATION_ALL_CP_RANKS_TRANSFER": "1",
     # memory fabric for PD KV transfer
-    "ASCEND_MF_STORE_URL": "192.168.25.209:24669",
+    "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:24667",
 }
 
 # Decode node environment variables, ported from d.sh.
@@ -72,7 +72,6 @@ DEEPSEEK_V4_PRO_W4A8_PD_SEP_DECODE_ENVS = {
     "DEEPEP_NORMAL_LONG_SEQ_ROUND": "8",
     "DEEPEP_NORMAL_LONG_SEQ_PER_ROUND_TOKENS": "2048",
     "DEEPEP_NORMAL_COMBINE_ENABLE_LONG_SEQ": "1",
-    "ASCEND_MF_STORE_URL": "tcp://192.168.25.209:24669",
 }
 
 # Prefill node (2 nodes x 16 NPUs, TP16 DP8 PP2 + CP interleave) launch
