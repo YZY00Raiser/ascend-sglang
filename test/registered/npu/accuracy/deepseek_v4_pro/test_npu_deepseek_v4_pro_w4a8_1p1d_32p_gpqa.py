@@ -5,7 +5,8 @@ from sglang.test.ascend.e2e.test_npu_accuracy_utils import (
 )
 from sglang.test.ascend.e2e.test_npu_multi_node_utils import NIC_NAME
 from sglang.test.ascend.e2e.test_npu_performance_utils import (
-    DEEPSEEK_V4_PRO_0813_W4A8_MODEL_PATH,
+    DEEPSEEK_V4_PRO_0813_W4A8_MODEL_PATH, TestNpuPerfMultiNodePdSepTestCaseBase, BENCHMARK_TOOL_DEFAULT,
+    AISBENCHMARK_DATASET_DEFAULT,
 )
 from sglang.test.ci.ci_register import register_npu_ci
 
@@ -224,6 +225,40 @@ class TestNPUDeepSeekV4ProW4A8PDSEPGPQAHigh(
     def test_npu_deepseek_v4_pro_w4a8_pd_sep_gpqa_high(self):
         """Run NPU accuracy test for DSV4-Pro W4A8 PD-Sep GPQA High mode."""
         self.run_accuracy()
+
+class TestNPUDeepSeekV4ProW4A8PDSEPIn128kOut1kPrefix90(
+    TestNpuPerfMultiNodePdSepTestCaseBase
+):
+    """Test NPU perf for DeepSeek-V4-Pro W4A8 PD-Sep 2P+2D in128k prefix90.
+
+    Requirement: DSV4_Pro_Radix_Cache_0 (step 4, PD separation 128k input
+    with 90% radix-cache hit rate). The shared-prefix dataset makes 90% of
+    each input length a repeated prefix, so radix cache hits should reduce
+    TTFT noticeably compared with the random-input test above.
+    """
+
+    model_config = DEEPSEEK_V4_PRO_W4A8_PD_SEP_MODEL_CONFIG
+    benchmark_tool = BENCHMARK_TOOL_DEFAULT
+    dataset_type = AISBENCHMARK_DATASET_DEFAULT
+    dataset_name = "generated-shared-prefix"
+    repeat_rate = 0.9
+    input_len = 131072
+    output_len = 1024
+    num_prompts = 32
+    max_concurrency = 32
+    random_range_ratio = 1
+    warmup_requests = 0
+    request_rate = float("inf")
+    seed = 1
+    temperature = 0.6
+    top_p = 0.95
+    # TODO: calibrate tpot / output_token_throughput / ttft baselines on the
+    # first successful run, then set them here to enable regression assertions.
+    pop_sglang_is_in_ci_for_gsp = True
+
+    def test_npu_deepseek_v4_pro_w4a8_pd_sep_in128k_out1k_prefix90(self):
+        """Run NPU perf test for DSV4-Pro W4A8 PD-Sep in128k prefix90."""
+        self.run_throughput()
 
 
 if __name__ == "__main__":
