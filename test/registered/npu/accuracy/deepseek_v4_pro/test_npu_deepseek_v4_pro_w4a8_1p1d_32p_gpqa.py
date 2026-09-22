@@ -122,6 +122,7 @@ DEEPSEEK_V4_PRO_W4A8_PD_SEP_PREFILL_ARGS = [
     "--enable-prefill-cp",
     "--cp-strategy",
     "interleave",
+    "--disable-radix-cache",
 ]
 
 # Decode node (2 nodes x 16 NPUs, TP32 DP16) launch arguments, ported from
