@@ -17,17 +17,17 @@ register_npu_ci(
 )
 
 # Common environment variables shared by prefill/decode nodes, ported from
-# scripts_shell/pd/pro_1p1d(2+2)/dsv4_pro_pd.sh.
+# 2p.sh and d.sh.
 DEEPSEEK_V4_PRO_W4A8_PD_SEP_COMMON_ENVS = {
     "SGLANG_SET_CPU_AFFINITY": "1",
     "TRANSFORMERS_VERBOSITY": "error",
     "PYTORCH_NPU_ALLOC_CONF": "expandable_segments:True",
     "STREAMS_PER_DEVICE": "32",
+    "DEEPEP_HCCL_BUFFSIZE": "1536",
     "HCCL_OP_EXPANSION_MODE": "AIV",
     "HCCL_CONNECT_TIMEOUT": "300",
     "HCCL_EXEC_TIMEOUT": "68",
-    "SGLANG_DISAGGREGATION_BOOTSTRAP_TIMEOUT": "1200",
-    "SGLANG_DISAGGREGATION_WAITING_TIMEOUT": "1200",
+    "ACL_DEVICE_SYNC_TIMEOUT": "60",
     # skip gpu branch
     "SGLANG_OPT_USE_OVERLAP_STORE_CACHE": "False",
     "FORCE_DRAFT_MODEL_NON_QUANT": "1",
@@ -38,64 +38,60 @@ DEEPSEEK_V4_PRO_W4A8_PD_SEP_COMMON_ENVS = {
     "SGLANG_OPT_USE_TILELANG_MHC_PRE": "False",
     "SGLANG_OPT_DEEPGEMM_HC_PRENORM": "False",
     "SGLANG_OPT_USE_TILELANG_MHC_POST": "False",
-    "SGLANG_OPT_FP8_WO_A_GEMM": "0",
-    "HCCL_SOCKET_IFNAME": NIC_NAME,
-    "GLOO_SOCKET_IFNAME": NIC_NAME,
-}
-
-# Prefill node environment variables for DSV4-Pro PD-Sep deployment.
-DEEPSEEK_V4_PRO_W4A8_PD_SEP_PREFILL_ENVS = {
-    **DEEPSEEK_V4_PRO_W4A8_PD_SEP_COMMON_ENVS,
-    "DEEPEP_HCCL_BUFFSIZE": "2048",
+    "SGLANG_OPT_FP8_WO_A_GEMM": "False",
+    # deepep
     "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "64",
-    # memory fabric for PD KV transfer
-    "MF_HYBM_USE_VMM_SEGMENT": "1",
-    "ASCEND_MF_TRANSFER_PROTOCOL": "device_urma",
-    "ASCEND_MF_STORE_URL": "tcp://127.0.0.1:24667",
-    # prefill delay
-    "SGLANG_SCHEDULER_DECREASE_PREFILL_IDLE": "1",
-    "SGLANG_PREFILL_DELAYER_MAX_DELAY_PASSES": "200",
-    # send cached prefix to decode early for radix-cache hits
-    "SGLANG_DISAGG_PREFILL_EARLY_SEND_CACHED_PREFIX": "1",
-}
-
-# Decode node environment variables for DSV4-Pro PD-Sep deployment.
-DEEPSEEK_V4_PRO_W4A8_PD_SEP_DECODE_ENVS = {
-    **DEEPSEEK_V4_PRO_W4A8_PD_SEP_COMMON_ENVS,
-    "DEEPEP_HCCL_BUFFSIZE": "900",
-    "SGLANG_DEEPEP_NUM_MAX_DISPATCH_TOKENS_PER_RANK": "30",
-    "SGLANG_NPU_USE_MULTI_STREAM": "1",
-    # MTP (DSPARK)
+    # dspark
     "SGLANG_ENABLE_SPEC_V2": "1",
-    "SGLANG_ENABLE_OVERLAP_PLAN_STREAM": "1",
-    # dspark correctness-first setup
     "SGLANG_RAGGED_VERIFY_MODE": "static",
     "SGLANG_DSPARK_FAST_KERNEL": "0",
     "SGLANG_DSPARK_FAST_SAMPLING": "0",
     "SGLANG_DSPARK_ENABLE_MULTI_STREAM": "0",
     "SGLANG_DSPARK_QUANT_AUDIT": "1",
     "SGLANG_DSPARK_QUANT_AUDIT_STRICT": "0",
+    "HCCL_SOCKET_IFNAME": NIC_NAME,
+    "GLOO_SOCKET_IFNAME": NIC_NAME,
+    "HCCL_HOST_SOCKET_PORT_RANGE": "auto",
 }
 
-# Prefill node (2 nodes x 8 NPUs, TP16 DP4) launch arguments.
-# Radix cache is intentionally ENABLED on prefill (no --disable-radix-cache).
+# Prefill node environment variables, ported from 2p.sh.
+DEEPSEEK_V4_PRO_W4A8_PD_SEP_PREFILL_ENVS = {
+    **DEEPSEEK_V4_PRO_W4A8_PD_SEP_COMMON_ENVS,
+    "SGLANG_DISAGGREGATION_WAITING_TIMEOUT": "1800",
+    # cp
+    "SGLANG_DISAGGREGATION_ALL_CP_RANKS_TRANSFER": "1",
+    # memory fabric for PD KV transfer
+    "ASCEND_MF_STORE_URL": "192.168.25.209:24669",
+}
+
+# Decode node environment variables, ported from d.sh.
+DEEPSEEK_V4_PRO_W4A8_PD_SEP_DECODE_ENVS = {
+    **DEEPSEEK_V4_PRO_W4A8_PD_SEP_COMMON_ENVS,
+    "SGLANG_DISAGGREGATION_WAITING_TIMEOUT": "600",
+    "HCCL_BUFFSIZE": "512",
+    "DEEPEP_NORMAL_LONG_SEQ_ROUND": "8",
+    "DEEPEP_NORMAL_LONG_SEQ_PER_ROUND_TOKENS": "2048",
+    "DEEPEP_NORMAL_COMBINE_ENABLE_LONG_SEQ": "1",
+    "ASCEND_MF_STORE_URL": "tcp://192.168.25.209:24669",
+}
+
+# Prefill node (2 nodes x 16 NPUs, TP16 DP8 PP2 + CP interleave) launch
+# arguments, ported from 2p.sh.
 DEEPSEEK_V4_PRO_W4A8_PD_SEP_PREFILL_ARGS = [
     "--disaggregation-mode",
     "prefill",
     "--disaggregation-transfer-backend",
     "ascend",
-    "--disaggregation-bootstrap-port",
-    8998,
     "--tp-size",
     16,
     "--nnodes",
     2,
+    "--pp-size",
+    2,
     "--dp-size",
-    4,
+    8,
     "--enable-dp-attention",
     "--enable-dp-lm-head",
-    "--load-balance-method",
-    "round_robin",
     "--trust-remote-code",
     "--attention-backend",
     "ascend",
@@ -104,45 +100,46 @@ DEEPSEEK_V4_PRO_W4A8_PD_SEP_PREFILL_ARGS = [
     "--watchdog-timeout",
     9000,
     "--max-running-requests",
-    64,
+    32,
     "--mem-fraction-static",
     0.83,
     "--quantization",
     "modelslim",
     "--max-prefill-tokens",
-    2048000,
+    9000,
     "--chunked-prefill-size",
-    65536,
+    8192,
     "--kv-cache-dtype",
-    "fp8_e4m3",
-    "--context-length",
-    133120,
+    "auto",
+    "--moe-dense-tp-size",
+    1,
+    "--cuda-graph-bs-decode",
+    1,
+    2,
     "--moe-a2a-backend",
     "deepep",
     "--deepep-mode",
     "auto",
-    "--disable-cuda-graph",
-    "--enable-dynamic-batch-tokenizer",
-    "--tokenizer-worker-num",
-    16,
+    "--enable-prefill-cp",
+    "--cp-strategy",
+    "interleave",
 ]
 
-# Decode node (2 nodes x 8 NPUs, TP16 DP4) launch arguments.
+# Decode node (2 nodes x 16 NPUs, TP32 DP16) launch arguments, ported from
+# d.sh.
 DEEPSEEK_V4_PRO_W4A8_PD_SEP_DECODE_ARGS = [
     "--disaggregation-mode",
     "decode",
     "--disaggregation-transfer-backend",
     "ascend",
     "--tp-size",
-    16,
+    32,
     "--nnodes",
     2,
     "--dp-size",
-    4,
+    16,
     "--enable-dp-attention",
     "--enable-dp-lm-head",
-    "--load-balance-method",
-    "round_robin",
     "--trust-remote-code",
     "--attention-backend",
     "ascend",
@@ -151,43 +148,34 @@ DEEPSEEK_V4_PRO_W4A8_PD_SEP_DECODE_ARGS = [
     "--watchdog-timeout",
     9000,
     "--max-running-requests",
-    256,
+    32,
     "--mem-fraction-static",
-    0.86,
+    0.85,
     "--quantization",
     "modelslim",
     "--max-prefill-tokens",
-    2048000,
+    9000,
     "--chunked-prefill-size",
-    16384,
+    8192,
     "--kv-cache-dtype",
-    "fp8_e4m3",
-    "--context-length",
-    133120,
+    "auto",
+    "--moe-dense-tp-size",
+    1,
+    "--cuda-graph-bs-decode",
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
     "--moe-a2a-backend",
     "deepep",
     "--deepep-mode",
     "auto",
-    "--cuda-graph-bs",
-    1,
-    2,
-    4,
-    8,
-    "--tokenizer-worker-num",
-    8,
-    # DSPARK speculative decoding with the bundled draft weights.
-    "--speculative-algorithm",
-    "DSPARK",
-    "--speculative-draft-model-path",
-    DEEPSEEK_V4_PRO_0813_W4A8_MODEL_PATH,
-    "--speculative-draft-model-quantization",
-    "modelslim",
-    "--speculative-draft-attention-backend",
-    "ascend",
-    "--speculative-num-draft-tokens",
-    6,
-    # Radix cache enabled on decode for the cache-hit scenario.
-    "--disaggregation-decode-enable-radix-cache",
 ]
 
 # Model config for DSV4-Pro W4A8 2P+2D PD-Sep deployment.
